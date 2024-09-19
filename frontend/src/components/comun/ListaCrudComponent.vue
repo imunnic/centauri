@@ -56,9 +56,9 @@
 </template>
 
 <script>
-import BuscadorComponent from '@/components/commons/BuscadorComponent.vue';
-import ItemListaComponent from '@/components/commons/ItemListaComponent.vue';
-import FabBotonComponent from '@/components/commons/FabBotonComponent.vue';
+import BuscadorComponent from '@/components/comun/BuscadorComponent.vue';
+import ItemListaComponent from '@/components/comun/ItemListaComponent.vue';
+import FabBotonComponent from '@/components/comun/FabBotonComponent.vue';
 
 export default {
   components: { BuscadorComponent, ItemListaComponent, FabBotonComponent },

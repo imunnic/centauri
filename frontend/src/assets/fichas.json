@@ -1,10 +1,13 @@
 [
   {
     "id": 1,
+    "descripcion":"Entrenamiento de calistenia",
     "estado": "PENDIENTE",
     "nombre": "Ficha 4.1",
-    "parte": "fundamental",
+    "parte": "Fundamental",
     "tipo": "HIIT",
+    "rpeEstimado":5,
+    "duracionEstimada":20,
     "rutina": {
       "rondas": [
         {
@@ -59,9 +62,11 @@
     "id": 2,
     "estado": "PENDIENTE",
     "nombre": "Ficha 4.2",
-    "parte": "fundamental",
+    "parte": "Fundamental",
     "tipo": "Cardio",
     "descripcion": "Entrenamiento de alta intensidad para mejorar la resistencia cardiovascular.",
+    "rpeEstimado":5,
+    "duracionEstimada":25,
     "rutina": {
       "rondas": [
         {
@@ -113,9 +118,11 @@
     "id": 3,
     "estado": "PENDIENTE",
     "nombre": "Ficha 3.1",
-    "parte": "fundamental",
+    "parte": "Fundamental",
     "tipo": "Fuerza",
     "descripcion": "Entrenamiento de fuerza para aumentar la masa muscular.",
+    "rpeEstimado":7,
+    "duracionEstimada":20,
     "rutina": {
       "rondas": [
         {
@@ -169,11 +176,13 @@
   },
   {
     "id": 4,
-    "estado": "PENDIENTE",
+    "estado": "APROBADA",
     "nombre": "Ficha 3.1",
-    "parte": "fundamental",
+    "parte": "Fundamental",
     "tipo": "Resistencia",
     "descripcion": "Entrenamiento de resistencia para mejorar el VAM.",
+    "rpeEstimado":5,
+    "duracionEstimada":18,
     "rutina": {
       "rondas": [
         {
