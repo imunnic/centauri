@@ -1,4 +1,5 @@
 # Centauri.
+![Icono Centauri](./frontend/public/centauri_verde.png)
 
 # Descripción General
 

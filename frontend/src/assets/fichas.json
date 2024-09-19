@@ -1,0 +1,216 @@
+[
+  {
+    "id": 1,
+    "estado": "PENDIENTE",
+    "nombre": "Ficha 4.1",
+    "parte": "fundamental",
+    "tipo": "HIIT",
+    "rutina": {
+      "rondas": [
+        {
+          "tipo": "Reps",
+          "cantidad": 3,
+          "series": [
+            {
+              "tipo": "Reps",
+              "ajustable": true,
+              "ejercicio": {
+                "nombre": "Push-ups",
+                "tipoCarga": "REPS"
+              },
+              "cantidad": 12,
+              "carga": 30
+            },
+            {
+              "tipo": "Reps",
+              "ajustable": true,
+              "ejercicio": {
+                "nombre": "Pull-ups",
+                "tipoCarga": "REPS"
+              },
+              "cantidad": 8,
+              "carga": 25
+            },
+            {
+              "tipo": "Reps",
+              "ajustable": true,
+              "ejercicio": {
+                "nombre": "Lunges",
+                "tipoCarga": "REPS"
+              },
+              "cantidad": 10,
+              "carga": 25
+            },
+            {
+              "tipo": "Tiempo",
+              "ajustable": false,
+              "ejercicio": {
+                "nombre": "Plank",
+                "tipoCarga": "REPS"
+              },
+              "cantidad": 60
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "estado": "PENDIENTE",
+    "nombre": "Ficha 4.2",
+    "parte": "fundamental",
+    "tipo": "Cardio",
+    "descripcion": "Entrenamiento de alta intensidad para mejorar la resistencia cardiovascular.",
+    "rutina": {
+      "rondas": [
+        {
+          "tipo": "Reps",
+          "cantidad": 4,
+          "series": [
+            {
+              "tipo": "Tiempo",
+              "ajustable": false,
+              "ejercicio": {
+                "nombre": "Burpees"
+              },
+              "cantidad": 45,
+              "carga": 0
+            },
+            {
+              "tipo": "Tiempo",
+              "ajustable": false,
+              "ejercicio": {
+                "nombre": "Mountain Climbers"
+              },
+              "cantidad": 45,
+              "carga": 0
+            },
+            {
+              "tipo": "Tiempo",
+              "ajustable": false,
+              "ejercicio": {
+                "nombre": "Jump Squats"
+              },
+              "cantidad": 45,
+              "carga": 0
+            },
+            {
+              "tipo": "Tiempo",
+              "ajustable": false,
+              "ejercicio": {
+                "nombre": "Rest"
+              },
+              "cantidad": 45,
+              "carga": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "estado": "PENDIENTE",
+    "nombre": "Ficha 3.1",
+    "parte": "fundamental",
+    "tipo": "Fuerza",
+    "descripcion": "Entrenamiento de fuerza para aumentar la masa muscular.",
+    "rutina": {
+      "rondas": [
+        {
+          "tipo": "Reps",
+          "cantidad": 4,
+          "series": [
+            {
+              "tipo": "Reps",
+              "ajustable": true,
+              "ejercicio": {
+                "nombre": "Deadlifts",
+                "tipoCarga": "RM"
+              },
+              "cantidad": 5,
+              "carga": 70
+            },
+            {
+              "tipo": "Reps",
+              "ajustable": true,
+              "ejercicio": {
+                "nombre": "Bench Press",
+                "tipoCarga": "RM"
+              },
+              "cantidad": 6,
+              "carga": 60
+            },
+            {
+              "tipo": "Reps",
+              "ajustable": true,
+              "ejercicio": {
+                "nombre": "Bent Over Rows",
+                "tipoCarga": "RM"
+              },
+              "cantidad": 10,
+              "carga": 55
+            },
+            {
+              "tipo": "Reps",
+              "ajustable": true,
+              "ejercicio": {
+                "nombre": "Shoulder Press",
+                "tipoCarga": "RM"
+              },
+              "cantidad": 10,
+              "carga": 55
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": 4,
+    "estado": "PENDIENTE",
+    "nombre": "Ficha 3.1",
+    "parte": "fundamental",
+    "tipo": "Resistencia",
+    "descripcion": "Entrenamiento de resistencia para mejorar el VAM.",
+    "rutina": {
+      "rondas": [
+        {
+          "tipo": "Reps",
+          "cantidad": 6,
+          "series": [
+            {
+              "tipo": "Dist",
+              "ajustable": true,
+              "ejercicio": {
+                "nombre": "Carrera",
+                "tipoCarga": "VAM"
+              },
+              "cantidad": 200,
+              "carga": 80
+            },
+            {
+              "tipo": "Tiempo",
+              "ajustable": false,
+              "ejercicio": {
+                "nombre": "Descanso"
+              },
+              "cantidad": 60
+            },
+            {
+              "tipo": "Dist",
+              "ajustable": true,
+              "ejercicio": {
+                "nombre": "Carrera",
+                "tipoCarga": "VAM"
+              },
+              "cantidad": 200,
+              "carga": 80
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

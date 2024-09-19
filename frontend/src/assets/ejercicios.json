@@ -1,0 +1,237 @@
+{
+  "data": {
+    "_embedded": {
+      "ejercicios": [
+        {
+          "id":1,
+          "nombre": "Flexiones",
+          "descripcion": "Ejercicio para fortalecer el pecho, los hombros y los tríceps.",
+          "cualidad": "Fuerza",
+          "numero_ejecutantes": 1,
+          "tipo_movimiento": "Activo resistivo",
+          "tipo_contraccion": "Excéntrica",
+          "velocidad": "Media",
+          "equipoId": null,
+          "musculos_principales": ["Pectorales"],
+          "musculos_secundarios": ["Tríceps", "Deltoides"],
+          "url": "https://www.youtube.com/watch?v=0pkjOk0EiAk",
+          "_links": {
+            "self": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/flexiones"
+            },
+            "ejercicio": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/flexiones"
+            }
+          }
+        },
+        {
+          "id":2,
+          "nombre": "Sit-ups",
+          "descripcion": "Ejercicio para fortalecer los músculos abdominales.",
+          "cualidad": "Fuerza",
+          "numero_ejecutantes": 1,
+          "tipo_movimiento": "Activo resistivo",
+          "tipo_contraccion": "Concéntrica",
+          "velocidad": "Media",
+          "equipoId": null,
+          "musculos_principales": ["Abdominales"],
+          "musculos_secundarios": ["Flexores de cadera"],
+          "url": "https://www.youtube.com/watch?v=situps123",
+          "_links": {
+            "self": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/sit-ups"
+            },
+            "ejercicio": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/sit-ups"
+            }
+          }
+        },
+        {
+          "id":3,
+          "nombre": "Sentadillas",
+          "descripcion": "Ejercicio para fortalecer los músculos de las piernas y los glúteos.",
+          "cualidad": "Fuerza",
+          "numero_ejecutantes": 1,
+          "tipo_movimiento": "Activo resistivo",
+          "tipo_contraccion": "Concéntrica",
+          "velocidad": "Media",
+          "equipoId": null,
+          "musculos_principales": ["Cuádriceps"],
+          "musculos_secundarios": ["Glúteos", "Isquiotibiales"],
+          "url": "https://www.youtube.com/watch?v=sentadillas123",
+          "_links": {
+            "self": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/sentadillas"
+            },
+            "ejercicio": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/sentadillas"
+            }
+          }
+        },
+        {
+          "id":4,
+          "nombre": "Dominadas",
+          "descripcion": "Ejercicio para fortalecer los músculos de la espalda y los brazos.",
+          "cualidad": "Fuerza",
+          "numero_ejecutantes": 1,
+          "tipo_movimiento": "Activo resistivo",
+          "tipo_contraccion": "Concéntrica",
+          "velocidad": "Media",
+          "equipoId": 11,
+          "musculos_principales": ["Dorsales"],
+          "musculos_secundarios": ["Bíceps", "Trapecios"],
+          "url": "https://www.youtube.com/watch?v=dominadas123",
+          "_links": {
+            "self": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/dominadas"
+            },
+            "ejercicio": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/dominadas"
+            },
+            "equipo":{
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/equipos/11"
+            }
+          }
+        },
+        {
+          "id":5,
+          "nombre": "Plancha",
+          "descripcion": "Ejercicio isométrico para fortalecer el core y mejorar la estabilidad.",
+          "cualidad": "Resistencia",
+          "numero_ejecutantes": 1,
+          "tipo_movimiento": "Estático",
+          "tipo_contraccion": "Isométrica",
+          "velocidad": "N/A",
+          "equipoId": null,
+          "musculos_principales": ["Abdominales"],
+          "musculos_secundarios": ["Espalda baja", "Hombros"],
+          "url": "https://www.youtube.com/watch?v=plancha123",
+          "_links": {
+            "self": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/plancha"
+            },
+            "ejercicio": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/plancha"
+            }
+          }
+        },
+        {
+          "id":6,
+          "nombre": "Burpee",
+          "descripcion": "Ejercicio de cuerpo completo que combina fuerza y cardio.",
+          "cualidad": "Fuerza y Resistencia",
+          "numero_ejecutantes": 1,
+          "tipo_movimiento": "Activo resistivo",
+          "tipo_contraccion": "Concéntrica",
+          "velocidad": "Alta",
+          "equipoId": null,
+          "musculos_principales": ["Cuádriceps", "Pectorales"],
+          "musculos_secundarios": ["Tríceps", "Deltoides", "Abdominales"],
+          "url": "https://www.youtube.com/watch?v=burpee123",
+          "_links": {
+            "self": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/burpee"
+            },
+            "ejercicio": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/burpee"
+            }
+          }
+        },
+        {
+          "id":7,
+          "nombre": "Salto doble de comba",
+          "descripcion": "Ejercicio cardiovascular avanzado que mejora la coordinación y la resistencia.",
+          "cualidad": "Resistencia",
+          "numero_ejecutantes": 1,
+          "tipo_movimiento": "Activo resistivo",
+          "tipo_contraccion": "Concéntrica",
+          "velocidad": "Alta",
+          "equipoId": 6,
+          "musculos_principales": ["Gemelos"],
+          "musculos_secundarios": ["Cuádriceps", "Abdominales"],
+          "url": "https://www.youtube.com/watch?v=saltodoble123",
+          "_links": {
+            "self": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/salto-doble-de-comba"
+            },
+            "ejercicio": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/salto-doble-de-comba"
+            },
+            "equipo":{
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/equipos/6"
+            }
+          }
+        },
+        {
+          "id":8,
+          "nombre": "Salto de comba",
+          "descripcion": "Ejercicio cardiovascular que mejora la coordinación y la resistencia.",
+          "cualidad": "Resistencia",
+          "numero_ejecutantes": 1,
+          "tipo_movimiento": "Activo resistivo",
+          "tipo_contraccion": "Concéntrica",
+          "velocidad": "Alta",
+          "equipoId": 6,
+          "musculos_principales": ["Gemelos"],
+          "musculos_secundarios": ["Cuádriceps", "Abdominales"],
+          "url": "https://www.youtube.com/watch?v=saltocomba123",
+          "_links": {
+            "self": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/salto-de-comba"
+            },
+            "ejercicio": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/salto-de-comba"
+            },
+            "equipo":{
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/equipos/6"
+            }
+          }
+        },
+        {
+          "id":9,
+          "nombre": "Zancada",
+          "descripcion": "Ejercicio para fortalecer los músculos de las piernas y los glúteos.",
+          "cualidad": "Fuerza",
+          "numero_ejecutantes": 1,
+          "tipo_movimiento": "Activo resistivo",
+          "tipo_contraccion": "Concéntrica",
+          "velocidad": "Media",
+          "equipoId": null,
+          "musculos_principales": ["Cuádriceps"],
+          "musculos_secundarios": ["Glúteos", "Isquiotibiales"],
+          "url": "https://www.youtube.com/watch?v=zancada123",
+          "_links": {
+            "self": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/zancada"
+            },
+            "ejercicio": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/zancada"
+            }
+          }
+        },
+        {
+          "id":10,
+          "nombre": "Carrera",
+          "descripcion": "Ejercicio cardiovascular que mejora la resistencia y la salud cardiovascular.",
+          "cualidad": "Resistencia",
+          "numero_ejecutantes": 1,
+          "tipo_movimiento": "Activo resistivo",
+          "tipo_contraccion": "Concéntrica",
+          "velocidad": "Variable",
+          "equipoId": null,
+          "musculos_principales": ["Cuádriceps", "Isquiotibiales"],
+          "musculos_secundarios": ["Gemelos", "Abdominales"],
+          "url": "https://www.youtube.com/watch?v=carrera123",
+          "_links": {
+            "self": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/carrera"
+            },
+            "ejercicio": {
+              "href": "https://kiron-c6e07df12596.herokuapp.com/api/ejercicios/carrera"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
