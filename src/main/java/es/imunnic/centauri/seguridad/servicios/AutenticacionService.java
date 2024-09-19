@@ -1,8 +1,8 @@
 package es.imunnic.centauri.seguridad.servicios;
 
 import es.imunnic.centauri.entidades.Usuario;
-import es.imunnic.centauri.seguridad.entidades.UsuarioExterno;
 import es.imunnic.centauri.repositorios.UsuarioDAO;
+import es.imunnic.centauri.seguridad.entidades.UsuarioExterno;
 import es.imunnic.centauri.seguridad.modelos.AutenticacionResponse;
 import es.imunnic.centauri.seguridad.modelos.LoginRequest;
 import es.imunnic.centauri.seguridad.modelos.RegistroResponse;

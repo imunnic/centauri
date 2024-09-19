@@ -1,4 +1,4 @@
-package es.mde.kiron.security.jwt;
+package es.imunnic.centauri.seguridad.jwt;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

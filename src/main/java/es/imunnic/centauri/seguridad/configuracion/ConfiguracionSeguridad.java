@@ -40,6 +40,7 @@ public class ConfiguracionSeguridad {
         .addFilterBefore(this.FILTER, UsernamePasswordAuthenticationFilter.class)
         .build();
   }
+
 }
 
 

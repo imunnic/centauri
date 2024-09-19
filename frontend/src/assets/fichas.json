@@ -11,11 +11,11 @@
     "rutina": {
       "rondas": [
         {
-          "tipo": "Reps",
+          "tipo": "REPS",
           "cantidad": 3,
           "series": [
             {
-              "tipo": "Reps",
+              "tipo": "REPS",
               "ajustable": true,
               "ejercicio": {
                 "nombre": "Push-ups",
@@ -25,7 +25,7 @@
               "carga": 30
             },
             {
-              "tipo": "Reps",
+              "tipo": "REPS",
               "ajustable": true,
               "ejercicio": {
                 "nombre": "Pull-ups",
@@ -35,7 +35,7 @@
               "carga": 25
             },
             {
-              "tipo": "Reps",
+              "tipo": "REPS",
               "ajustable": true,
               "ejercicio": {
                 "nombre": "Lunges",
@@ -45,7 +45,7 @@
               "carga": 25
             },
             {
-              "tipo": "Tiempo",
+              "tipo": "TIEMPO",
               "ajustable": false,
               "ejercicio": {
                 "nombre": "Plank",
@@ -70,11 +70,11 @@
     "rutina": {
       "rondas": [
         {
-          "tipo": "Reps",
+          "tipo": "REPS",
           "cantidad": 4,
           "series": [
             {
-              "tipo": "Tiempo",
+              "tipo": "TIEMPO",
               "ajustable": false,
               "ejercicio": {
                 "nombre": "Burpees"
@@ -83,7 +83,7 @@
               "carga": 0
             },
             {
-              "tipo": "Tiempo",
+              "tipo": "TIEMPO",
               "ajustable": false,
               "ejercicio": {
                 "nombre": "Mountain Climbers"
@@ -92,7 +92,7 @@
               "carga": 0
             },
             {
-              "tipo": "Tiempo",
+              "tipo": "TIEMPO",
               "ajustable": false,
               "ejercicio": {
                 "nombre": "Jump Squats"
@@ -101,7 +101,7 @@
               "carga": 0
             },
             {
-              "tipo": "Tiempo",
+              "tipo": "TIEMPO",
               "ajustable": false,
               "ejercicio": {
                 "nombre": "Rest"
@@ -126,11 +126,11 @@
     "rutina": {
       "rondas": [
         {
-          "tipo": "Reps",
+          "tipo": "REPS",
           "cantidad": 4,
           "series": [
             {
-              "tipo": "Reps",
+              "tipo": "REPS",
               "ajustable": true,
               "ejercicio": {
                 "nombre": "Deadlifts",
@@ -140,7 +140,7 @@
               "carga": 70
             },
             {
-              "tipo": "Reps",
+              "tipo": "REPS",
               "ajustable": true,
               "ejercicio": {
                 "nombre": "Bench Press",
@@ -150,7 +150,7 @@
               "carga": 60
             },
             {
-              "tipo": "Reps",
+              "tipo": "REPS",
               "ajustable": true,
               "ejercicio": {
                 "nombre": "Bent Over Rows",
@@ -160,7 +160,7 @@
               "carga": 55
             },
             {
-              "tipo": "Reps",
+              "tipo": "REPS",
               "ajustable": true,
               "ejercicio": {
                 "nombre": "Shoulder Press",
@@ -186,11 +186,11 @@
     "rutina": {
       "rondas": [
         {
-          "tipo": "Reps",
+          "tipo": "REPS",
           "cantidad": 6,
           "series": [
             {
-              "tipo": "Dist",
+              "tipo": "DIST",
               "ajustable": true,
               "ejercicio": {
                 "nombre": "Carrera",
@@ -200,7 +200,7 @@
               "carga": 80
             },
             {
-              "tipo": "Tiempo",
+              "tipo": "TIEMPO",
               "ajustable": false,
               "ejercicio": {
                 "nombre": "Descanso"
@@ -208,7 +208,7 @@
               "cantidad": 60
             },
             {
-              "tipo": "Dist",
+              "tipo": "DIST",
               "ajustable": true,
               "ejercicio": {
                 "nombre": "Carrera",
