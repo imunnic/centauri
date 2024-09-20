@@ -1,38 +1,43 @@
 <template>
   <v-container>
     <div class="contenedor-flex justify-start">
-      <v-switch 
-        v-if="perfil == 'ECEF'"
-        v-model="soloPendientes" 
-        label="Mostrar pendientes" 
-        color="red" 
-        active-color="red"
-        class="interruptor"
-      ></v-switch>
+      <v-switch v-if="perfil == 'ECEF'" v-model="soloPendientes" label="Mostrar pendientes" color="red"
+        active-color="red" class="interruptor"></v-switch>
     </div>
 
-    <ListaCrudComponent 
-      :items="fichasRegistradas" 
-      :key="fichasKey" 
-      @detalle="verFicha" 
-      :permiso-creacion="false"
-      :cargando="cargando" 
-    />
+    <ListaCrudComponent :items="fichasRegistradas" :key="fichasKey" @detalle="verFicha" :permiso-creacion="false"
+      :cargando="cargando">
+      <template v-slot:info-extra="{ item }">
+        <div class="info-relevante">
+          <p>
+            <b>RPE estimado:
+              <span :style="{ color: getColor(item.rpeEstimado) }">
+                {{ item.rpeEstimado }}/10
+              </span>
+            </b>
+          </p>
+          <p><b>Tiempo estimado:</b> {{ item.tiempoEstimado }} minutos</p>
+        </div>
+      </template>
+    </ListaCrudComponent>
+
+    
   </v-container>
 </template>
 
 <script>
 import BuscadorComponent from '@/components/comun/BuscadorComponent.vue';
 import ListaCrudComponent from '../components/comun/ListaCrudComponent.vue';
+import FabBotonComponent from '@/components/comun/FabBotonComponent.vue';
 import { useFichasStore } from '@/store/fichasStore.js';
 import { useUsuariosStore } from '@/store/usuariosStore.js';
 import { mapActions, mapState } from 'pinia';
 
 export default {
-  components: { BuscadorComponent, ListaCrudComponent },
+  components: { BuscadorComponent, ListaCrudComponent, FabBotonComponent },
   computed: {
     ...mapState(useFichasStore, ['fichasRegistradas']),
-    ...mapState(useUsuariosStore, ['token','perfil']),
+    ...mapState(useUsuariosStore, ['token', 'perfil']),
   },
   data() {
     return {
@@ -65,7 +70,18 @@ export default {
       const href = ficha.id;
       const id = href.split('/').pop();
       this.$router.push('/fichas/' + id);
+    },
+    getColor(rpe) {
+      if (rpe < 6) return 'green';
+      if (rpe >= 6 && rpe < 9) return 'orange';
+      return 'red';
     }
   }
 };
 </script>
+
+<style scoped>
+.info-relevante {
+  font-size: 17px;
+}
+</style>

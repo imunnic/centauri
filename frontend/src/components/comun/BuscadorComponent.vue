@@ -46,9 +46,9 @@ export default {
     return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   };
   const normalizedQuery = normalizeString(query);
-
+  let filtrado = this.filtros.filter(key => key !== 'id');
   const itemsfiltrados = this.items.filter(item => {
-    return this.filtros.some(key => {
+    return filtrado.some(key => {
       if (Array.isArray(item[key])) {
         return item[key].some(subItem => {
           if (typeof subItem === 'object' && subItem.nombre) {
