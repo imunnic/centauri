@@ -5,7 +5,8 @@
     --claro: #0D4C0D;
     --hover:#93DD93;
     --neutro: #737373;
-    --calentamiento:#a20505;
+    --rechazo:#a20505;
+    --sombraRechazo:#650303;
     --estiramiento: #0202aa;
   }
 
@@ -16,6 +17,14 @@
 
 .claro{
   background-color: var(--claro) !important;
+  color: var(--texto) !important;
+}
+.rechazo{
+  background-color: var(--rechazo) !important;
+  color: var(--texto) !important;
+}
+.rechazo:hover{
+  background-color: var(--rechazo) !important;
   color: var(--texto) !important;
 }
 .claro:hover{

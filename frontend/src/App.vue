@@ -24,7 +24,7 @@ import {mapActions, mapState} from 'pinia';
       }
     },
     computed:{
-    ...mapState(useUsuariosStore,['token'])
+    ...mapState(useUsuariosStore,['token', 'isLogged'])
   },
   methods: {
     ...mapActions(useUsuariosStore,['peticionLogin']),
@@ -33,7 +33,9 @@ import {mapActions, mapState} from 'pinia';
     }
   },
   async created() {
-    await this.peticionLogin();
+    if (!this.isLogged) {
+      await this.peticionLogin();
+    }
   },
   }
 </script>

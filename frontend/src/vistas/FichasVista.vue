@@ -1,22 +1,12 @@
 <template>
   <v-container>
     <div class="contenedor-flex justify-start">
-      <v-switch
-        v-model="soloPendientes"
-        label="Mostrar pendientes"
-        color="red"
-        active-color="red"
-        class="interruptor"
-      ></v-switch>
+      <v-switch v-model="soloPendientes" label="Mostrar pendientes" color="red" active-color="red"
+        class="interruptor"></v-switch>
     </div>
-    
-    <ListaCrudComponent
-      :items="fichasFiltradas"
-      :key="fichasKey"
-      @detalle="verFicha"
-      :permiso-creacion="false"
-      :cargando="cargando"
-    />
+
+    <ListaCrudComponent :items="fichasFiltradas" :key="fichasKey" @detalle="verFicha" :permiso-creacion="false"
+      :cargando="cargando" />
   </v-container>
 </template>
 
@@ -52,19 +42,15 @@ export default {
   async mounted() {
     this.arrancarServicioFicha(this.token);
     this.cargando = true;
-    console.log(this.token);
-    let response = await axios.get("http://localhost:8080/api/fichas", {
-    headers: {
-        'Authorization': `Bearer ${this.token}` // Añadir el token en los headers
-    }
-    })  
-    console.log(response);
+    this.cargarFichas();
     this.cargando = false;
   },
   methods: {
     ...mapActions(useFichasStore, ['arrancarServicioFicha', 'cargarFichas']),
     verFicha(ficha) {
-      this.$router.push('/fichas/' + ficha.id);
+      const href = ficha._links.self.href;
+      const id = href.split('/').pop();
+      this.$router.push('/fichas/' + id);
     }
   }
 };

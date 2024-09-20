@@ -2,19 +2,20 @@
   <v-card elevation="2" class="ronda-componente contenedor carta">
     <div class="ronda-header">
       <div class="contenedor-input" v-if="!soloLectura">
-        <v-select v-model="ronda.tipo" :items="['Reps', 'Tiempo']" label="Tipo" required class="input-medio"
+        <v-select v-model="ronda.tipo" :items="['REPS', 'TIEMPO']" label="Tipo" required class="input-medio"
           :disabled="soloLectura"></v-select>
-        <v-text-field v-if="ronda.tipo === 'Reps'" v-model="ronda.cantidad" label="Cantidad" type="number" required
+        <v-text-field v-if="ronda.tipo === 'REPS'" v-model="ronda.cantidad" label="Cantidad" type="number" required
           class="input-corto" :disabled="soloLectura"></v-text-field>
-        <v-text-field v-if="ronda.tipo === 'Tiempo'" v-model="formattedTime" label="Tiempo" type="time" required
+        <v-text-field v-if="ronda.tipo === 'TIEMPO'" v-model="formattedTime" label="TIEMPO" type="time" required
           class="input-corto" :disabled="soloLectura"></v-text-field>
       </div>
       <div v-else class="flex-fila">
-        <p class="definicion-ronda" v-if="ronda.tipo == 'Reps'"> <b>{{ ronda.cantidad }} repeticiones</b></p>
-        <p class="definicion-ronda" v-if="ronda.tipo == 'Tiempo'"><b>Ronda de {{ formattedTime }} minutos</b></p>
+        <p class="definicion-ronda" v-if="ronda.tipo == 'REPS'"> <b>{{ ronda.cantidad }} repeticiones</b></p>
+        <p class="definicion-ronda" v-if="ronda.tipo == 'TIEMPO'"><b>Ronda de {{ formattedTime }} minutos</b></p>
       </div>
 
-      <v-icon small @click="quitarRonda" color="error" class="icono-papelera" v-if="!soloLectura">mdi-trash-can</v-icon>
+      <v-icon small @click="quitarRonda" color="error" class="icono-papelera" 
+      v-if="!soloLectura">mdi-trash-can</v-icon>
     </div>
 
     <div class="contenedor-flex">
@@ -76,7 +77,8 @@ export default {
   methods: {
     agregarSerie() {
       if (!this.soloLectura) {
-        this.ronda.series.push({ id: uuidv4(), ejercicio: this.ejercicioVacio, tipo: '', cantidad: 0, peso: 0 });
+        this.ronda.series
+          .push({ id: uuidv4(), ejercicio: this.ejercicioVacio, tipo: '', cantidad: 0, peso: 0 });
       }
     },
     quitarRonda() {
@@ -112,7 +114,7 @@ export default {
   mounted() {
     if (this.soloLectura) {
     } else {
-      this.ronda.tipo = 'Reps';
+      this.ronda.tipo = 'REPS';
       this.agregarSerie();
     }
   }
@@ -128,7 +130,6 @@ export default {
   top: 0;
   bottom: 0;
   width: 5px;
-  /* Ancho de la barra */
   background-color: var(--claro);
 }
 

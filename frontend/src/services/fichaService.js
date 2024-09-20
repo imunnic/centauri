@@ -14,14 +14,22 @@ export default class FichaService {
   }
 
   getAll() {
-    console.log(url);
-    console.log(config);
     return axios.get(url, config);
   }
 
   cambiarEstado(href, estado){
-    let ruta = href + "/estado"
-    return axios.patch(ruta, estado)
+    let ruta;
+    if(estado){
+      ruta = href + "/estado?aprobado=true"
+    } else{
+      ruta = href + "/estado?aprobado=false"
+    }
+    return axios.patch(ruta, null, config)
+  }
+
+  getFicha(id){
+    let ruta = url + "/" + id
+    return axios.get(ruta, config)
   }
 
 }

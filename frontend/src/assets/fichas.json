@@ -115,16 +115,15 @@
     }
   },
   {
-    "id": 3,
+    
     "estado": "PENDIENTE",
-    "nombre": "Ficha 3.1",
+    "nombre": "Ficha 3.2",
     "parte": "Fundamental",
     "tipo": "Fuerza",
     "descripcion": "Entrenamiento de fuerza para aumentar la masa muscular.",
     "rpeEstimado":7,
     "duracionEstimada":20,
-    "rutina": {
-      "rondas": [
+    "rutina":  [
         {
           "tipo": "REPS",
           "cantidad": 4,
@@ -172,7 +171,7 @@
           ]
         }
       ]
-    }
+    
   },
   {
     "id": 4,

@@ -16,6 +16,7 @@ export const useUsuariosStore = defineStore("usuarios", {
         this.token = await this.usuarioService.getToken();
         this.perfil = await this.usuarioService.getRol();
         this.username = await this.usuarioService.getUsername();
+        this.isLogged = true;
     },
   },
 });
