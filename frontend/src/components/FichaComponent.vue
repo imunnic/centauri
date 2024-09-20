@@ -1,5 +1,5 @@
 <template>
-  <v-card class="parte-componente contenedor">
+  <v-card class="ficha-componente contenedor">
     <v-row class="d-flex justify-space-between">
       <v-col cols="6">
         <div class="d-flex justify-start">
@@ -79,7 +79,7 @@ export default {
       }
     },
     emitirActualizacion() {
-      this.$emit('update-parte', this.localRondas);
+      this.$emit('update-ficha', this.localRondas);
     }
   },
   watch: {
@@ -94,7 +94,7 @@ export default {
 </script>
 
 <style scoped>
-.parte-componente {
+.ficha-componente {
   padding: 20px;
 }
 

@@ -1,5 +1,53 @@
 <template>
-  <v-card class="contenedor" elevation="3">
+  <v-expansion-panels v-if="soloLectura == false">
+    <v-expansion-panel :hide-actions="soloLectura" class="carta contenedor">
+      <v-expansion-panel-title class="componente" style="position: relative;">
+        <div class="contenedor">
+          <div>
+            <p class="definicion-serie" v-if="serie.tipo == 'REPS'"> <b>{{ formatoDuracion }} repeticiones de {{
+    ejercicioSeleccionadoNombre }}</b></p>
+            <p class="definicion-serie" v-if="serie.tipo == 'TIEMPO'"><b>{{ formatoDuracion }} minutos de {{
+    ejercicioSeleccionadoNombre }}</b></p>
+            <p class="definicion-serie" v-if="serie.tipo == 'DIST'"><b>{{ formatoDuracion }} metros de {{
+    ejercicioSeleccionadoNombre }}</b></p>
+          </div>
+          <div v-if="serie.ajustable">
+            <p class="definicion-serie"><b>{{ serie.carga }} % de carga</b></p>
+          </div>
+          <div class="info">
+          </div>
+        </div>
+      </v-expansion-panel-title>
+      <v-expansion-panel-text v-if="soloLectura == false" style="position: relative;">
+        <v-form class="contenedor">
+          <v-select v-model="serie.ejercicio" label="Ejercicio" :items="ejerciciosRegistrados" item-title="nombre"
+            item-value="_links.self.href" required :disabled="soloLectura"></v-select>
+          <div class="flex-container">
+            <div class="input-medio">
+              <v-select v-model="serie.tipo" :items="['REPS', 'TIEMPO', 'DIST']" label="Tipo" required
+                :disabled="soloLectura"></v-select>
+            </div>
+            <div class="input-corto">
+              <v-text-field v-if="serie.tipo === 'REPS'" v-model="serie.cantidad" label="Repeticiones" type="number"
+                required :disabled="soloLectura"></v-text-field>
+              <v-text-field v-if="serie.tipo === 'TIEMPO'" v-model="formatoTiempo" label="Tiempo" type="time" required
+                :disabled="soloLectura"></v-text-field>
+              <v-text-field v-if="serie.tipo === 'DIST'" v-model="serie.cantidad" label="Distancia" type="number"
+                required :disabled="soloLectura"></v-text-field>
+            </div>
+          </div>
+          <v-text-field v-if="serie.ajustable" v-model="serie.carga" label="Carga (%)" type="number" required class="input-corto"
+            :disabled="soloLectura"></v-text-field>
+          <v-checkbox v-model="serie.ajustable" label="Adaptable" :disabled="soloLectura"></v-checkbox>
+        </v-form>
+      </v-expansion-panel-text>
+    </v-expansion-panel>
+    <v-icon color="error" @click.stop="quitarSerie" style="position: absolute; top: 0; right: 0; margin: 8px;"
+      v-if="!soloLectura">
+      mdi-trash-can
+    </v-icon>
+  </v-expansion-panels>
+  <v-card v-else class="contenedor" elevation="3">
     <div class="contenedor-flex flex-columna">
       <v-card-title class="titulo-serie">Serie de {{ serie.ejercicio.nombre }}</v-card-title>
       <div v-if="serie.ajustable && serie.ejercicio.tipoCarga == 'REPS'" class="flex-fila">
@@ -21,9 +69,11 @@
         <div class="info-serie">
           <p class="definicion-serie"><b>Carga: {{ serie.carga }} %</b></p>
           <p class="definicion-serie" v-if="serie.tipo == 'TIEMPO'">
-            <b>{{ formatoDuracion }} minutos a {{ marcaEjercicio}}</b></p>
+            <b>{{ formatoDuracion }} minutos a {{ marcaEjercicio }}</b>
+          </p>
           <p class="definicion-serie" v-if="serie.tipo == 'DIST'">
-            <b>{{ formatoDuracion }} metros a {{ marcaEjercicio}}</b></p>
+            <b>{{ formatoDuracion }} metros a {{ marcaEjercicio }}</b>
+          </p>
         </div>
         <div class="info-serie">
           <div class="flex-item">
@@ -37,11 +87,14 @@
         <div class="info-serie">
           <p class="definicion-serie"><b>Carga: {{ serie.carga }} %</b></p>
           <p class="definicion-serie" v-if="serie.tipo == 'REPS'">
-            <b>{{ formatoDuracion }} repeticiones con {{ marcaEjercicio }} kg</b></p>
+            <b>{{ formatoDuracion }} repeticiones con {{ marcaEjercicio }} kg</b>
+          </p>
           <p class="definicion-serie" v-if="serie.tipo == 'TIEMPO'">
-            <b>{{ formatoDuracion }} minutos con {{ marcaEjercicio }} kg</b></p>
-          <p class="definicion-serie" v-if="serie.tipo == 'Dist'">
-            <b>{{ formatoDuracion }} metros con {{ marcaEjercicio }} kg</b></p>
+            <b>{{ formatoDuracion }} minutos con {{ marcaEjercicio }} kg</b>
+          </p>
+          <p class="definicion-serie" v-if="serie.tipo == 'DIST'">
+            <b>{{ formatoDuracion }} metros con {{ marcaEjercicio }} kg</b>
+          </p>
         </div>
         <div class="info-serie">
           <div class="flex-item">
@@ -74,7 +127,7 @@ export default {
         tipo: 'REPS',
         cantidad: 1,
         peso: 0,
-        ajustable: false
+        ajustable: true
       })
     },
     soloLectura: {
@@ -90,7 +143,12 @@ export default {
   },
   computed: {
     ...mapState(useEjerciciosStore, ['ejerciciosRegistrados']),
-
+    ejercicioSeleccionadoNombre() {
+      const ejercicioSeleccionado = this.ejerciciosRegistrados.find(
+        ejercicio => ejercicio._links.self.href === this.serie.ejercicio
+      );
+      return ejercicioSeleccionado ? ejercicioSeleccionado.nombre : 'Ejercicio no seleccionado';
+    },
     formatoMarca() {
       const minutes = Math.floor(this.ritmoObjetivo / 60).toString().padStart(2, '0');
       const seconds = (this.ritmoObjetivo % 60).toString().padStart(2, '0');
@@ -112,8 +170,8 @@ export default {
 
     marcaEjercicio() {
       if (this.serie.ejercicio.tipoCarga === 'VAM') {
-        const ritmoEnSegundos = 
-        this.ritmoObjetivo + (this.ritmoObjetivo * ((100 - this.serie.carga) / 100));
+        const ritmoEnSegundos =
+          this.ritmoObjetivo + (this.ritmoObjetivo * ((100 - this.serie.carga) / 100));
         const minutos = Math.floor(ritmoEnSegundos / 60).toString().padStart(2, '0');
         const segundos = (ritmoEnSegundos % 60).toFixed(0).toString().padStart(2, '0');
         return `${minutos}:${segundos} min/km`;
@@ -133,6 +191,7 @@ export default {
       this.$emit('quitar-serie', this.serie.id);
     }
   },
+  created() { },
   mounted() {
     if (!this.soloLectura) {
       this.serie.tipo = 'REPS';

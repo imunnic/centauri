@@ -6,12 +6,12 @@
           :disabled="soloLectura"></v-select>
         <v-text-field v-if="ronda.tipo === 'REPS'" v-model="ronda.cantidad" label="Cantidad" type="number" required
           class="input-corto" :disabled="soloLectura"></v-text-field>
-        <v-text-field v-if="ronda.tipo === 'TIEMPO'" v-model="formattedTime" label="TIEMPO" type="time" required
+        <v-text-field v-if="ronda.tipo === 'TIEMPO'" v-model="formatoTiempo" label="TIEMPO" type="time" required
           class="input-corto" :disabled="soloLectura"></v-text-field>
       </div>
       <div v-else class="flex-fila">
         <p class="definicion-ronda" v-if="ronda.tipo == 'REPS'"> <b>{{ ronda.cantidad }} repeticiones</b></p>
-        <p class="definicion-ronda" v-if="ronda.tipo == 'TIEMPO'"><b>Ronda de {{ formattedTime }} minutos</b></p>
+        <p class="definicion-ronda" v-if="ronda.tipo == 'TIEMPO'"><b>Ronda de {{ formatoTiempo }} minutos</b></p>
       </div>
 
       <v-icon small @click="quitarRonda" color="error" class="icono-papelera" 
@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     ...mapState(useEjerciciosStore, ['ejercicioVacio']),
-    formattedTime: {
+    formatoTiempo: {
       get() {
         const minutes = Math.floor(this.ronda.cantidad / 60).toString().padStart(2, '0');
         const seconds = (this.ronda.cantidad % 60).toString().padStart(2, '0');

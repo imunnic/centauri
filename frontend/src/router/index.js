@@ -15,6 +15,11 @@ const routes = [
     name: "fichaDetalle",
     component: () => import("../vistas/FichaDetalleVista.vue")
   },
+  {
+    path: "/fichas/crear",
+    name: "crearFicha",
+    component: () => import("../vistas/CrearFichaVista.vue")
+  },
 ];
 
 const router = createRouter({

@@ -6,6 +6,7 @@ export const useEjerciciosStore = defineStore("ejercicios", {
   state: () => ({
     ejerciciosRegistrados: ejercicios,
     ejerciciosService: null,
+    ejercicioVacio:{}
   }),
   actions: {
     async cargarEjercicios() {

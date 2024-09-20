@@ -21,7 +21,8 @@
       </template>
     </ListaCrudComponent>
 
-    
+    <FabBotonComponent v-if="perfil == 'DIPLOMADO' || perfil == 'ECEF'" :icon="'mdi-plus'" @click="crearFicha"></FabBotonComponent>
+
   </v-container>
 </template>
 
@@ -75,6 +76,9 @@ export default {
       if (rpe < 6) return 'green';
       if (rpe >= 6 && rpe < 9) return 'orange';
       return 'red';
+    },
+    crearFicha(){
+      this.$router.push('/fichas/crear');
     }
   }
 };
