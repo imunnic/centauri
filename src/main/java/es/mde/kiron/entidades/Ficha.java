@@ -22,8 +22,6 @@ public class Ficha {
   private String descripcion;
   @DBRef
   private Usuario autor;
-  private String unidad;
-  private String categoria;
   private List<Ronda> rutina = new ArrayList<>();
   private int rpeEstimado;
   private int tiempoEstimado;
@@ -77,22 +75,6 @@ public class Ficha {
 
   public void setAutor(Usuario autor) {
     this.autor = autor;
-  }
-
-  public String getUnidad() {
-    return unidad;
-  }
-
-  public void setUnidad(String unidad) {
-    this.unidad = unidad;
-  }
-
-  public String getCategoria() {
-    return categoria;
-  }
-
-  public void setCategoria(String categoria) {
-    this.categoria = categoria;
   }
 
   public int getRpeEstimado() {

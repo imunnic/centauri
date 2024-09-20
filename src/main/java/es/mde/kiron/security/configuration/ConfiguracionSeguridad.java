@@ -27,17 +27,20 @@ public class ConfiguracionSeguridad {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(
-            authRequest -> authRequest
-                .requestMatchers("/api/autenticacion/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated())
+        .authorizeHttpRequests(authRequest -> authRequest
+            // Permitir el acceso público a los endpoints de autenticación y al de /aprobado
+            .requestMatchers("/api/autenticacion/**", "/api/fichas/aprobado").permitAll()
+            // Requerir autenticación para cualquier otro endpoint
+            .anyRequest().authenticated())
+        // Política de sesiones sin estado (stateless) para JWT o tokens Bearer
         .sessionManagement(sessionManager ->
             sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        // Proveedor de autenticación (usando tu autenticador personalizado)
         .authenticationProvider(this.PROVIDER)
+        // Filtro personalizado (antes del UsernamePasswordAuthenticationFilter)
         .addFilterBefore(this.FILTER, UsernamePasswordAuthenticationFilter.class)
         .build();
   }
+
 }
 

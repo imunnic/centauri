@@ -17,6 +17,14 @@ export default class FichaService {
     return axios.get(url, config);
   }
 
+  getAprobadas() {
+    return axios.get(url + "/aprobado", config);
+  }
+
+  getPendientes(){
+    return axios.get(url + "/pendiente", config);
+  }
+
   cambiarEstado(href, estado){
     let ruta;
     if(estado){

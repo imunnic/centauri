@@ -5,9 +5,11 @@ import es.mde.kiron.modelos.Estado;
 import es.mde.kiron.repositorios.FichaDAO;
 import es.mde.kiron.repositorios.UsuarioDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -39,6 +41,24 @@ public class FichaController {
 
     Ficha fichaActualizada = fichaDAO.save(ficha);
     return ResponseEntity.ok(fichaActualizada);
+  }
+
+  @GetMapping("/aprobado")
+  public ResponseEntity<List<Ficha>> getAprobados(){
+    List<Ficha> aprobadas = fichaDAO.findByEstado(Estado.APROBADO);
+    return new ResponseEntity(aprobadas, HttpStatus.OK);
+  }
+
+  @GetMapping("/pendiente")
+  public ResponseEntity<List<Ficha>> getPendientes(){
+    List<Ficha> aprobadas = fichaDAO.findByEstado(Estado.PENDIENTE);
+    return new ResponseEntity(aprobadas, HttpStatus.OK);
+  }
+
+  @GetMapping("/rechazada")
+  public ResponseEntity<List<Ficha>> getRechazadas(){
+    List<Ficha> aprobadas = fichaDAO.findByEstado(Estado.RECHAZADO);
+    return new ResponseEntity(aprobadas, HttpStatus.OK);
   }
 
 
