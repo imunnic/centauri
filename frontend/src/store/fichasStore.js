@@ -22,6 +22,10 @@ export const useFichasStore = defineStore('fichas', {
       let response = await this.fichaService.getPendientes();
       this.fichasRegistradas = response.data;
     },
+    async cargarPropias(){
+      let response = await this.fichaService.getPropias(useUsuariosStore().id);
+      this.fichasRegistradas =response.data._embedded.fichas;
+    },
     async cargarFichaDetalle(id){
       return await this.fichaService.getFicha(id) 
     },

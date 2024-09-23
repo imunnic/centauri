@@ -28,20 +28,25 @@ export default class FichaService {
   cambiarEstado(href, estado){
     let ruta;
     if(estado){
-      ruta = href + "/estado?aprobado=true"
+      ruta = href + "/estado?aprobado=true";
     } else{
-      ruta = href + "/estado?aprobado=false"
+      ruta = href + "/estado?aprobado=false";
     }
-    return axios.patch(ruta, null, config)
+    return axios.patch(ruta, null, config);
   }
 
   getFicha(id){
-    let ruta = url + "/" + id
-    return axios.get(ruta, config)
+    let ruta = url + "/" + id;
+    return axios.get(ruta, config);
+  }
+
+  getPropias(id){
+    let ruta = url + "/search/findByAutor?id=" + id;
+    return axios.get(ruta, config);
   }
 
   postFicha(ficha){
-    return axios.post(url, ficha, config)
+    return axios.post(url, ficha, config);
   }
 
 }

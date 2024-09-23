@@ -10,5 +10,6 @@ import java.util.List;
 @RepositoryRestResource(path = "fichas", itemResourceRel = "ficha",
     collectionResourceRel = "fichas")
 public interface FichaDAO extends MongoRepository<Ficha, String> {
-  public List<Ficha> findByEstado(Estado estado);
+  List<Ficha> findByEstado(Estado estado);
+  List<Ficha> findByAutor(String id);
 }
