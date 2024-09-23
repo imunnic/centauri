@@ -23,7 +23,6 @@ public class FichaController {
     this.fichaDAO = fichaDAO;
   }
 
-
   @PatchMapping("/{id}/estado")
   public ResponseEntity<Ficha> modificarEstadoFicha(@PathVariable String id, @RequestParam boolean aprobado) {
     Optional<Ficha> fichaOptional = fichaDAO.findById(id);

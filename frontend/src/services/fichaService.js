@@ -40,4 +40,8 @@ export default class FichaService {
     return axios.get(ruta, config)
   }
 
+  postFicha(ficha){
+    return axios.post(url, ficha, config)
+  }
+
 }

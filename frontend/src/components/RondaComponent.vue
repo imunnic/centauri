@@ -2,11 +2,11 @@
   <v-card elevation="2" class="ronda-componente contenedor carta">
     <div class="ronda-header">
       <div class="contenedor-input" v-if="!soloLectura">
-        <v-select v-model="ronda.tipo" :items="['REPS', 'TIEMPO']" label="Tipo" required class="input-medio"
+        <v-select v-model="ronda.tipo" :items="tiposRonda" item-title="texto" item-value="valor" label="Tipo" required class="input-medio"
           :disabled="soloLectura"></v-select>
         <v-text-field v-if="ronda.tipo === 'REPS'" v-model="ronda.cantidad" label="Cantidad" type="number" required
           class="input-corto" :disabled="soloLectura"></v-text-field>
-        <v-text-field v-if="ronda.tipo === 'TIEMPO'" v-model="formatoTiempo" label="TIEMPO" type="time" required
+        <v-text-field v-if="ronda.tipo === 'TIEMPO'" v-model="formatoTiempo" label="Tiempo" type="time" required
           class="input-corto" :disabled="soloLectura"></v-text-field>
       </div>
       <div v-else class="flex-fila">
@@ -56,6 +56,15 @@ export default {
       default: false
     }
   },
+  data() {
+    return {
+      tiposRonda: [
+        { valor: 'REPS', texto: 'Repeticiones' },
+        { valor: 'TIEMPO', texto: 'Tiempo' },
+        { valor: 'DIST', texto: 'Distancia' }
+      ]
+    }
+  },
   components: {
     SerieComponent,
     draggable
@@ -78,7 +87,7 @@ export default {
     agregarSerie() {
       if (!this.soloLectura) {
         this.ronda.series
-          .push({ id: uuidv4(), ejercicio: this.ejercicioVacio, tipo: '', cantidad: 0, peso: 0 });
+          .push({ id: uuidv4(), ejercicio: null, tipo: '', cantidad: 0, peso: 0 });
       }
     },
     quitarRonda() {

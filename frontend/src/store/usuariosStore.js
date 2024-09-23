@@ -6,6 +6,7 @@ export const useUsuariosStore = defineStore("usuarios", {
     username: "",
     token: "",
     perfil: "",
+    href:"",
     isLogged: false,
     primerInicio: null,
     usuarioService: new UsuariosService(),
@@ -15,7 +16,11 @@ export const useUsuariosStore = defineStore("usuarios", {
     async peticionLogin() {
         this.token = await this.usuarioService.getToken();
         this.perfil = await this.usuarioService.getRol();
-        this.username = await this.usuarioService.getUsername();
+        let usuario = await this.usuarioService.getUsername();
+        this.username = usuario.nombre;
+        this.href = "http://localhost:8080/usuarios/" + usuario.id
+        console.log(usuario);
+        // this.href = await this.usuarioService.getHref();
         this.isLogged = true;
     },
   },

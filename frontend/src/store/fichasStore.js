@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import FichaService from '../services/fichaService.js';
+import { useUsuariosStore } from "./usuariosStore.js";
 
 export const useFichasStore = defineStore('fichas', {
   state: () => ({
@@ -26,7 +27,11 @@ export const useFichasStore = defineStore('fichas', {
     },
     async cambiarEstado(href, estadoNuevo){
       this.fichaService.cambiarEstado(href, estadoNuevo);
+    },
+    async grabarFicha(ficha){
+      ficha.estado = "PENDIENTE";
+      ficha.autor = useUsuariosStore().href;
+      await this.fichaService.postFicha(ficha);
     }
-
   }
 });

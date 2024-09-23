@@ -1,44 +1,57 @@
 <template>
-  <v-expansion-panels v-if="soloLectura == false">
+  <v-expansion-panels v-model="expansionPanelOpen" v-if="soloLectura == false">
     <v-expansion-panel :hide-actions="soloLectura" class="carta contenedor">
       <v-expansion-panel-title class="componente" style="position: relative;">
         <div class="contenedor">
-          <div>
-            <p class="definicion-serie" v-if="serie.tipo == 'REPS'"> <b>{{ formatoDuracion }} repeticiones de {{
-    ejercicioSeleccionadoNombre }}</b></p>
-            <p class="definicion-serie" v-if="serie.tipo == 'TIEMPO'"><b>{{ formatoDuracion }} minutos de {{
-    ejercicioSeleccionadoNombre }}</b></p>
-            <p class="definicion-serie" v-if="serie.tipo == 'DIST'"><b>{{ formatoDuracion }} metros de {{
-    ejercicioSeleccionadoNombre }}</b></p>
+          <div v-if="!ejercicioSeleccionadoNombre || ejercicioSeleccionadoNombre === 'Ejercicio no seleccionado'">
+            <b>
+              <p class="definicion-serie">
+                Por favor, elija un ejercicio
+              </p>
+            </b>
           </div>
-          <div v-if="serie.ajustable">
+          <div v-else>
+            <p class="definicion-serie" v-if="serie.tipo == 'REPS' && serie.ajustable">
+              <b>{{ serie.carga }} % repeticiones de {{ ejercicioSeleccionadoNombre }}</b>
+            </p>
+            <p class="definicion-serie" v-if="serie.tipo == 'REPS' && !serie.ajustable">
+              <b>{{ formatoDuracion }} repeticiones de {{ ejercicioSeleccionadoNombre }}</b>
+            </p>
+            <p class="definicion-serie" v-if="serie.tipo == 'TIEMPO'">
+              <b>{{ formatoDuracion }} {{textoTiempo}} de {{ ejercicioSeleccionadoNombre }}</b>
+            </p>
+            <p class="definicion-serie" v-if="serie.tipo == 'DIST'">
+              <b>{{ formatoDuracion }} metros de {{ ejercicioSeleccionadoNombre }}</b>
+            </p>
+          </div>
+          <div v-if="serie.ajustable && serie.tipo != 'REPS'">
             <p class="definicion-serie"><b>{{ serie.carga }} % de carga</b></p>
           </div>
-          <div class="info">
-          </div>
+          <div class="info"></div>
         </div>
       </v-expansion-panel-title>
       <v-expansion-panel-text v-if="soloLectura == false" style="position: relative;">
         <v-form class="contenedor">
           <v-select v-model="serie.ejercicio" label="Ejercicio" :items="ejerciciosRegistrados" item-title="nombre"
-            item-value="_links.self.href" required :disabled="soloLectura"></v-select>
+             item-value="_links.self.href" requiered :disabled="soloLectura"
+            placeholder="Seleccione un ejercicio"></v-select>
           <div class="flex-container">
             <div class="input-medio">
-              <v-select v-model="serie.tipo" :items="['REPS', 'TIEMPO', 'DIST']" label="Tipo" required
+              <v-select v-model="serie.tipo" :items="tiposSerie" item-title="texto" item-value="valor" label="Tipo" required
                 :disabled="soloLectura"></v-select>
             </div>
-            <div class="input-corto">
-              <v-text-field v-if="serie.tipo === 'REPS'" v-model="serie.cantidad" label="Repeticiones" type="number"
-                required :disabled="soloLectura"></v-text-field>
+            <div class="input-corto" v-if="!(serie.tipo == 'REPS' && serie.ajustable)">
+              <v-text-field v-if="serie.tipo === 'REPS'" v-model="formatoDuracion" label="Repeticiones" type="number"
+                required :disabled="soloLectura" hint="Cantidad" min="1"></v-text-field>
               <v-text-field v-if="serie.tipo === 'TIEMPO'" v-model="formatoTiempo" label="Tiempo" type="time" required
-                :disabled="soloLectura"></v-text-field>
-              <v-text-field v-if="serie.tipo === 'DIST'" v-model="serie.cantidad" label="Distancia" type="number"
-                required :disabled="soloLectura"></v-text-field>
+                :disabled="soloLectura" hint="Tiempo"></v-text-field>
+              <v-text-field v-if="serie.tipo === 'DIST'" v-model="formatoDuracion" label="Distancia" type="number"
+                required :disabled="soloLectura" hint="Distancia" min="1"></v-text-field>
             </div>
           </div>
-          <v-text-field v-if="serie.ajustable" v-model="serie.carga" label="Carga (%)" type="number" required class="input-corto"
-            :disabled="soloLectura"></v-text-field>
-          <v-checkbox v-model="serie.ajustable" label="Adaptable" :disabled="soloLectura"></v-checkbox>
+          <v-text-field v-if="serie.ajustable" v-model="serie.carga" label="Carga (%)" type="number" required
+            class="input-corto" :disabled="soloLectura" hint="Porcentaje de carga"></v-text-field>
+          <v-checkbox v-model="serie.ajustable" label="Ajustable" :disabled="soloLectura"></v-checkbox>
         </v-form>
       </v-expansion-panel-text>
     </v-expansion-panel>
@@ -69,7 +82,7 @@
         <div class="info-serie">
           <p class="definicion-serie"><b>Carga: {{ serie.carga }} %</b></p>
           <p class="definicion-serie" v-if="serie.tipo == 'TIEMPO'">
-            <b>{{ formatoDuracion }} minutos a {{ marcaEjercicio }}</b>
+            <b>{{ formatoDuracion }} {{ textoTiempo }} a {{ marcaEjercicio }}</b>
           </p>
           <p class="definicion-serie" v-if="serie.tipo == 'DIST'">
             <b>{{ formatoDuracion }} metros a {{ marcaEjercicio }}</b>
@@ -113,7 +126,6 @@
   </v-card>
 </template>
 
-
 <script>
 import { useEjerciciosStore } from '../store/ejerciciosStore.js';
 import { mapState } from 'pinia';
@@ -122,13 +134,6 @@ export default {
   props: {
     serie: {
       type: Object,
-      default: () => ({
-        ejercicio: this.ejerciciosRegistrados[0],
-        tipo: 'REPS',
-        cantidad: 1,
-        peso: 0,
-        ajustable: true
-      })
     },
     soloLectura: {
       type: Boolean,
@@ -138,11 +143,20 @@ export default {
   data() {
     return {
       marcaObjetivo: 10,
-      ritmoObjetivo: 240
+      ritmoObjetivo: 240,
+      expansionPanelOpen: [0],
+      tiposSerie: [
+        { valor: 'REPS', texto: 'Repeticiones' },
+        { valor: 'TIEMPO', texto: 'Tiempo' },
+        { valor: 'DIST', texto: 'Distancia' }
+      ]
     };
   },
   computed: {
     ...mapState(useEjerciciosStore, ['ejerciciosRegistrados']),
+    textoTiempo(){
+      return this.serie.cantidad >= 60 ? 'minutos':'segundos'; 
+    },
     ejercicioSeleccionadoNombre() {
       const ejercicioSeleccionado = this.ejerciciosRegistrados.find(
         ejercicio => ejercicio._links.self.href === this.serie.ejercicio
@@ -155,18 +169,34 @@ export default {
       return `${minutes}:${seconds}`;
     },
 
-    formatoTiempo() {
+    formatoTiempo: {
+    get() {
       const minutes = Math.floor(this.serie.cantidad / 60).toString().padStart(2, '0');
       const seconds = (this.serie.cantidad % 60).toString().padStart(2, '0');
       return `${minutes}:${seconds}`;
     },
+    set(value) {
+      const [minutes, seconds] = value.split(':').map(Number);
+      this.serie.cantidad = (minutes * 60) + seconds;
+    }
+  },
 
-    formatoDuracion() {
+    formatoDuracion: {
+    get() {
       if (this.serie.tipo === 'TIEMPO') {
-        return this.formatoTiempo;
+        return this.formatoTiempo; // o la conversión que necesites
       }
       return `${this.serie.cantidad}`;
     },
+    set(value) {
+      if (this.serie.tipo === 'TIEMPO') {
+        const [minutes, seconds] = value.split(':').map(Number);
+        this.serie.cantidad = (minutes * 60) + seconds;
+      } else {
+        this.serie.cantidad = Number(value);
+      }
+    }
+  },
 
     marcaEjercicio() {
       if (this.serie.ejercicio.tipoCarga === 'VAM') {
@@ -180,6 +210,16 @@ export default {
       }
     }
   },
+
+  watch: {
+    'serie.ejercicio': function(newEjercicioHref) {
+      const ejercicio = this.ejerciciosRegistrados.find(ej => ej._links.self.href === newEjercicioHref);
+      if (ejercicio) {
+        this.serie.ejercicio = ejercicio;
+      }
+    }
+  },
+
   methods: {
     onInput(value) {
       const [minutes, seconds] = value.split(':').map(Number);
@@ -191,17 +231,27 @@ export default {
       this.$emit('quitar-serie', this.serie.id);
     }
   },
-  created() { },
-  mounted() {
+  created() {
     if (!this.soloLectura) {
       this.serie.tipo = 'REPS';
-      this.serie.cantidad = 1;
+      this.serie.cantidad = this.serie.cantidad || 10;
+      this.serie.carga = this.serie.carga || 50;
+      this.serie.ajustable = false;
     }
   }
 };
 </script>
 
+
 <style scoped>
+.carta {
+  margin-bottom: 10px;
+}
+
+.contenedor {
+  margin-bottom: 0px;
+}
+
 .titulo-serie {
   font-size: 20px;
   font-weight: 600;
@@ -232,6 +282,7 @@ export default {
 
 .input-corto {
   flex: 1;
+  min-width: 150px;
 }
 
 .input-label {

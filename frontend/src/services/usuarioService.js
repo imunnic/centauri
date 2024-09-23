@@ -23,7 +23,7 @@ export default class UsuariosService {
             password: user
         };
         let response = await axios.post(url + login,credenciales);
-        return response.data.usuario.nombre;
+        return response.data.usuario;
     }
 
     async getRol(){
