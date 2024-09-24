@@ -54,4 +54,8 @@ export default class FichaService {
     return axios.patch(ruta, ficha, config);
   }
 
+  deleteFicha(href){
+    return axios.delete(href, config);
+  }
+
 }

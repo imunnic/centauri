@@ -3,7 +3,7 @@ let url = "http://localhost:8080/api/autenticacion/";
 let login = "login";
 let registro = "registro";
 let bearerToken;
-let user = "dparlop";
+let user = "aminman";
 
 export default class UsuariosService {
     constructor(){}

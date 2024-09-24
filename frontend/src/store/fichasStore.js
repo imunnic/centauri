@@ -40,6 +40,10 @@ export const useFichasStore = defineStore('fichas', {
     async editarFicha(ficha, id){
       ficha.estado = "PENDIENTE";
       await this.fichaService.editarFicha(ficha, id)
+    },
+    async borrarFicha(href){
+      await this.fichaService.deleteFicha(href);
     }
+
   }
 });

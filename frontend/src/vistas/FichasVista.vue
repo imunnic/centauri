@@ -9,7 +9,7 @@
     </div>
 
     <ListaCrudComponent :items="fichasRegistradas" :key="fichasKey" @detalle="verFicha" 
-      :permiso-creacion="fichasPropias" :cargando="cargando" @editar="editarFicha">
+      :permiso-creacion="fichasPropias" :cargando="cargando" @editar="editarFicha" @eliminar="eliminarFicha">
       <template v-slot:info-extra="{ item }">
         <div class="info-relevante">
           <p>
@@ -87,7 +87,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useFichasStore, ['arrancarServicioFicha', 'cargarFichas', 'cargarPendientes','cargarPropias']),
+    ...mapActions(useFichasStore, ['arrancarServicioFicha', 'cargarFichas', 'cargarPendientes','cargarPropias', 'borrarFicha']),
     verFicha(ficha) {
       if(this.fichasPropias){
         const href = ficha._links.self.href;
@@ -109,6 +109,10 @@ export default {
       const href = fichaEditar._links.self.href;
       const id = href.split('/').pop();
       this.$router.push({name:'editarFicha', params:{id}, query:{edicion:true}});
+    },
+    async eliminarFicha(ficha){
+      await this.borrarFicha(ficha._links.self.href);
+      await this.cargarPropias();
     }
   }
 };
