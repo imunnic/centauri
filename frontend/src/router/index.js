@@ -20,6 +20,11 @@ const routes = [
     name: "crearFicha",
     component: () => import("../vistas/CrearFichaVista.vue")
   },
+  {
+    path: "/fichas/editar/:id",
+    name: "editarFicha",
+    component: () => import("../vistas/EditarFichaVista.vue")
+  },
 ];
 
 const router = createRouter({

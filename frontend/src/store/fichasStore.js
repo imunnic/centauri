@@ -36,6 +36,10 @@ export const useFichasStore = defineStore('fichas', {
       ficha.estado = "PENDIENTE";
       ficha.autor = useUsuariosStore().href;
       await this.fichaService.postFicha(ficha);
+    },
+    async editarFicha(ficha, id){
+      ficha.estado = "PENDIENTE";
+      await this.fichaService.editarFicha(ficha, id)
     }
   }
 });

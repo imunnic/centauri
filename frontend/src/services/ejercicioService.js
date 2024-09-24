@@ -11,7 +11,7 @@ export default class EjerciciosService {
   }
 
   actualizarCabecera(token) {
-    config.headers.Authorization = config.headers.Authorization + token;
+    config.headers.Authorization = "Bearer " + token;
   }
 
   getAll() {

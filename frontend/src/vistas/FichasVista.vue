@@ -9,7 +9,7 @@
     </div>
 
     <ListaCrudComponent :items="fichasRegistradas" :key="fichasKey" @detalle="verFicha" 
-      :permiso-creacion="fichasPropias" :cargando="cargando">
+      :permiso-creacion="fichasPropias" :cargando="cargando" @editar="editarFicha">
       <template v-slot:info-extra="{ item }">
         <div class="info-relevante">
           <p>
@@ -60,8 +60,11 @@ export default {
       fichasPropias: false
     };
   },
-  async mounted() {
+  async created(){
     this.arrancarServicioFicha(this.token);
+
+  },
+  async mounted() {
     this.cargando = true;
     await this.cargarFichas();
     this.cargando = false;
@@ -86,9 +89,13 @@ export default {
   methods: {
     ...mapActions(useFichasStore, ['arrancarServicioFicha', 'cargarFichas', 'cargarPendientes','cargarPropias']),
     verFicha(ficha) {
-      const href = ficha.id;
-      const id = href.split('/').pop();
-      this.$router.push('/fichas/' + id);
+      if(this.fichasPropias){
+        const href = ficha._links.self.href;
+        const id = href.split('/').pop();
+        this.$router.push('/fichas/' + id);
+      } else {
+        this.$router.push('/fichas/' + ficha.id);
+      }
     },
     getColor(rpe) {
       if (rpe < 6 || rpe == 'APROBADO') return 'green';
@@ -98,7 +105,11 @@ export default {
     crearFicha(){
       this.$router.push('/fichas/crear');
     },
-
+    editarFicha(fichaEditar){
+      const href = fichaEditar._links.self.href;
+      const id = href.split('/').pop();
+      this.$router.push({name:'editarFicha', params:{id}, query:{edicion:true}});
+    }
   }
 };
 </script>

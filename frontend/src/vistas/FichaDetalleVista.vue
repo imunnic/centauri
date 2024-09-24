@@ -104,6 +104,7 @@ export default {
       let response = await this.cargarFichaDetalle(this.$route.params.id);
       this.fichaSeleccionada = response.data;
       this.mostrarAlertaTemporal("Ficha rechazada", "error");
+      this.$router.push({path:'/fichas'});
     },
 
     mostrarAlertaTemporal(mensaje, tipo = 'success') {

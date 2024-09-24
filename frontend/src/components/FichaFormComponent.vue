@@ -5,7 +5,7 @@
       <div class="flex-container">
         <v-text-field
           label="Nombre de la ficha"
-          v-model="ficha.nombre"
+          v-model="fichaLocal.nombre"
           :rules="nombreRules"
           class="input-field"
           required
@@ -14,7 +14,7 @@
         <v-select
           :items="tiposFicha"
           label="Tipo de ficha"
-          v-model="ficha.tipoFicha"
+          v-model="fichaLocal.tipoFicha"
           :rules="tipoRules"
           class="input-field"
           required
@@ -23,7 +23,7 @@
         <v-select
           :items="partesSesion"
           label="Parte de la sesión"
-          v-model="ficha.parteSesion"
+          v-model="fichaLocal.parteSesion"
           :rules="parteRules"
           class="input-field"
           required
@@ -33,7 +33,7 @@
       <div class="flex-container">
         <div class="rpe-estimado">
           <v-text-field
-            v-model="ficha.rpeEstimado"
+            v-model="fichaLocal.rpeEstimado"
             class="input-corto"
             type="number"
             label="RPE estimado"
@@ -57,9 +57,9 @@
         </div>
       </div>
       <h3>Rutina</h3>
-      <FichaComponent :rondas="ficha.rutina" @update-ficha="actualizarRutina" />
+      <FichaComponent :rondas="fichaLocal.rutina" @update-ficha="actualizarRutina" />
       <v-textarea
-        v-model="ficha.descripcion"
+        v-model="fichaLocal.descripcion"
         label="Descripción"
         placeholder="Ficha de calentamiento con flexiones, abdominales, etc"
         hint="Introduce una descripción de la ficha"
@@ -81,10 +81,23 @@ export default {
   components: {
     FichaComponent,
   },
+  props: {
+    ficha: {
+      type: Object,
+      default: () => ({
+        nombre: '',
+        tipoFicha: '',
+        rpeEstimado: 1,
+        rutina: [],
+        tiempoEstimado: 0,
+        descripcion: '',
+      }),
+    },
+  },
   data() {
     return {
       valid: false,
-      ficha: {
+      fichaLocal: {
         nombre: '',
         tipoFicha: '',
         rpeEstimado: 1,
@@ -106,32 +119,43 @@ export default {
   computed: {
     formatoTiempo: {
       get() {
-        const minutes = Math.floor(this.ficha.tiempoEstimado / 60)
+        const minutes = Math.floor(this.fichaLocal.tiempoEstimado / 60)
           .toString()
           .padStart(2, '0');
-        const seconds = (this.ficha.tiempoEstimado % 60)
+        const seconds = (this.fichaLocal.tiempoEstimado % 60)
           .toString()
           .padStart(2, '0');
         return `${minutes}:${seconds}`;
       },
       set(value) {
         const [minutes, seconds] = value.split(':').map(Number);
-        this.tiempoEstimado = minutes * 60 + seconds;
+        this.fichaLocal.tiempoEstimado = minutes * 60 + seconds;
+      },
+    },
+  },
+  watch: {
+    ficha: {
+      immediate: false,
+      handler(newFicha) {
+        this.fichaLocal = { ...newFicha };
       },
     },
   },
   methods: {
-    ...mapActions(useFichasStore, ['grabarFicha']),
+    ...mapActions(useFichasStore, ['grabarFicha', 'editarFicha']),
     actualizarRutina(rondas) {
-      this.ficha.rutina = rondas;
+      this.fichaLocal.rutina = rondas;
     },
     async guardarFicha() {
       let isValido = await this.$refs.formulario.validate();
-      console.log(isValido.valid);
-      if (isValido.valid) {
-        console.log(this.ficha);
-        await this.grabarFicha(this.ficha);
+      if (this.$route.query.edicion == 'true'){
+        await this.editarFicha(this.fichaLocal, this.$route.params.id);
         this.$router.push({ path: '/fichas' });
+      } else {
+        if (isValido) {
+          await this.grabarFicha(this.fichaLocal);
+          this.$router.push({ path: '/fichas' });
+        }
       }
     },
   },

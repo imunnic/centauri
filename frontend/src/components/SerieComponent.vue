@@ -249,7 +249,7 @@ export default {
 }
 
 .contenedor {
-  margin-bottom: 0px;
+  margin-bottom: 10px;
 }
 
 .titulo-serie {

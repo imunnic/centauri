@@ -123,8 +123,12 @@ export default {
   mounted() {
     if (this.soloLectura) {
     } else {
-      this.ronda.tipo = 'REPS';
-      this.agregarSerie();
+      if (this.$route.query.edicion == 'true'){
+
+      } else {
+        this.ronda.tipo = 'REPS';
+        this.agregarSerie();
+      }
     }
   }
 };

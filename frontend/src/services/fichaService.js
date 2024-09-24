@@ -10,7 +10,7 @@ export default class FichaService {
   constructor() {}
 
   actualizarCabecera(token) {
-    config.headers.Authorization = config.headers.Authorization + token;
+    config.headers.Authorization = "Bearer " + token;
   }
 
   getAll() {
@@ -47,6 +47,11 @@ export default class FichaService {
 
   postFicha(ficha){
     return axios.post(url, ficha, config);
+  }
+
+  editarFicha(ficha, id){
+    let ruta = url + "/" + id
+    return axios.patch(ruta, ficha, config);
   }
 
 }
