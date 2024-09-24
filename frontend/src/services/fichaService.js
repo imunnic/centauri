@@ -1,8 +1,9 @@
 import axios from "axios";
-let url = "http://localhost:8080/api/fichas";
+import configuracion from "@/configuracion.json";
+let url = configuracion.urlBase + "fichas";
 let config = {
   headers: {
-    Authorization: "Bearer ",
+    Authorization: configuracion.headersDefecto.Authorization,
   },
 };
 

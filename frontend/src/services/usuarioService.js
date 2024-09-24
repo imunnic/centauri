@@ -1,9 +1,11 @@
 import axios from "axios";
-let url = "http://localhost:8080/api/autenticacion/";
+import configuracion from "@/configuracion.json";
+
+let url = configuracion.urlBase + "autenticacion/";
 let login = "login";
 let registro = "registro";
 let bearerToken;
-let user = "aminman";
+let user = "dparlop";
 
 export default class UsuariosService {
     constructor(){}
