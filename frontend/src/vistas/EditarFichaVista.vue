@@ -19,15 +19,14 @@ export default {
         return {
             ficha:null
         }
-    }
-    ,
+    },
     methods: {
         ...mapActions(useEjerciciosStore, ['cargarEjercicios', 'arrancarServicioEjercicios']),
         ...mapActions(useFichasStore, ['cargarFichaDetalle'])
     },
-    created() {
-        this.arrancarServicioEjercicios();
-        this.cargarEjercicios();
+    async created() {
+        this.arrancarServicioEjercicios(this.token);
+        await this.cargarEjercicios();
 
     },
     async mounted(){

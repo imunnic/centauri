@@ -16,7 +16,6 @@
 
     <EjercicioDetalleComponent v-if="detalle" :ejercicio="ejercicioSeleccionado" @cerrar="cerrarDialogoDetalle" />
 
-
   </v-container>
 </template>
 

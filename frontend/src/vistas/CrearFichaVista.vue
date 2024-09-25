@@ -4,11 +4,15 @@
 
 <script>
 import FichaFormComponent from '../components/FichaFormComponent.vue';
-import { useEjerciciosStore } from '@/store/ejerciciosStore.js'
-import { mapActions } from 'pinia'
+import { useEjerciciosStore } from '@/store/ejerciciosStore.js';
+import {useUsuariosStore} from '@/store/usuariosStore.js';
+import { mapActions, mapState } from 'pinia';
 export default {
   components: {
     FichaFormComponent
+  },
+  computed:{
+    ...mapState(useUsuariosStore,['token'])
   },
   data() {
     return {
@@ -18,9 +22,9 @@ export default {
   methods: {
     ...mapActions(useEjerciciosStore, ['cargarEjercicios', 'arrancarServicioEjercicios'])
   },
-  created() {
-    this.arrancarServicioEjercicios();
-    this.cargarEjercicios();
+  async created() {
+    this.arrancarServicioEjercicios(this.token);
+    await this.cargarEjercicios();
   },
 
 }

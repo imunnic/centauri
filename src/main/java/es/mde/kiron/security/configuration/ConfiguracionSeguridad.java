@@ -3,6 +3,7 @@ package es.mde.kiron.security.configuration;
 import es.mde.kiron.security.jwt.JwtFiltroAutenticacion;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,6 +31,7 @@ public class ConfiguracionSeguridad {
         .authorizeHttpRequests(authRequest -> authRequest
             // Permitir el acceso público a los endpoints de autenticación y al de /aprobado
             .requestMatchers("/api/autenticacion/**", "/api/fichas/aprobado").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/ejercicios").permitAll()
             // Requerir autenticación para cualquier otro endpoint
             .anyRequest().authenticated())
         // Política de sesiones sin estado (stateless) para JWT o tokens Bearer

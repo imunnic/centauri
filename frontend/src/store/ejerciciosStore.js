@@ -4,7 +4,7 @@ import EjercicioService from '@/services/ejercicioService.js';
 export const useEjerciciosStore = defineStore("ejercicios", {
   state: () => ({
     ejerciciosRegistrados: [],
-    ejerciciosService: null,
+    ejerciciosService: new EjercicioService(),
     ejercicioVacio:{}
   }),
   actions: {
