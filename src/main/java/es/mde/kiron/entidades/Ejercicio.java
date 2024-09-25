@@ -7,9 +7,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.HashSet;
 import java.util.Set;
 
-
+@Document
 public class Ejercicio {
 
+  @Id
+  private String id;
   private String nombre;
   private String descripcion;
   private String cualidad;

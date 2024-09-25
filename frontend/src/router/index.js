@@ -25,6 +25,11 @@ const routes = [
     name: "editarFicha",
     component: () => import("../vistas/EditarFichaVista.vue")
   },
+  {
+    path: "/ejercicios",
+    name: "ejercicios",
+    component: () => import("../vistas/EjerciciosVista.vue")
+  },
 ];
 
 const router = createRouter({

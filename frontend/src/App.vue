@@ -16,7 +16,11 @@ import {mapActions, mapState} from 'pinia';
     components: { HeaderComponent, NavegadorComponent },
     data() {
       return {
-        menu:[{ title: 'Fichas', prependIcon: 'mdi-dumbbell', ruta: '/fichas' }],
+        menu:[
+          { title: 'Fichas', prependIcon: 'mdi-dumbbell', ruta: '/fichas' },
+          {title: 'Ejercicios', prependIcon: 'mdi-run', ruta:'/ejercicios'}
+        
+        ],
         aplicacion:{
           nombre: "Centauri",
           icono:"/centauri_verde.png"

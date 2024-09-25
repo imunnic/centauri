@@ -1,17 +1,16 @@
 import { defineStore } from "pinia";
 import EjercicioService from '@/services/ejercicioService.js';
-import ejercicios from "../assets/ejercicios.json";
 
 export const useEjerciciosStore = defineStore("ejercicios", {
   state: () => ({
-    ejerciciosRegistrados: ejercicios,
+    ejerciciosRegistrados: [],
     ejerciciosService: null,
     ejercicioVacio:{}
   }),
   actions: {
     async cargarEjercicios() {
       let response = await this.ejerciciosService.getAll();
-      this.ejerciciosRegistrados = response.data._embedded.ejercicios;
+      this.ejerciciosRegistrados = response;
     },
     arrancarServicioEjercicios(token) {
       this.ejerciciosService = new EjercicioService();
@@ -32,6 +31,7 @@ export const useEjerciciosStore = defineStore("ejercicios", {
       ejercicio.musculos_principales = [];
       ejercicio.musculos_secundarios = [];
       ejercicio.url = "";
+      ejercicio.tipoCarga = ""
     },
     async modificarEjercicio(ejercicio) {
       await this.ejerciciosService.modificarEjercicio(ejercicio);
