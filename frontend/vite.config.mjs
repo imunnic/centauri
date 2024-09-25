@@ -33,6 +33,13 @@ export default defineConfig({
       },
     }),
   ],
+  css: {
+    preprocessorOptions: {
+      sass: {
+        api: 'modern-compiler' // https://github.com/vitejs/vite/issues/18164
+      }
+    }
+  },
   define: { 'process.env': {} },
   resolve: {
     alias: {
