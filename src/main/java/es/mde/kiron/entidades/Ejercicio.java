@@ -2,7 +2,6 @@ package es.mde.kiron.entidades;
 
 import es.mde.kiron.modelos.TipoCarga;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,18 +14,18 @@ public class Ejercicio {
   private String nombre;
   private String descripcion;
   private String cualidad;
-  private int numero_ejecutantes;
-  private String tipo_movimiento;
-  private String tipo_contraccion;
+  private int numeroEjecutantes;
+  private String tipoMovimiento;
+  private String tipoContraccion;
   private String velocidad;
   private String url;
   private TipoCarga tipoCarga;
   private Set<String> musculosPrincipales = new HashSet<>();
-  private Set<String> musculos_secundarios = new HashSet<>();
+  private Set<String> musculosSecundarios = new HashSet<>();
 
   public Ejercicio() {
     this.musculosPrincipales = new HashSet<>();
-    this.musculos_secundarios = new HashSet<>();
+    this.musculosSecundarios = new HashSet<>();
   }
 
 
@@ -54,28 +53,28 @@ public class Ejercicio {
     this.cualidad = cualidad;
   }
 
-  public int getNumero_ejecutantes() {
-    return numero_ejecutantes;
+  public int getNumeroEjecutantes() {
+    return numeroEjecutantes;
   }
 
-  public void setNumero_ejecutantes(int numero_ejecutantes) {
-    this.numero_ejecutantes = numero_ejecutantes;
+  public void setNumeroEjecutantes(int numeroEjecutantes) {
+    this.numeroEjecutantes = numeroEjecutantes;
   }
 
-  public String getTipo_movimiento() {
-    return tipo_movimiento;
+  public String getTipoMovimiento() {
+    return tipoMovimiento;
   }
 
-  public void setTipo_movimiento(String tipo_movimiento) {
-    this.tipo_movimiento = tipo_movimiento;
+  public void setTipoMovimiento(String tipoMovimiento) {
+    this.tipoMovimiento = tipoMovimiento;
   }
 
-  public String getTipo_contraccion() {
-    return tipo_contraccion;
+  public String getTipoContraccion() {
+    return tipoContraccion;
   }
 
-  public void setTipo_contraccion(String tipo_contraccion) {
-    this.tipo_contraccion = tipo_contraccion;
+  public void setTipoContraccion(String tipoContraccion) {
+    this.tipoContraccion = tipoContraccion;
   }
 
   public String getVelocidad() {
@@ -102,12 +101,12 @@ public class Ejercicio {
     this.musculosPrincipales = musculosPrincipales;
   }
 
-  public Set<String> getMusculos_secundarios() {
-    return musculos_secundarios;
+  public Set<String> getMusculosSecundarios() {
+    return musculosSecundarios;
   }
 
-  public void setMusculos_secundarios(Set<String> musculos_secundarios) {
-    this.musculos_secundarios = musculos_secundarios;
+  public void setMusculosSecundarios(Set<String> musculosSecundarios) {
+    this.musculosSecundarios = musculosSecundarios;
   }
 
   public TipoCarga getTipoCarga() {

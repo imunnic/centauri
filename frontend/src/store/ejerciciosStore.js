@@ -23,17 +23,18 @@ export const useEjerciciosStore = defineStore("ejercicios", {
       ejercicio.nombre = "";
       ejercicio.descripcion = "";
       ejercicio.cualidad = "";
-      ejercicio.numero_ejecutantes = 0;
-      ejercicio.tipo_movimiento = "";
-      ejercicio.tipo_contracción = "";
+      ejercicio.numeroEjecutantes = 0;
+      ejercicio.tipoMovimiento = "";
+      ejercicio.tipoContracción = "";
       ejercicio.velocidad = "";
       ejercicio.equipo = 0;
-      ejercicio.musculos_principales = [];
-      ejercicio.musculos_secundarios = [];
+      ejercicio.musculosPrincipales = [];
+      ejercicio.musculosSecundarios = [];
       ejercicio.url = "";
       ejercicio.tipoCarga = ""
     },
     async modificarEjercicio(ejercicio) {
+      console.log(ejercicio);
       await this.ejerciciosService.modificarEjercicio(ejercicio);
     },
     async eliminarEjercicio(ejercicio) {

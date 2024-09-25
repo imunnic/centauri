@@ -1,5 +1,5 @@
 <template>
-  <v-dialog max-width="600px" v-model="mostrar">
+  <v-dialog max-width="600px" v-model="mostrar" persistent>
     <v-card>
       <v-card-title class="d-flex justify-space-between">
         <span class="headline">{{ tituloFormulario }}</span>
@@ -28,7 +28,7 @@
             </div>
             <div class="flex-item">
               <v-select 
-                v-model="ejercicioNuevo.musculos_principales" 
+                v-model="ejercicioNuevo.musculosPrincipales" 
                 :items="musculosItems" 
                 label="Músculos principales" 
                 multiple>
@@ -36,7 +36,7 @@
             </div>
             <div class="flex-item">
               <v-select 
-                v-model="ejercicioNuevo.musculos_secundarios" 
+                v-model="ejercicioNuevo.musculosSecundarios" 
                 :items="musculosItems" 
                 label="Músculos secundarios" 
                 multiple>
@@ -52,20 +52,20 @@
             </div>
             <div class="flex-item">
               <v-text-field 
-                v-model="ejercicioNuevo.numero_ejecutantes" 
+                v-model="ejercicioNuevo.numeroEjecutantes" 
                 label="Número de ejecutantes" 
                 type="number">
               </v-text-field>
             </div>
             <div class="flex-item">
               <v-text-field 
-                v-model="ejercicioNuevo.tipo_movimiento" 
+                v-model="ejercicioNuevo.tipoMovimiento" 
                 label="Tipo de movimiento">
               </v-text-field>
             </div>
             <div class="flex-item">
               <v-text-field 
-                v-model="ejercicioNuevo.tipo_contraccion" 
+                v-model="ejercicioNuevo.tipoContraccion" 
                 label="Tipo de contracción">
               </v-text-field>
             </div>
@@ -132,14 +132,14 @@ export default {
         nombre: '',
         descripcion: '',
         cualidad: '',
-        numero_ejecutantes: 1,
-        tipo_movimiento: '',
-        tipo_contraccion: '',
+        numeroEjecutantes: 1,
+        tipoMovimiento: '',
+        tipoContraccion: '',
         velocidad: '',
         url: '',
         tipoCarga: '',
-        musculos_principales: [],
-        musculos_secundarios: []
+        musculosPrincipales: [],
+        musculosSecundarios: []
       }
     };
   },

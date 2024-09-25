@@ -7,12 +7,12 @@
       </v-alert>
     </transition>
 
-    <ListaCrudComponent :items="ejerciciosRegistrados" :key="ejerciciosKey" 
+    <ListaCrudComponent :items="ejerciciosRegistrados" :key="ejerciciosKey" @editar="editarEjercicio"
       @crear="crearEjercicio"  :cargando="cargando" 
       :permisoCreacion="permisoCreacion">
     </ListaCrudComponent>
 
-    <EjercicioFormComponent v-if="mostrarForm" @cerrar="cerrarForm" 
+    <EjercicioFormComponent v-if="mostrarForm" @cerrar="cerrarForm" :edicion="modoEdicion"
       :ejercicio="ejercicioSeleccionado" @guardar="guardarEjercicio" />
 
       </v-container>
@@ -60,6 +60,7 @@ export default {
       'arrancarServicioEjercicios',
       'cargarEjercicios',
       'resetEjercicio',
+      'modificarEjercicio',
       'agregarEjercicio'
     ]),
     resetFormulario() {
@@ -95,6 +96,11 @@ export default {
     crearEjercicio() {
       this.modoEdicion = false;
       this.ejercicioSeleccionado = {};
+      this.mostrarForm = true;
+    },
+    editarEjercicio(ejercicio) {
+      this.ejercicioSeleccionado = { ...ejercicio };
+      this.modoEdicion = true;
       this.mostrarForm = true;
     },
   },

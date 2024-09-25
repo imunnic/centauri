@@ -38,6 +38,10 @@ export default class EjerciciosService {
     return ejercicios;
   }
 
+  modificarEjercicio(ejercicioModificado) {
+    return axios.put(ejercicioModificado._links.self.href, ejercicioModificado, config);
+  }
+
   crearEjercicio(ejercicio) {
     return axios.post(url, ejercicio, config);
   }
