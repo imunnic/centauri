@@ -11,5 +11,5 @@ import java.util.List;
     collectionResourceRel = "ejercicios")
 public interface EjercicioDAO extends MongoRepository<Ejercicio, String> {
   List<Ejercicio> findByMusculosPrincipalesContainingIgnoreCase(@Param("nombre") String nombre);
-
+  List<Ejercicio> findByNombreContainingIgnoreCase(@Param("nombre") String nombre);
 }
