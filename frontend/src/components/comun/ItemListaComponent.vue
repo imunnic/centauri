@@ -25,7 +25,7 @@
       <div class="contenido">
         <v-card-title class="titulo">{{ item.nombre }}</v-card-title>
         <v-card-text>
-          {{ item.descripcion }}
+          <p class="texto">{{ item.descripcion }}</p>
           <slot name="info-extra" :item="item"></slot>
         </v-card-text>
         <v-card-actions v-if="acciones.length > 0">

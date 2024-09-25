@@ -7,26 +7,29 @@
       </v-alert>
     </transition>
 
-    <ListaCrudComponent :items="ejerciciosRegistrados" :key="ejerciciosKey" @editar="editarEjercicio"
-      @crear="crearEjercicio"  :cargando="cargando" @eliminar="borrarEjercicio"
-      :permisoCreacion="permisoCreacion">
+    <ListaCrudComponent :items="ejerciciosRegistrados" :key="ejerciciosKey" @editar="editarEjercicio" @detalle="abrirDialogoDetalle"
+      @crear="crearEjercicio" :cargando="cargando" @eliminar="borrarEjercicio" :permisoCreacion="permisoCreacion">
     </ListaCrudComponent>
 
     <EjercicioFormComponent v-if="mostrarForm" @cerrar="cerrarForm" :edicion="modoEdicion"
       :ejercicio="ejercicioSeleccionado" @guardar="guardarEjercicio" />
 
-      </v-container>
+    <EjercicioDetalleComponent v-if="detalle" :ejercicio="ejercicioSeleccionado" @cerrar="cerrarDialogoDetalle" />
+
+
+  </v-container>
 </template>
 
 <script>
 import ListaCrudComponent from '@/components/comun/ListaCrudComponent.vue';
 import EjercicioFormComponent from '@/components/EjercicioFormComponent.vue';
+import EjercicioDetalleComponent from '@/components/EjercicioDetalleComponent.vue';
 import { mapState, mapActions } from 'pinia';
 import { useUsuariosStore } from '@/store/usuariosStore.js';
 import { useEjerciciosStore } from '@/store/ejerciciosStore.js';
 
 export default {
-  components: { ListaCrudComponent, EjercicioFormComponent},
+  components: { ListaCrudComponent, EjercicioFormComponent, EjercicioDetalleComponent },
   data() {
     return {
       ejercicioSeleccionado: {},
@@ -41,7 +44,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useUsuariosStore, ['token','perfil']),
+    ...mapState(useUsuariosStore, ['token', 'perfil']),
     ...mapState(useEjerciciosStore, ['ejerciciosRegistrados']),
     permisoCreacion() {
       return this.perfil == 'ECEF';
@@ -104,9 +107,16 @@ export default {
       this.modoEdicion = true;
       this.mostrarForm = true;
     },
+    abrirDialogoDetalle(ejercicio) {
+      this.ejercicioSeleccionado = ejercicio;
+      this.detalle = true;
+    },
+    cerrarDialogoDetalle() {
+      this.detalle = false;
+    },
     async borrarEjercicio(ejercicio) {
       await this.eliminarEjercicio(ejercicio);
-      this.cargando=true;
+      this.cargando = true;
       await this.cargarEjercicios();
       this.cargando = false;
       this.mostrarAlertaTemporal('Ejercicio eliminado con éxito');

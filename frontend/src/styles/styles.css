@@ -113,3 +113,7 @@
 .info-contenido {
   flex: 1;
 }
+
+.texto{
+  font-size: 17px;
+}
