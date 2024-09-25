@@ -34,7 +34,6 @@ export const useEjerciciosStore = defineStore("ejercicios", {
       ejercicio.tipoCarga = ""
     },
     async modificarEjercicio(ejercicio) {
-      console.log(ejercicio);
       await this.ejerciciosService.modificarEjercicio(ejercicio);
     },
     async eliminarEjercicio(ejercicio) {

@@ -8,7 +8,7 @@
     </transition>
 
     <ListaCrudComponent :items="ejerciciosRegistrados" :key="ejerciciosKey" @editar="editarEjercicio"
-      @crear="crearEjercicio"  :cargando="cargando" 
+      @crear="crearEjercicio"  :cargando="cargando" @eliminar="borrarEjercicio"
       :permisoCreacion="permisoCreacion">
     </ListaCrudComponent>
 
@@ -61,6 +61,7 @@ export default {
       'cargarEjercicios',
       'resetEjercicio',
       'modificarEjercicio',
+      'eliminarEjercicio',
       'agregarEjercicio'
     ]),
     resetFormulario() {
@@ -103,6 +104,14 @@ export default {
       this.modoEdicion = true;
       this.mostrarForm = true;
     },
+    async borrarEjercicio(ejercicio) {
+      await this.eliminarEjercicio(ejercicio);
+      this.cargando=true;
+      await this.cargarEjercicios();
+      this.cargando = false;
+      this.mostrarAlertaTemporal('Ejercicio eliminado con éxito');
+      this.ejerciciosKey += 1;
+    }
   },
   async created() {
     this.cargando = true;

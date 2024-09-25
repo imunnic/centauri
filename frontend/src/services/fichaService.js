@@ -14,49 +14,49 @@ export default class FichaService {
     config.headers.Authorization = "Bearer " + token;
   }
 
-  getAll() {
-    return axios.get(url, config);
+  async getAll() {
+    return await axios.get(url, config);
   }
 
-  getAprobadas() {
-    return axios.get(url + "/aprobado", config);
+  async getAprobadas() {
+    return await axios.get(url + "/aprobado", config);
   }
 
-  getPendientes(){
-    return axios.get(url + "/pendiente", config);
+  async getPendientes(){
+    return await axios.get(url + "/pendiente", config);
   }
 
-  cambiarEstado(href, estado){
+  async cambiarEstado(href, estado){
     let ruta;
     if(estado){
       ruta = href + "/estado?aprobado=true";
     } else{
       ruta = href + "/estado?aprobado=false";
     }
-    return axios.patch(ruta, null, config);
+    return await axios.patch(ruta, null, config);
   }
 
-  getFicha(id){
+  async getFicha(id){
     let ruta = url + "/" + id;
-    return axios.get(ruta, config);
+    return await axios.get(ruta, config);
   }
 
-  getPropias(id){
+  async getPropias(id){
     let ruta = url + "/search/findByAutor?id=" + id;
-    return axios.get(ruta, config);
+    return await axios.get(ruta, config);
   }
 
-  postFicha(ficha){
-    return axios.post(url, ficha, config);
+  async postFicha(ficha){
+    return await axios.post(url, ficha, config);
   }
 
-  editarFicha(ficha, id){
+  async editarFicha(ficha, id){
     let ruta = url + "/" + id
-    return axios.patch(ruta, ficha, config);
+    return await axios.patch(ruta, ficha, config);
   }
 
-  deleteFicha(href){
-    return axios.delete(href, config);
+  async deleteFicha(href){
+    return await axios.delete(href, config);
   }
 
 }

@@ -38,8 +38,12 @@ export default class EjerciciosService {
     return ejercicios;
   }
 
-  modificarEjercicio(ejercicioModificado) {
-    return axios.put(ejercicioModificado._links.self.href, ejercicioModificado, config);
+  async modificarEjercicio(ejercicioModificado) {
+    return await axios.put(ejercicioModificado._links.self.href, ejercicioModificado, config);
+  }
+
+  async eliminarEjercicio(href) {
+    await axios.delete(href, config);
   }
 
   crearEjercicio(ejercicio) {
