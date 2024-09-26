@@ -10,13 +10,13 @@ let user = "dparlop";
 export default class UsuariosService {
     constructor(){}
 
-    async getToken(){
+    async login(){
         const credenciales = {
             username: user,
             password: user
-        };
+        }
         let response = await axios.post(url + login,credenciales);
-        return response.data.token;
+        return response.data;
     }
 
     async getUsername(){

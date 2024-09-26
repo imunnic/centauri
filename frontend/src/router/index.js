@@ -3,7 +3,12 @@ import { createRouter, createWebHistory } from "vue-router";
 const routes = [
   {
     path: "/",
-    redirect: "/fichas",
+    redirect: "/login",
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("../vistas/LoginVista.vue")
   },
   {
     path: "/fichas",
