@@ -45,12 +45,15 @@ export default class EquipamientosService {
   }
 
   async crearEquipamiento(equipamiento) {
-    console.log(config);
     return await axios.post(url, equipamiento, config);
   }
 
   async modificarEquipamiento(equipamientoModificado) {
     return await axios.put(equipamientoModificado._links.self.href, equipamientoModificado, config);
+  }
+
+  async eliminarEquipamiento(href) {
+    return await axios.delete(href, config);
   }
 
 

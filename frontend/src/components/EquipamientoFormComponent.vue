@@ -15,11 +15,11 @@
                 required></v-text-field>
             </div>
             <div class="flex-item">
-              <v-text-field v-model="equipamientoNuevo.tipo" label="Tipo" :rules="[reglas.necesario]"
-                required></v-text-field>
+              <v-text-field v-model="equipamientoNuevo.tipo" label="Tipo" ></v-text-field>
             </div>
             <div class="flex-item">
-              <v-textarea v-model="equipamientoNuevo.descripcion" label="Descripción"></v-textarea>
+              <v-textarea v-model="equipamientoNuevo.descripcion" label="Descripción" :rules="[reglas.necesario]"
+              required></v-textarea>
             </div>
             <div class="flex-item">
               <v-text-field v-model="equipamientoNuevo.url" label="Enlace de Imagen" type="url"></v-text-field>

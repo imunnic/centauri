@@ -8,9 +8,8 @@
     </transition>
 
     <ListaCrudComponent :items="equipamientosRegistrados" :key="equipamientosKey" @editar="editarEquipamiento"
-      @crear="crearEquipamiento" :mostrar-imagen="true" :imagen-predeterminada="imagenNoEncontrada"
-      :cargando="cargando"
-      :permisoCreacion="permisoCreacion">
+      @crear="crearEquipamiento" @eliminar="borrarEquipamiento" :mostrar-imagen="true" 
+      :imagen-predeterminada="imagenNoEncontrada" :cargando="cargando" :permisoCreacion="permisoCreacion">
       <template v-slot:info-extra="{ item }">
         <p class="texto"><b>Tipo</b>: {{ item.tipo }}</p class="texto">
       </template>
@@ -63,7 +62,8 @@ export default {
       'cargarEquipamientos',
       'resetEquipamiento',
       'agregarEquipamiento',
-      'modificarEquipamiento'
+      'modificarEquipamiento',
+      'eliminarEquipamiento'
     ]),
     resetFormulario() {
       this.equipamientoSeleccionado = {};
@@ -101,6 +101,12 @@ export default {
       this.equipamientoSeleccionado = { ...equipamiento };
       this.modoEdicion = true;
       this.mostrarCrearForm = true;
+    },
+    async borrarEquipamiento(equipamiento) {
+      await this.eliminarEquipamiento(equipamiento);
+      this.cargarEquipamientos();
+      this.equipamientosKey += 1;
+      this.mostrarAlertaTemporal('Equipamiento eliminado con éxito');
     },
     cerrarFormulario() {
       this.mostrarCrearForm = false;
