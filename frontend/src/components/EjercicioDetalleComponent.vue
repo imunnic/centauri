@@ -28,6 +28,7 @@
         <p><b>Tipo de movimiento</b>: {{ ejercicio.tipoMovimiento || 'No especificado' }}</p>
         <p><b>Tipo de contracción</b>: {{ ejercicio.tipoContraccion || 'No especificado' }}</p>
         <p><b>Velocidad</b>: {{ ejercicio.velocidad || 'No especificado' }}</p>
+        <p><b>Equipo</b>: {{ ejercicio.equipo || 'No especificado' }}</p>
         <p><b>Músculos principales</b>: {{ formatoLista(ejercicio.musculosPrincipales) }}</p>
         <p><b>Músculos secundarios</b>: {{ formatoLista(ejercicio.musculosSecundarios) }}</p>
         <p><b>Tipo de Carga</b>: {{ tipoCargaDisplay }}</p>

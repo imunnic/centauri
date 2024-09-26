@@ -59,6 +59,12 @@
             </div>
             <div class="flex-item">
               <v-text-field 
+                v-model="ejercicioNuevo.equipo" 
+                label="Equipo">
+              </v-text-field>
+            </div>
+            <div class="flex-item">
+              <v-text-field 
                 v-model="ejercicioNuevo.tipoMovimiento" 
                 label="Tipo de movimiento">
               </v-text-field>
@@ -133,6 +139,7 @@ export default {
         descripcion: '',
         cualidad: '',
         numeroEjecutantes: 1,
+        equipo:'',
         tipoMovimiento: '',
         tipoContraccion: '',
         velocidad: '',
