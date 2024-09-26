@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <!-- https://vuejs.org/guide/built-ins/transition transiciones de componentes -->
     <transition name="fade">
       <v-alert v-if="mostrarAlerta" :type="tipoAlerta" dismissible class="alert-container ma-2">
         {{ mensajeAlerta }}
@@ -8,33 +7,36 @@
     </transition>
 
     <ListaCrudComponent :items="equipamientosRegistrados" :key="equipamientosKey" @editar="editarEquipamiento"
-      @crear="crearEquipamiento" @eliminar="borrarEquipamiento" :mostrar-imagen="true" 
-      :imagen-predeterminada="imagenNoEncontrada" :cargando="cargando" :permisoCreacion="permisoCreacion">
-      <template v-slot:info-extra="{ item }">
-        <p class="texto"><b>Tipo</b>: {{ item.tipo }}</p class="texto">
-      </template>
+      @crear="crearEquipamiento" @detalle="abrirDialogoDetalle" @eliminar="borrarEquipamiento"
+      :mostrar-imagen="true" :descripcion="false" :imagen-predeterminada="imagenNoEncontrada" 
+      :cargando="cargando" :permisoCreacion="permisoCreacion">
     </ListaCrudComponent>
 
     <EquipamientoFormComponent v-if="mostrarCrearForm" @cerrar="cerrarFormulario" :edicion="modoEdicion"
       :equipamiento="equipamientoSeleccionado" @guardar="guardarEquipamiento" />
+
+    <EquipamientoDetalleComponent v-if="detalle" :equipamiento="equipamientoSeleccionado" @cerrar="cerrarDialogoDetalle" />
   </v-container>
 </template>
+
 <script>
 import configuracion from '@/configuracion.json';
 import ListaCrudComponent from '@/components/comun/ListaCrudComponent.vue';
 import EquipamientoFormComponent from '@/components/EquipamientoFormComponent.vue';
+import EquipamientoDetalleComponent from '@/components/EquipamientoDetalleComponent.vue';
 import { useUsuariosStore } from '@/store/usuariosStore.js';
 import { useEquipamientosStore } from '@/store/equipamientosStore.js';
 import { mapState, mapActions } from 'pinia';
 
 export default {
-  components: { ListaCrudComponent, EquipamientoFormComponent },
+  components: { ListaCrudComponent, EquipamientoFormComponent, EquipamientoDetalleComponent },
   data() {
     return {
       equipamientoSeleccionado: {},
       mostrarCrearForm: false,
       modoEdicion: false,
-      equipamientosKey: 0, //forzar renderizado https://michaelnthiessen.com/force-re-render/
+      detalle: false,
+      equipamientosKey: 0,
       mostrarAlerta: false,
       mensajeAlerta: '',
       tipoAlerta: 'success',
@@ -48,14 +50,6 @@ export default {
     permisoCreacion() {
       return this.perfil == 'ECEF';
     }
-  },
-  watch: {
-    equipamientosRegistrados: {
-      handler() {
-        this.equipamientosKey += 1;
-      },
-      deep: true,
-    },
   },
   methods: {
     ...mapActions(useEquipamientosStore, [
@@ -82,11 +76,9 @@ export default {
       if (this.modoEdicion) {
         await this.modificarEquipamiento(equipamiento);
         this.mostrarAlertaTemporal('Equipamiento modificado con éxito');
-
       } else {
         await this.agregarEquipamiento(equipamiento);
         this.mostrarAlertaTemporal('Equipamiento creado con éxito');
-
       }
       await this.cargarEquipamientos();
       this.cerrarFormulario();
@@ -101,6 +93,13 @@ export default {
       this.equipamientoSeleccionado = { ...equipamiento };
       this.modoEdicion = true;
       this.mostrarCrearForm = true;
+    },
+    abrirDialogoDetalle(equipamiento) {
+      this.equipamientoSeleccionado = equipamiento;
+      this.detalle = true;
+    },
+    cerrarDialogoDetalle() {
+      this.detalle = false;
     },
     async borrarEquipamiento(equipamiento) {
       await this.eliminarEquipamiento(equipamiento);

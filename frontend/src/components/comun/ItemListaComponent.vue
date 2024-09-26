@@ -25,7 +25,7 @@
       <div class="contenido">
         <v-card-title class="titulo">{{ item.nombre }}</v-card-title>
         <v-card-text>
-          <p class="texto">{{ item.descripcion }}</p>
+          <p class="texto" v-if="descripcion">{{ item.descripcion }}</p>
           <slot name="info-extra" :item="item"></slot>
         </v-card-text>
         <v-card-actions v-if="acciones.length > 0">
@@ -49,6 +49,9 @@ export default {
     item: {
       type: Object,
       required: true
+    },
+    descripcion:{
+      default:true
     },
     acciones: {
       type: Array,

@@ -44,7 +44,8 @@
 
       <ItemListaComponent class="componente" v-for="(item, index) in itemsFiltrados" :key="index" :item="item"
         :acciones="acciones"  :mostrar-imagen="mostrarImagen" :imagenPredeterminada="imagenPredeterminada" 
-        @click="abrirDialogoDetalle(item)" @editar="emitEditar(item)" @eliminar="emitEliminar(item)">
+        :descripcion="descripcion" @click="abrirDialogoDetalle(item)" @editar="emitEditar(item)" 
+        @eliminar="emitEliminar(item)">
         <template v-slot:info-extra="{ item }">
           <slot name="info-extra" :item="item"></slot>
         </template>
@@ -65,6 +66,9 @@ export default {
   props: {
     items: {
       required: true
+    },
+    descripcion: {
+      default: true
     },
     cargando: {
       required: true
