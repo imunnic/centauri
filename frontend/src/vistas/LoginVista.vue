@@ -8,21 +8,21 @@
 import { useUsuariosStore } from '@/store/usuariosStore.js';
 import { useFichasStore } from '@/store/fichasStore.js';
 import { useEjerciciosStore } from '@/store/ejerciciosStore';
-import { mapState,mapActions} from 'pinia';
+import { mapState, mapActions } from 'pinia';
 export default {
 
-  computed:{
-    ...mapState(useUsuariosStore,['token','isLogged'])
+  computed: {
+    ...mapState(useUsuariosStore, ['token', 'isLogged'])
   },
   data() {
     return {
 
     }
   },
-  methods:{
-    ...mapActions(useUsuariosStore,['peticionLogin']),
-    ...mapActions(useFichasStore,['arrancarServicioFicha']),
-    ...mapActions(useEjerciciosStore,['arrancarServicioEjercicios']),
+  methods: {
+    ...mapActions(useUsuariosStore, ['peticionLogin']),
+    ...mapActions(useFichasStore, ['arrancarServicioFicha']),
+    ...mapActions(useEjerciciosStore, ['arrancarServicioEjercicios']),
     redirigirConRetardo() {
       setTimeout(() => {
         this.$router.push('/fichas');
@@ -31,17 +31,14 @@ export default {
 
   },
   async created() {
-
-      try {
-      await this.peticionLogin(); 
+    try {
+      await this.peticionLogin();
     } catch (error) {
       console.error('Error during login:', error);
     }
-    console.log(this.token);
     this.arrancarServicioFicha(this.token);
     this.arrancarServicioEjercicios(this.token);
     this.redirigirConRetardo();
-
   }
 }
 </script>
