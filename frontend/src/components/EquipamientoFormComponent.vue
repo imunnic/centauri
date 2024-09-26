@@ -1,5 +1,5 @@
 <template>
-  <v-dialog max-width="600px" v-model="mostrar">
+  <v-dialog max-width="600px" v-model="mostrar" persistent>
     <v-card>
       <v-card-title class="d-flex justify-space-between">
         <span class="headline">{{ tituloFormulario }}</span>
@@ -81,7 +81,6 @@ export default {
     },
     async guardarEquipamiento() {
       let isValido = await this.$refs.form.validate();
-      console.log(isValido);
       if (isValido.valid) {
         this.$emit('guardar', this.equipamientoNuevo);
         this.cerrarDialogo();

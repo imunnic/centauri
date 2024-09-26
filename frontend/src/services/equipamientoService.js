@@ -49,5 +49,9 @@ export default class EquipamientosService {
     return await axios.post(url, equipamiento, config);
   }
 
+  async modificarEquipamiento(equipamientoModificado) {
+    return await axios.put(equipamientoModificado._links.self.href, equipamientoModificado, config);
+  }
+
 
 }

@@ -17,6 +17,9 @@ export const useEquipamientosStore = defineStore("equipamientos", {
     async agregarEquipamiento(equipamiento){
       await this.equipamientosService.crearEquipamiento(equipamiento);
     },
+    async modificarEquipamiento(equipamiento){
+        await this.equipamientosService.modificarEquipamiento(equipamiento);
+    },
     resetEquipamiento(equipamiento){
       equipamiento.nombre = "";
       equipamiento.descripcion = "";

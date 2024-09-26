@@ -7,12 +7,12 @@
       </v-alert>
     </transition>
 
-    <ListaCrudComponent :items="equipamientosRegistrados" :key="equipamientosKey" 
+    <ListaCrudComponent :items="equipamientosRegistrados" :key="equipamientosKey" @editar="editarEquipamiento"
       @crear="crearEquipamiento" :mostrar-imagen="true" :imagen-predeterminada="imagenNoEncontrada"
       :cargando="cargando"
       :permisoCreacion="permisoCreacion">
       <template v-slot:info-extra="{ item }">
-        <div><b>Tipo</b>: {{ item.tipo }}</div>
+        <p class="texto"><b>Tipo</b>: {{ item.tipo }}</p class="texto">
       </template>
     </ListaCrudComponent>
 
@@ -62,7 +62,8 @@ export default {
     ...mapActions(useEquipamientosStore, [
       'cargarEquipamientos',
       'resetEquipamiento',
-      'agregarEquipamiento'
+      'agregarEquipamiento',
+      'modificarEquipamiento'
     ]),
     resetFormulario() {
       this.equipamientoSeleccionado = {};
@@ -94,6 +95,11 @@ export default {
     crearEquipamiento() {
       this.modoEdicion = false;
       this.equipamientoSeleccionado = {};
+      this.mostrarCrearForm = true;
+    },
+    editarEquipamiento(equipamiento) {
+      this.equipamientoSeleccionado = { ...equipamiento };
+      this.modoEdicion = true;
       this.mostrarCrearForm = true;
     },
     cerrarFormulario() {
@@ -131,5 +137,8 @@ export default {
 .componente {
   margin-bottom: 20px !important;
   width: 100%;
+}
+.texto{
+  font-size: 17px;
 }
 </style>
