@@ -32,6 +32,7 @@ public class ConfiguracionSeguridad {
             // Permitir el acceso público a los endpoints de autenticación y al de /aprobado
             .requestMatchers("/api/autenticacion/**", "/api/fichas/aprobado").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/ejercicios").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/equipamientos").permitAll()
             // Requerir autenticación para cualquier otro endpoint
             .anyRequest().authenticated())
         // Política de sesiones sin estado (stateless) para JWT o tokens Bearer

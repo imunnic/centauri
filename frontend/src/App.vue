@@ -17,8 +17,9 @@ import {mapActions, mapState} from 'pinia';
     data() {
       return {
         menu:[
-          { title: 'Fichas', prependIcon: 'mdi-dumbbell', ruta: '/fichas' },
-          {title: 'Ejercicios', prependIcon: 'mdi-run', ruta:'/ejercicios'}
+          { title: 'Fichas', prependIcon: 'mdi-clipboard-list-outline', ruta: '/fichas' },
+          { title: 'Ejercicios', prependIcon: 'mdi-run', ruta:'/ejercicios' },
+          { title: 'Equipamiento', prependIcon: 'mdi-dumbbell', ruta:'/equipamientos' }
         
         ],
         aplicacion:{

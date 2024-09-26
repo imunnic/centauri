@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 
 public class Serie {
 
-
   private Ejercicio ejercicio;
   private int cantidad;
   private String tipo;

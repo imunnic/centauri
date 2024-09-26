@@ -4,7 +4,6 @@ package es.mde.kiron.modelos;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Ronda {
 
   private List<Serie> series = new ArrayList<>();

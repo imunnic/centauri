@@ -39,7 +39,6 @@ public class Usuario {
     this.nombre = nombre;
   }
 
-
   public Rol getRol() {
     return rol;
   }

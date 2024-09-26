@@ -7,7 +7,8 @@
 <script>
 import { useUsuariosStore } from '@/store/usuariosStore.js';
 import { useFichasStore } from '@/store/fichasStore.js';
-import { useEjerciciosStore } from '@/store/ejerciciosStore';
+import { useEjerciciosStore } from '@/store/ejerciciosStore.js';
+import { useEquipamientosStore } from '@/store/equipamientosStore.js';
 import { mapState, mapActions } from 'pinia';
 export default {
 
@@ -23,6 +24,7 @@ export default {
     ...mapActions(useUsuariosStore, ['peticionLogin']),
     ...mapActions(useFichasStore, ['arrancarServicioFicha']),
     ...mapActions(useEjerciciosStore, ['arrancarServicioEjercicios']),
+    ...mapActions(useEquipamientosStore,['arrancarServicioEquipamientos']),
     redirigirConRetardo() {
       setTimeout(() => {
         this.$router.push('/fichas');
@@ -38,6 +40,7 @@ export default {
     }
     this.arrancarServicioFicha(this.token);
     this.arrancarServicioEjercicios(this.token);
+    this.arrancarServicioEquipamientos(this.token);
     this.redirigirConRetardo();
   }
 }

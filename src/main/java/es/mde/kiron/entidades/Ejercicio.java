@@ -18,7 +18,7 @@ public class Ejercicio {
   private String tipoMovimiento;
   private String tipoContraccion;
   private String velocidad;
-  private String equipo;
+  private String equipamiento;
   private String url;
   private TipoCarga tipoCarga;
   private Set<String> musculosPrincipales = new HashSet<>();
@@ -118,12 +118,12 @@ public class Ejercicio {
     this.tipoCarga = tipoCarga;
   }
 
-  public String getEquipo() {
-    return equipo;
+  public String getEquipamiento() {
+    return equipamiento;
   }
 
-  public void setEquipo(String equipo) {
-    this.equipo = equipo;
+  public void setEquipamiento(String equipamiento) {
+    this.equipamiento = equipamiento;
   }
 
   public String getId() {
