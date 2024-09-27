@@ -57,7 +57,7 @@ export default {
         return {
           title: this.primeraAMayuscula(parteRuta),
           href,
-          disabled: index === rutas.length - 1
+          disabled: true
         };
       });
     }
