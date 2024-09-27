@@ -23,11 +23,11 @@
           <p class="mensaje-video-no-disponible">No hay video disponible</p>
           <img :src="videoNoDisponible" alt="Video no disponible" class="imagen-ajustada">
         </div>
-        <p><b>Cualidad</b>: {{ ejercicio.cualidad || 'No especificado' }}</p>
-        <p><b>Tipo de movimiento</b>: {{ ejercicio.tipoMovimiento || 'No especificado' }}</p>
-        <p><b>Tipo de contracción</b>: {{ ejercicio.tipoContraccion || 'No especificado' }}</p>
-        <p><b>Velocidad</b>: {{ ejercicio.velocidad || 'No especificado' }}</p>
-        <p><b>Equipamiento</b>: {{ equipamiento.nombre || 'No especificado' }}</p>
+        <p><b>Cualidad</b>: {{ ejercicio.cualidad || 'No especificado.' }}</p>
+        <p><b>Tipo de movimiento</b>: {{ ejercicio.tipoMovimiento || 'No especificado.' }}</p>
+        <p><b>Tipo de contracción</b>: {{ ejercicio.tipoContraccion || 'No especificado.' }}</p>
+        <p><b>Velocidad</b>: {{ ejercicio.velocidad || 'No especificado.' }}</p>
+        <p><b>Equipamiento</b>: {{ equipamiento.nombre || 'No especificado.' }}</p>
         <p><b>Músculos principales</b>: {{ formatoLista(ejercicio.musculosPrincipales) }}</p>
         <p><b>Músculos secundarios</b>: {{ formatoLista(ejercicio.musculosSecundarios) }}</p>
         <p><b>Tipo de Carga</b>: {{ tipoCargaDisplay }}</p>
@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       dialog: true,
-      equipamiento: { nombre: 'No especificado' },
+      equipamiento: { nombre: 'No especificado.' },
       videoNoDisponible: configuracion.urlVideoNoEncontrado
     };
   },
@@ -67,7 +67,7 @@ export default {
         case 'VAM':
           return 'VAM';
         default:
-          return 'Tipo de carga no especificado';
+          return 'Tipo de carga no especificado.';
       }
     }
   },
@@ -90,11 +90,11 @@ export default {
       if (response && response.data) {
         this.equipamiento = response.data;
       } else {
-        this.equipamiento = { nombre: 'No especificado' };
+        this.equipamiento = { nombre: 'No especificado.' };
       }
     } catch (error) {
       console.error('Error fetching equipamiento:', error);
-      this.equipamiento = { nombre: 'No especificado' };
+      this.equipamiento = { nombre: 'No especificado.' };
     }
   }
 }
