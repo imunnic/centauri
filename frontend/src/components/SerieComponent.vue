@@ -67,7 +67,7 @@
         <div class="info-serie">
           <p class="definicion-serie"><b>Carga: {{ serie.carga }} %</b></p>
           <p class="definicion-serie" v-if="serie.tipo == 'REPS'"> <b>{{ marcaEjercicio }} repeticiones</b></p>
-          <p class="definicion-serie" v-if="serie.tipo == 'TIEMPO'"><b>{{ marcaEjercicio }} minutos</b></p>
+          <p class="definicion-serie" v-if="serie.tipo == 'TIEMPO'"><b>{{ marcaEjercicio }} {{textoTiempo}}</b></p>
           <p class="definicion-serie" v-if="serie.tipo == 'DIST'"><b>{{ marcaEjercicio }} metros</b></p>
         </div>
         <div class="info-serie">
@@ -103,7 +103,7 @@
             <b>{{ formatoDuracion }} repeticiones con {{ marcaEjercicio }} kg</b>
           </p>
           <p class="definicion-serie" v-if="serie.tipo == 'TIEMPO'">
-            <b>{{ formatoDuracion }} minutos con {{ marcaEjercicio }} kg</b>
+            <b>{{ formatoDuracion }} {{textoTiempo}} con {{ marcaEjercicio }} kg</b>
           </p>
           <p class="definicion-serie" v-if="serie.tipo == 'DIST'">
             <b>{{ formatoDuracion }} metros con {{ marcaEjercicio }} kg</b>
@@ -119,7 +119,7 @@
       </div>
       <div v-if="serie.ajustable == false">
         <p class="definicion-serie" v-if="serie.tipo == 'REPS'"> <b>{{ formatoDuracion }} repeticiones</b></p>
-        <p class="definicion-serie" v-if="serie.tipo == 'TIEMPO'"><b>{{ formatoDuracion }} minutos</b></p>
+        <p class="definicion-serie" v-if="serie.tipo == 'TIEMPO'"><b>{{ formatoDuracion }} {{ textoTiempo }}</b></p>
         <p class="definicion-serie" v-if="serie.tipo == 'DIST'"><b>{{ formatoDuracion }} metros</b></p>
       </div>
     </div>
@@ -164,20 +164,20 @@ export default {
       return ejercicioSeleccionado ? ejercicioSeleccionado.nombre : 'Ejercicio no seleccionado';
     },
     formatoMarca() {
-      const minutes = Math.floor(this.ritmoObjetivo / 60).toString().padStart(2, '0');
+      const minutos = Math.floor(this.ritmoObjetivo / 60).toString().padStart(2, '0');
       const seconds = (this.ritmoObjetivo % 60).toString().padStart(2, '0');
-      return `${minutes}:${seconds}`;
+      return `${minutos}:${seconds}`;
     },
 
     formatoTiempo: {
     get() {
-      const minutes = Math.floor(this.serie.cantidad / 60).toString().padStart(2, '0');
+      const minutos = Math.floor(this.serie.cantidad / 60).toString().padStart(2, '0');
       const seconds = (this.serie.cantidad % 60).toString().padStart(2, '0');
-      return `${minutes}:${seconds}`;
+      return `${minutos}:${seconds}`;
     },
     set(value) {
-      const [minutes, seconds] = value.split(':').map(Number);
-      this.serie.cantidad = (minutes * 60) + seconds;
+      const [minutos, seconds] = value.split(':').map(Number);
+      this.serie.cantidad = (minutos * 60) + seconds;
     }
   },
 
@@ -190,8 +190,8 @@ export default {
     },
     set(value) {
       if (this.serie.tipo === 'TIEMPO') {
-        const [minutes, seconds] = value.split(':').map(Number);
-        this.serie.cantidad = (minutes * 60) + seconds;
+        const [minutos, seconds] = value.split(':').map(Number);
+        this.serie.cantidad = (minutos * 60) + seconds;
       } else {
         this.serie.cantidad = Number(value);
       }
@@ -222,9 +222,9 @@ export default {
 
   methods: {
     onInput(value) {
-      const [minutes, seconds] = value.split(':').map(Number);
-      if (!isNaN(minutes) && !isNaN(seconds)) {
-        this.marcaObjetivo = (minutes * 60) + seconds;
+      const [minutos, seconds] = value.split(':').map(Number);
+      if (!isNaN(minutos) && !isNaN(seconds)) {
+        this.marcaObjetivo = (minutos * 60) + seconds;
       }
     },
     quitarSerie() {
