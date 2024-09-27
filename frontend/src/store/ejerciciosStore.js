@@ -23,11 +23,11 @@ export const useEjerciciosStore = defineStore("ejercicios", {
       ejercicio.nombre = "";
       ejercicio.descripcion = "";
       ejercicio.cualidad = "";
-      ejercicio.numeroEjecutantes = 0;
+      ejercicio.numeroEjecutantes = 1;
       ejercicio.tipoMovimiento = "";
       ejercicio.tipoContracción = "";
       ejercicio.velocidad = "";
-      ejercicio.equipo = '';
+      ejercicio.equipamiento = '';
       ejercicio.musculosPrincipales = [];
       ejercicio.musculosSecundarios = [];
       ejercicio.url = "";
@@ -38,6 +38,16 @@ export const useEjerciciosStore = defineStore("ejercicios", {
     },
     async eliminarEjercicio(ejercicio) {
       await this.ejerciciosService.eliminarEjercicio(ejercicio._links.self.href);
+    },
+    async getEquipamientoDeEjercicio(ejercicio){
+      let equipamiento = {nombre:''};
+      try {
+        equipamiento = 
+        await this.ejerciciosService.getEquipamientoDeEjercicio(ejercicio._links.equipamiento.href);
+      } catch(error) {
+        console.log('Este equipo no tiene equipamiento');
+      }
+      return equipamiento;
     }
   }
 });

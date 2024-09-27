@@ -39,14 +39,18 @@ export default class EjerciciosService {
   }
 
   async modificarEjercicio(ejercicioModificado) {
-    return await axios.put(ejercicioModificado._links.self.href, ejercicioModificado, config);
+    return await axios.patch(ejercicioModificado._links.self.href, ejercicioModificado, config);
   }
 
   async eliminarEjercicio(href) {
     await axios.delete(href, config);
   }
 
-  crearEjercicio(ejercicio) {
-    return axios.post(url, ejercicio, config);
+  async crearEjercicio(ejercicio) {
+    console.log(ejercicio);
+    return await axios.post(url, ejercicio, config);
+  }
+  async getEquipamientoDeEjercicio(href) {
+    return await axios.get(href,config);
   }
 }

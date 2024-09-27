@@ -24,11 +24,15 @@
           allowfullscreen
           class="iframe-centrado"
         ></iframe>
+        <div v-else class="contenedor-imagen">
+          <p class="mensaje-video-no-disponible">No hay video disponible</p>
+          <img :src="videoNoDisponible" alt="Video no disponible" class="imagen-ajustada">
+        </div>
         <p><b>Cualidad</b>: {{ ejercicio.cualidad || 'No especificado' }}</p>
         <p><b>Tipo de movimiento</b>: {{ ejercicio.tipoMovimiento || 'No especificado' }}</p>
         <p><b>Tipo de contracción</b>: {{ ejercicio.tipoContraccion || 'No especificado' }}</p>
         <p><b>Velocidad</b>: {{ ejercicio.velocidad || 'No especificado' }}</p>
-        <p><b>Equipo</b>: {{ ejercicio.equipo || 'No especificado' }}</p>
+        <p><b>Equipamiento</b>: {{ equipamiento.nombre || 'No especificado' }}</p>
         <p><b>Músculos principales</b>: {{ formatoLista(ejercicio.musculosPrincipales) }}</p>
         <p><b>Músculos secundarios</b>: {{ formatoLista(ejercicio.musculosSecundarios) }}</p>
         <p><b>Tipo de Carga</b>: {{ tipoCargaDisplay }}</p>
@@ -40,6 +44,8 @@
 </template>
 
 <script>
+import configuracion from '@/configuracion.json';
+import { useEjerciciosStore } from '@/store/ejerciciosStore.js'
 import { mapActions } from 'pinia'
 
 export default {
@@ -52,7 +58,8 @@ export default {
   data() {
     return {
       dialog: true,
-      equipo: null
+      equipamiento: {},
+      videoNoDisponible: configuracion.urlVideoNoEncontrado
     };
   },
   computed: {
@@ -70,6 +77,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(useEjerciciosStore, ['getEquipamientoDeEjercicio']),
     formatoUrl(url) {
       return url.replace('watch?v=', 'embed/');
     },
@@ -82,7 +90,8 @@ export default {
     },
   },
   async created() {
-    // Código adicional si es necesario
+    let response = await this.getEquipamientoDeEjercicio(this.ejercicio);
+    this.equipamiento = response.data;
   }
 }
 </script>
@@ -102,5 +111,33 @@ export default {
   width: 100%;
   max-width: 560px;
   height: 315px;
+}
+
+.contenedor-imagen {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.mensaje-video-no-disponible {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 2;
+}
+
+.imagen-ajustada {
+  max-width: 30%;
+  height: auto;
+  object-fit: contain;
+  z-index: 1;
 }
 </style>

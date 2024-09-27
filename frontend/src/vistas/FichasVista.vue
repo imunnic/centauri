@@ -87,7 +87,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useFichasStore, ['arrancarServicioFicha', 'cargarFichas', 'cargarPendientes','cargarPropias', 'borrarFicha']),
+    ...mapActions(useFichasStore, ['arrancarServicioFicha', 
+    'cargarFichas', 'cargarPendientes','cargarPropias', 'borrarFicha']),
     verFicha(ficha) {
       if(this.fichasPropias){
         const href = ficha._links.self.href;

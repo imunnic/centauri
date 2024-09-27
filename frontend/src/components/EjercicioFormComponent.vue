@@ -58,10 +58,13 @@
               </v-text-field>
             </div>
             <div class="flex-item">
-              <v-text-field 
-                v-model="ejercicioNuevo.equipo" 
-                label="Equipo">
-              </v-text-field>
+              <v-select 
+                v-model="ejercicioNuevo.equipamiento"
+                :items="equipamientosRegistrados"
+                item-title="nombre"
+                item-value="_links.self.href"
+                label="Equipamiento">
+              </v-select>
             </div>
             <div class="flex-item">
               <v-text-field 
@@ -112,6 +115,8 @@
 
 <script>
 import musculos from '../assets/musculos.json';
+import { useEquipamientosStore } from '@/store/equipamientosStore';
+import { mapState, mapActions } from 'pinia';
 
 export default {
   props: {
@@ -122,6 +127,9 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  computed:{
+    ...mapState(useEquipamientosStore, ['equipamientosRegistrados'])
   },
   data() {
     return {
@@ -139,7 +147,7 @@ export default {
         descripcion: '',
         cualidad: '',
         numeroEjecutantes: 1,
-        equipo:'',
+        equipamiento:'',
         tipoMovimiento: '',
         tipoContraccion: '',
         velocidad: '',
@@ -162,12 +170,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions(useEquipamientosStore,['cargarEquipamientos']),
     cerrarDialogo() {
       this.$emit('cerrar');
       this.resetForm();
     },
     resetForm() {
       this.ejercicioNuevo = { ...this.ejercicio };
+      this.ejercicioNuevo.equipamiento = '';
     },
     async guardarEjercicio() {
       let isValid = await this.$refs.form.validate();
@@ -177,8 +187,9 @@ export default {
       } 
     }
   },
-  created() {
+  async created() {
     this.resetForm();
+    await this.cargarEquipamientos();
   }
 };
 </script>

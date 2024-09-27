@@ -184,7 +184,7 @@ export default {
     formatoDuracion: {
     get() {
       if (this.serie.tipo === 'TIEMPO') {
-        return this.formatoTiempo; // o la conversión que necesites
+        return this.formatoTiempo;
       }
       return `${this.serie.cantidad}`;
     },

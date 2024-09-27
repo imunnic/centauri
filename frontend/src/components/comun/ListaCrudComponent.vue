@@ -22,6 +22,11 @@
     spinner de carga.
   - permisoCreacion: Booleano que determina si el botón flotante de acción está habilitado. Por 
     defecto es `true`.
+  - descripcion: booleano que muestra o deja de mostrar la descripción de los objetos que 
+    se representan en la lista. Por defecto es verdadero.
+  - mostrarImagen: muestra imagen si la tienen los objetos que se representan en la lista.
+  - imagenPredeterminada: enlace a una imagen predeterminada para mostrar en caso de que los objetos
+    no tengan imagen.
 
   Data:
   - itemsFiltrados: Array que contiene los ítems después de aplicar los filtros.

@@ -9,6 +9,8 @@
     en el array debe tener las propiedades `icon` (nombre del ícono), `color` (color del botón) 
     y `evento` (nombre del evento que se emitirá cuando se haga clic en el botón). Por defecto, 
     se incluyen acciones para editar (ícono 'mdi-pencil') y eliminar (ícono 'mdi-trash-can').
+  - descripcion: booleano que muestra o deja de mostrar la descripción de los objetos que 
+    representa la lista. Por defecto es verdadero.
 
 -->
 <template>

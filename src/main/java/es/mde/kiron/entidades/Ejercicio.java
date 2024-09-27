@@ -2,6 +2,7 @@ package es.mde.kiron.entidades;
 
 import es.mde.kiron.modelos.TipoCarga;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +19,8 @@ public class Ejercicio {
   private String tipoMovimiento;
   private String tipoContraccion;
   private String velocidad;
-  private String equipamiento;
+  @DBRef
+  private Equipamiento equipamiento;
   private String url;
   private TipoCarga tipoCarga;
   private Set<String> musculosPrincipales = new HashSet<>();
@@ -118,11 +120,11 @@ public class Ejercicio {
     this.tipoCarga = tipoCarga;
   }
 
-  public String getEquipamiento() {
+  public Equipamiento getEquipamiento() {
     return equipamiento;
   }
 
-  public void setEquipamiento(String equipamiento) {
+  public void setEquipamiento(Equipamiento equipamiento) {
     this.equipamiento = equipamiento;
   }
 
