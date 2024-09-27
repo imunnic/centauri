@@ -16,14 +16,9 @@
         <v-icon class="texto" v-if="ejercicio.numeroEjecutantes > 2">mdi-account-group</v-icon>
       </v-card-subtitle>
       <v-card-text>
-        <iframe
-          v-if="ejercicio.url"
-          :src="formatoUrl(ejercicio.url)"
-          frameborder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          class="iframe-centrado"
-        ></iframe>
+        <iframe v-if="ejercicio.url" :src="formatoUrl(ejercicio.url)" frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
+          class="iframe-centrado"></iframe>
         <div v-else class="contenedor-imagen">
           <p class="mensaje-video-no-disponible">No hay video disponible</p>
           <img :src="videoNoDisponible" alt="Video no disponible" class="imagen-ajustada">
@@ -58,7 +53,7 @@ export default {
   data() {
     return {
       dialog: true,
-      equipamiento: {},
+      equipamiento: { nombre: 'No especificado' },
       videoNoDisponible: configuracion.urlVideoNoEncontrado
     };
   },
@@ -90,8 +85,17 @@ export default {
     },
   },
   async created() {
-    let response = await this.getEquipamientoDeEjercicio(this.ejercicio);
-    this.equipamiento = response.data;
+    try {
+      let response = await this.getEquipamientoDeEjercicio(this.ejercicio);
+      if (response && response.data) {
+        this.equipamiento = response.data;
+      } else {
+        this.equipamiento = { nombre: 'No especificado' };
+      }
+    } catch (error) {
+      console.error('Error fetching equipamiento:', error);
+      this.equipamiento = { nombre: 'No especificado' };
+    }
   }
 }
 </script>

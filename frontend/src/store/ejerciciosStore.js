@@ -40,7 +40,7 @@ export const useEjerciciosStore = defineStore("ejercicios", {
       await this.ejerciciosService.eliminarEjercicio(ejercicio._links.self.href);
     },
     async getEquipamientoDeEjercicio(ejercicio){
-      let equipamiento = {nombre:''};
+      let equipamiento = '';
       try {
         equipamiento = 
         await this.ejerciciosService.getEquipamientoDeEjercicio(ejercicio._links.equipamiento.href);
