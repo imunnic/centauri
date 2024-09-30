@@ -7,6 +7,7 @@ import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useFichasStore } from "@/store/fichasStore.js";
 import { useEjerciciosStore } from "@/store/ejerciciosStore.js";
 import { useEquipamientosStore } from "@/store/equipamientosStore.js";
+import { useSesionesStore } from "@/store/sesionesStore.js";
 import { mapState, mapActions } from "pinia";
 export default {
   computed: {
@@ -20,6 +21,7 @@ export default {
     ...mapActions(useFichasStore, ["arrancarServicioFicha"]),
     ...mapActions(useEjerciciosStore, ["arrancarServicioEjercicios"]),
     ...mapActions(useEquipamientosStore, ["arrancarServicioEquipamientos"]),
+    ...mapActions(useSesionesStore, ["arrancarServicioSesion"]),
     redirigirConRetardo() {
       setTimeout(() => {
         this.$router.push("/usuario");
@@ -35,6 +37,7 @@ export default {
     this.arrancarServicioFicha(this.token);
     this.arrancarServicioEjercicios(this.token);
     this.arrancarServicioEquipamientos(this.token);
+    this.arrancarServicioSesion(this.token);
     this.redirigirConRetardo();
   },
 };

@@ -9,8 +9,8 @@
       </v-card-title>
       <v-card-text>
         <v-form ref="form" @submit.prevent="guardarEjercicio">
-          <div class="flex-container">
-            <div class="flex-item">
+          <div class="contenedor-flex">
+            <div class="item-flex">
               <v-text-field
                 v-model="ejercicioNuevo.nombre"
                 label="Nombre"
@@ -19,7 +19,7 @@
               >
               </v-text-field>
             </div>
-            <div class="flex-item">
+            <div class="item-flex">
               <v-textarea
                 v-model="ejercicioNuevo.descripcion"
                 label="Descripción"
@@ -28,7 +28,7 @@
               >
               </v-textarea>
             </div>
-            <div class="flex-item">
+            <div class="item-flex">
               <v-select
                 v-model="ejercicioNuevo.musculosPrincipales"
                 :items="musculosItems"
@@ -37,7 +37,7 @@
               >
               </v-select>
             </div>
-            <div class="flex-item">
+            <div class="item-flex">
               <v-select
                 v-model="ejercicioNuevo.musculosSecundarios"
                 :items="musculosItems"
@@ -46,7 +46,7 @@
               >
               </v-select>
             </div>
-            <div class="flex-item">
+            <div class="item-flex">
               <v-select
                 v-model="ejercicioNuevo.cualidad"
                 :items="cualidadesItems"
@@ -55,7 +55,7 @@
               >
               </v-select>
             </div>
-            <div class="flex-item">
+            <div class="item-flex">
               <v-text-field
                 v-model="ejercicioNuevo.numeroEjecutantes"
                 label="Número de ejecutantes"
@@ -63,7 +63,7 @@
               >
               </v-text-field>
             </div>
-            <div class="flex-item">
+            <div class="item-flex">
               <v-select
                 v-model="ejercicioNuevo.equipamiento"
                 :items="equipamientosRegistrados"
@@ -73,32 +73,32 @@
               >
               </v-select>
             </div>
-            <div class="flex-item">
+            <div class="item-flex">
               <v-text-field
                 v-model="ejercicioNuevo.tipoMovimiento"
                 label="Tipo de movimiento"
               >
               </v-text-field>
             </div>
-            <div class="flex-item">
+            <div class="item-flex">
               <v-text-field
                 v-model="ejercicioNuevo.tipoContraccion"
                 label="Tipo de contracción"
               >
               </v-text-field>
             </div>
-            <div class="flex-item">
+            <div class="item-flex">
               <v-text-field
                 v-model="ejercicioNuevo.velocidad"
                 label="Velocidad"
               >
               </v-text-field>
             </div>
-            <div class="flex-item">
+            <div class="item-flex">
               <v-text-field v-model="ejercicioNuevo.url" label="URL">
               </v-text-field>
             </div>
-            <div class="flex-item">
+            <div class="item-flex">
               <v-select
                 v-model="ejercicioNuevo.tipoCarga"
                 :items="tipoCargaItems"
@@ -215,13 +215,14 @@ export default {
   margin-top: 2vh;
 }
 
-.flex-container {
+.contenedor-flex {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  align-items: stretch;
 }
 
-.flex-item {
+.item-flex {
   display: flex;
   flex-direction: column;
 }

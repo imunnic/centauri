@@ -25,21 +25,46 @@
     </div>
     <div class="derecha">
       <CalendarioComponent
-        @fecha-seleccionada="crearSesion"
+        @fecha-seleccionada="nuevaSesion"
         :modoInicial="modoInicial"
         :sesiones="sesiones"
         class="calendario"
       ></CalendarioComponent>
+
+      <SesionFormComponent
+        v-if="edicion"
+        :fecha="fechaSeleccionada"
+        :grupos="gruposEncargado"
+        @sesionCreada="sesionCreada"
+        @cerrar="cerrarFormularioSesion"
+      />
     </div>
   </div>
 </template>
+
 <script>
 import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
 import CalendarioComponent from "@/components/comun/CalendarioComponent.vue";
+import SesionFormComponent from "@/components/SesionFormComponent.vue";
+import { useSesionesStore } from "@/store/sesionesStore.js";
+import { useUsuariosStore } from "@/store/usuariosStore";
+import { mapActions, mapState } from "pinia";
+import grupos from "@/assets/grupos.json";
+
 export default {
   components: {
     ListaCrudComponent,
     CalendarioComponent,
+    SesionFormComponent,
+  },
+  computed: {
+    ...mapState(useUsuariosStore, ['username']),
+    isLargeScreen() {
+      return this.windowWidth > 1500;
+    },
+    modoInicial() {
+      return this.isLargeScreen ? "mes" : "dia";
+    },
   },
   data() {
     return {
@@ -48,13 +73,8 @@ export default {
         { nombre: "Grupo 1", color: { nombre: "rojo", valor: "#FF0000" } },
         { nombre: "Grupo 2", color: { nombre: "azul", valor: "#0000FF" } },
       ],
-      gruposEncargado: [
-        {
-          nombre: "Patrulla de tiro",
-          color: { nombre: "verde", valor: "#00EE00" },
-        },
-      ],
-      cargandoGrupos: false,
+      gruposEncargado: [],
+      fechaSeleccionada: null,
       sesiones: [
         {
           grupo: {
@@ -83,40 +103,39 @@ export default {
           ],
         },
       ],
+      edicion: false,
     };
   },
-  computed: {
-    isLargeScreen() {
-      return this.windowWidth > 1500;
-    },
-    modoInicial() {
-      if (this.isLargeScreen) {
-        return "mes";
-      } else {
-        return "dia";
-      }
-    },
-  },
   methods: {
-    handleResize() {
-      this.windowWidth = window.innerWidth;
+    ...mapActions(useSesionesStore, ["crearSesion"]),
+    nuevaSesion(fecha) {
+      this.fechaSeleccionada = fecha;
+      this.edicion = true;
     },
-    crearSesion(fecha) {
-      console.log(fecha);
+    sesionCreada(nuevaSesion) {
+      this.crearSesion(nuevaSesion);
+      this.edicion = false;
+    },
+    cerrarFormularioSesion() {
+      this.edicion = false;
     },
     getCartaStyle(item) {
       return {
         "--bg-color": item.color.valor,
       };
     },
+    filtrarPorEncargado(encargado) {
+      let filtro = grupos.filter((grupo) => grupo.encargado === encargado);
+      return filtro;
+    },
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);
+    this.gruposEncargado = this.filtrarPorEncargado(this.username);
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.handleResize);
   },
-  created() {},
 };
 </script>
 

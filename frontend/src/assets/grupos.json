@@ -1,0 +1,26 @@
+[
+  {
+    "nombre":"Grupo 1",
+    "encargado":"dparlop",
+    "color":{
+      "nombre":"verde",
+      "valor": "#0D4C0D"
+    }
+  },
+  {
+    "nombre":"Grupo 2",
+    "encargado":"aminman",
+    "color":{
+      "nombre":"rojo",
+      "valor": "#a20505"
+    }
+  },
+  {
+    "nombre":"Patrulla de tiro",
+    "encargado":"imunnic",
+    "color":{
+      "nombre":"gris",
+      "valor": "#737373"
+    }
+  }
+]
