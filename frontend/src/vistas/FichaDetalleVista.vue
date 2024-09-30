@@ -40,7 +40,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialogAprobar = false">Cancelar</v-btn>
-          <v-btn color="green darken-1" text @click="confirmarAprobar">Confirmar</v-btn>
+          <v-btn color="green darken-1" text @click="confirmar(true)">Confirmar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -52,7 +52,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialogRechazar = false">Cancelar</v-btn>
-          <v-btn color="red darken-1" text @click="confirmarRechazar">Confirmar</v-btn>
+          <v-btn color="red darken-1" text @click="confirmar(false)">Confirmar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -90,21 +90,18 @@ export default {
     ...mapActions(useFichasStore, ['cargarFichaDetalle', 'arrancarServicioFicha', 'cambiarEstado']),
     ...mapActions(useUsuariosStore, ['peticionLogin']),
 
-    async confirmarAprobar() {
+    async confirmar(aprobado){
       this.dialogAprobar = false;
-      await this.cambiarEstado(this.fichaSeleccionada._links.self.href, true);
+      await this.cambiarEstado(this.fichaSeleccionada._links.self.href, aprobado);
       let response = await this.cargarFichaDetalle(this.$route.params.id);
       this.fichaSeleccionada = response.data;
+      if(aprobado){
       this.mostrarAlertaTemporal("Ficha validada", "success");
-    },
-
-    async confirmarRechazar() {
-      this.dialogRechazar = false;
-      await this.cambiarEstado(this.fichaSeleccionada._links.self.href, false);
-      let response = await this.cargarFichaDetalle(this.$route.params.id);
-      this.fichaSeleccionada = response.data;
+      } else {
       this.mostrarAlertaTemporal("Ficha rechazada", "error");
-      this.$router.push({path:'/fichas'});
+      }
+      this.$router.push('/fichas');
+
     },
 
     mostrarAlertaTemporal(mensaje, tipo = 'success') {
