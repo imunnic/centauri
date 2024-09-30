@@ -22,41 +22,40 @@ export default class FichaService {
     return await axios.get(url + "/aprobado", config);
   }
 
-  async getPendientes(){
+  async getPendientes() {
     return await axios.get(url + "/pendiente", config);
   }
 
-  async cambiarEstado(href, estado){
+  async cambiarEstado(href, estado) {
     let ruta;
-    if(estado){
+    if (estado) {
       ruta = href + "/estado?aprobado=true";
-    } else{
+    } else {
       ruta = href + "/estado?aprobado=false";
     }
     return await axios.patch(ruta, null, config);
   }
 
-  async getFicha(id){
+  async getFicha(id) {
     let ruta = url + "/" + id;
     return await axios.get(ruta, config);
   }
 
-  async getPropias(id){
+  async getPropias(id) {
     let ruta = url + "/search/findByAutor?id=" + id;
     return await axios.get(ruta, config);
   }
 
-  async postFicha(ficha){
+  async postFicha(ficha) {
     return await axios.post(url, ficha, config);
   }
 
-  async editarFicha(ficha, id){
-    let ruta = url + "/" + id
+  async editarFicha(ficha, id) {
+    let ruta = url + "/" + id;
     return await axios.patch(ruta, ficha, config);
   }
 
-  async deleteFicha(href){
+  async deleteFicha(href) {
     return await axios.delete(href, config);
   }
-
 }

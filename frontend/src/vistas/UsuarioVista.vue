@@ -1,0 +1,154 @@
+<template>
+  <div class="contenedor flex-fila">
+    <div v-if="isLargeScreen" class="contenedor grupos izquierda">
+      <b>Grupos:</b>
+      <v-card
+        v-for="(item, index) in gruposUsuario"
+        :key="index"
+        class="carta contenedor"
+        elevation="2"
+        :style="getCartaStyle(item)"
+      >
+        <p class="texto">{{ item.nombre }}</p>
+      </v-card>
+
+      <b>Encargado de:</b>
+      <v-card
+        v-for="(item, index) in gruposEncargado"
+        :key="index"
+        class="carta contenedor"
+        elevation="2"
+        :style="getCartaStyle(item)"
+      >
+        <p class="texto">{{ item.nombre }}</p>
+      </v-card>
+    </div>
+    <div class="derecha">
+      <CalendarioComponent
+        @fecha-seleccionada="crearSesion"
+        :modoInicial="modoInicial"
+        :sesiones="sesiones"
+        class="calendario"
+      ></CalendarioComponent>
+    </div>
+  </div>
+</template>
+<script>
+import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
+import CalendarioComponent from "@/components/comun/CalendarioComponent.vue";
+export default {
+  components: {
+    ListaCrudComponent,
+    CalendarioComponent,
+  },
+  data() {
+    return {
+      windowWidth: window.innerWidth,
+      gruposUsuario: [
+        { nombre: "Grupo 1", color: { nombre: "rojo", valor: "#FF0000" } },
+        { nombre: "Grupo 2", color: { nombre: "azul", valor: "#0000FF" } },
+      ],
+      gruposEncargado: [
+        {
+          nombre: "Patrulla de tiro",
+          color: { nombre: "verde", valor: "#00EE00" },
+        },
+      ],
+      cargandoGrupos: false,
+      sesiones: [
+        {
+          grupo: {
+            nombre: "Grupo 1",
+            color: { nombre: "rojo", valor: "#FF0000" },
+          },
+          fecha: "30/09/2024",
+          nombre: "Sesion 1",
+          fichas: [
+            { nombre: "Ficha 1.2" },
+            { nombre: "Ficha 3.2" },
+            { nombre: "Ficha 5.2" },
+          ],
+        },
+        {
+          grupo: {
+            nombre: "Grupo 2",
+            color: { nombre: "azul", valor: "#0000FF" },
+          },
+          fecha: "01/10/2024",
+          nombre: "Sesion 13",
+          fichas: [
+            { nombre: "Ficha 1.5" },
+            { nombre: "Ficha 3.1" },
+            { nombre: "Ficha 4.2" },
+          ],
+        },
+      ],
+    };
+  },
+  computed: {
+    isLargeScreen() {
+      return this.windowWidth > 1500;
+    },
+    modoInicial() {
+      if (this.isLargeScreen) {
+        return "mes";
+      } else {
+        return "dia";
+      }
+    },
+  },
+  methods: {
+    handleResize() {
+      this.windowWidth = window.innerWidth;
+    },
+    crearSesion(fecha) {
+      console.log(fecha);
+    },
+    getCartaStyle(item) {
+      return {
+        "--bg-color": item.color.valor,
+      };
+    },
+  },
+  mounted() {
+    window.addEventListener("resize", this.handleResize);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.handleResize);
+  },
+  created() {},
+};
+</script>
+
+<style scoped>
+.texto {
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.flex-fila {
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.izquierda {
+  width: 100%;
+}
+
+.derecha {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  min-width: 50%;
+  padding-left: 20px;
+}
+
+.grupos {
+  max-width: 20vw;
+}
+
+.carta::before {
+  width: 5px;
+  background-color: var(--bg-color);
+}
+</style>

@@ -5,14 +5,14 @@
 <script>
 import FichaFormComponent from '../components/FichaFormComponent.vue';
 import { useEjerciciosStore } from '@/store/ejerciciosStore.js';
-import {useUsuariosStore} from '@/store/usuariosStore.js';
+import { useUsuariosStore } from '@/store/usuariosStore.js';
 import { mapActions, mapState } from 'pinia';
 export default {
   components: {
     FichaFormComponent
   },
-  computed:{
-    ...mapState(useUsuariosStore,['token'])
+  computed: {
+    ...mapState(useUsuariosStore, ['token'])
   },
   data() {
     return {

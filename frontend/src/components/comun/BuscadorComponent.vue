@@ -27,47 +27,58 @@ export default {
   props: {
     items: {
       type: Array,
-      required: true
+      required: true,
     },
     filtros: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      queryBusqueda: ''
+      queryBusqueda: "",
     };
   },
   methods: {
     listaFiltrada() {
-  const query = this.queryBusqueda.toLowerCase();
-  const normalizeString = (str) => {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-  };
-  const normalizedQuery = normalizeString(query);
-  let filtrado = this.filtros.filter(key => key !== 'id');
-  const itemsfiltrados = this.items.filter(item => {
-    return filtrado.some(key => {
-      if (Array.isArray(item[key])) {
-        return item[key].some(subItem => {
-          if (typeof subItem === 'object' && subItem.nombre) {
-            return normalizeString(subItem.nombre.toString()).includes(normalizedQuery);
+      const query = this.queryBusqueda.toLowerCase();
+      const normalizeString = (str) => {
+        return str
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase();
+      };
+      const normalizedQuery = normalizeString(query);
+      let filtrado = this.filtros.filter((key) => key !== "id");
+      const itemsfiltrados = this.items.filter((item) => {
+        return filtrado.some((key) => {
+          if (Array.isArray(item[key])) {
+            return item[key].some((subItem) => {
+              if (typeof subItem === "object" && subItem.nombre) {
+                return normalizeString(subItem.nombre.toString()).includes(
+                  normalizedQuery
+                );
+              }
+              return normalizeString(subItem.toString()).includes(
+                normalizedQuery
+              );
+            });
+          } else if (item[key] !== null && item[key] !== undefined) {
+            if (typeof item[key] === "object" && item[key].nombre) {
+              return normalizeString(item[key].nombre.toString()).includes(
+                normalizedQuery
+              );
+            }
+            return normalizeString(item[key].toString()).includes(
+              normalizedQuery
+            );
           }
-          return normalizeString(subItem.toString()).includes(normalizedQuery);
+          return false;
         });
-      } else if (item[key] !== null && item[key] !== undefined) {
-        if (typeof item[key] === 'object' && item[key].nombre) {
-          return normalizeString(item[key].nombre.toString()).includes(normalizedQuery);
-        }
-        return normalizeString(item[key].toString()).includes(normalizedQuery);
-      }
-      return false;
-    });
-  });
+      });
 
-  this.$emit('filtrada', itemsfiltrados);
-}
-  }
+      this.$emit("filtrada", itemsfiltrados);
+    },
+  },
 };
 </script>

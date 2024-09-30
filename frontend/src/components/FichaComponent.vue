@@ -13,7 +13,12 @@
       </v-col>
     </v-row>
 
-    <draggable v-model="localRondas" class="lista-rondas" :item-key="getItemKey" :disabled="soloLectura">
+    <draggable
+      v-model="localRondas"
+      class="lista-rondas"
+      :item-key="getItemKey"
+      :disabled="soloLectura"
+    >
       <template #item="{ element, index }">
         <RondaComponent
           :key="element.id"
@@ -28,41 +33,46 @@
 </template>
 
 <script>
-import RondaComponent from './RondaComponent.vue';
-import draggable from 'vuedraggable';
-import { v4 as uuidv4 } from 'uuid';
+import RondaComponent from "./RondaComponent.vue";
+import draggable from "vuedraggable";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   components: {
     RondaComponent,
-    draggable
+    draggable,
   },
   props: {
     rondas: {
       type: Array,
-      required: true
+      required: true,
     },
     soloLectura: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      localRondas: [...this.rondas]
+      localRondas: [...this.rondas],
     };
   },
   methods: {
     agregarRonda() {
       if (!this.soloLectura) {
-        const nuevaRonda = { id: uuidv4(), tipo: 'Reps', cantidad: 1, series: [] };
+        const nuevaRonda = {
+          id: uuidv4(),
+          tipo: "Reps",
+          cantidad: 1,
+          series: [],
+        };
         this.localRondas.push(nuevaRonda);
         this.emitirActualizacion();
       }
     },
     quitarRonda(id) {
       if (!this.soloLectura) {
-        this.localRondas = this.localRondas.filter(ronda => ronda.id !== id);
+        this.localRondas = this.localRondas.filter((ronda) => ronda.id !== id);
         this.emitirActualizacion();
       }
     },
@@ -71,7 +81,9 @@ export default {
     },
     actualizarRondas(nuevaRonda) {
       if (!this.soloLectura) {
-        const index = this.localRondas.findIndex(ronda => ronda.id === nuevaRonda.id);
+        const index = this.localRondas.findIndex(
+          (ronda) => ronda.id === nuevaRonda.id
+        );
         if (index !== -1) {
           this.localRondas.splice(index, 1, nuevaRonda);
           this.emitirActualizacion();
@@ -79,17 +91,17 @@ export default {
       }
     },
     emitirActualizacion() {
-      this.$emit('update-ficha', this.localRondas);
-    }
+      this.$emit("update-ficha", this.localRondas);
+    },
   },
   watch: {
     rondas: {
       deep: true,
       handler(newRondas) {
         this.localRondas = [...newRondas];
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 

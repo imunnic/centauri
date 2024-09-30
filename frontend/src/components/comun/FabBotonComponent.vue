@@ -12,31 +12,35 @@
 -->
 
 <template>
-    <v-btn icon class="fab-button" @click="$emit('click')" :class="clasesAdicionales">
-      <v-icon>{{ icon }}</v-icon>
-    </v-btn>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      icon: {
-        type: String,
-        default: 'mdi-plus'
-      },
-      clasesAdicionales: {
-        type: String,
-        default: 'claro'
-      }
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .fab-button {
-    position: fixed;
-    right: 16px;
-    bottom: 16px;
-  }
-  </style>
-  
+  <v-btn
+    icon
+    class="fab-button"
+    @click="$emit('click')"
+    :class="clasesAdicionales"
+  >
+    <v-icon>{{ icon }}</v-icon>
+  </v-btn>
+</template>
+
+<script>
+export default {
+  props: {
+    icon: {
+      type: String,
+      default: "mdi-plus",
+    },
+    clasesAdicionales: {
+      type: String,
+      default: "claro",
+    },
+  },
+};
+</script>
+
+<style scoped>
+.fab-button {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+}
+</style>

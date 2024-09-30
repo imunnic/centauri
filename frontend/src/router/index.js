@@ -8,12 +8,17 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: () => import("../vistas/LoginVista.vue")
+    component: () => import("../vistas/LoginVista.vue"),
+  },
+  {
+    path: "/usuario",
+    name: "usuario",
+    component: () => import("../vistas/UsuarioVista.vue"),
   },
   {
     path: "/equipamientos",
     name: "equipamientos",
-    component: () => import("../vistas/EquipamientoVista.vue")
+    component: () => import("../vistas/EquipamientoVista.vue"),
   },
   {
     path: "/fichas",
@@ -23,22 +28,22 @@ const routes = [
   {
     path: "/fichas/:id",
     name: "fichaDetalle",
-    component: () => import("../vistas/FichaDetalleVista.vue")
+    component: () => import("../vistas/FichaDetalleVista.vue"),
   },
   {
     path: "/fichas/crear",
     name: "crearFicha",
-    component: () => import("../vistas/CrearFichaVista.vue")
+    component: () => import("../vistas/CrearFichaVista.vue"),
   },
   {
     path: "/fichas/editar/:id",
     name: "editarFicha",
-    component: () => import("../vistas/EditarFichaVista.vue")
+    component: () => import("../vistas/EditarFichaVista.vue"),
   },
   {
     path: "/ejercicios",
     name: "ejercicios",
-    component: () => import("../vistas/EjerciciosVista.vue")
+    component: () => import("../vistas/EjerciciosVista.vue"),
   },
 ];
 

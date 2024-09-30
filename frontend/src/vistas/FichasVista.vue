@@ -1,19 +1,38 @@
 <template>
   <v-container>
     <div class="contenedor-flex justify-start flex-columna">
-      <v-switch v-if="perfil == 'ECEF' || perfil == 'DIPLOMADO'" v-model="fichasPropias" 
-        label="Mostrar fichas propias" color="blue" active-color="blue" class="interruptor" 
-        ></v-switch>
-      <v-switch v-if="perfil == 'ECEF' && !fichasPropias" v-model="soloPendientes" label="Mostrar pendientes" color="red"
-        active-color="red" class="interruptor"></v-switch>
+      <v-switch
+        v-if="perfil == 'ECEF' || perfil == 'DIPLOMADO'"
+        v-model="fichasPropias"
+        label="Mostrar fichas propias"
+        color="blue"
+        active-color="blue"
+        class="interruptor"
+      ></v-switch>
+      <v-switch
+        v-if="perfil == 'ECEF' && !fichasPropias"
+        v-model="soloPendientes"
+        label="Mostrar pendientes"
+        color="red"
+        active-color="red"
+        class="interruptor"
+      ></v-switch>
     </div>
 
-    <ListaCrudComponent :items="fichasRegistradas" :key="fichasKey" @detalle="verFicha" 
-      :permiso-creacion="fichasPropias" :cargando="cargando" @editar="editarFicha" @eliminar="eliminarFicha">
+    <ListaCrudComponent
+      :items="fichasRegistradas"
+      :key="fichasKey"
+      @detalle="verFicha"
+      :permiso-creacion="fichasPropias"
+      :cargando="cargando"
+      @editar="editarFicha"
+      @eliminar="eliminarFicha"
+    >
       <template v-slot:info-extra="{ item }">
         <div class="info-relevante">
           <p>
-            <b>RPE estimado:
+            <b
+              >RPE estimado:
               <span :style="{ color: getColor(item.rpeEstimado) }">
                 {{ item.rpeEstimado }}/10
               </span>
@@ -21,8 +40,9 @@
           </p>
           <p><b>Tiempo estimado:</b> {{ item.tiempoEstimado }} minutos</p>
           <p v-if="fichasPropias">
-            <b>Estado: 
-            <span :style="{ color: getColor(item.estado) }">
+            <b
+              >Estado:
+              <span :style="{ color: getColor(item.estado) }">
                 {{ item.estado }}
               </span>
             </b>
@@ -31,23 +51,27 @@
       </template>
     </ListaCrudComponent>
 
-    <FabBotonComponent v-if="perfil == 'DIPLOMADO' || perfil == 'ECEF'" :icon="'mdi-plus'" @click="crearFicha"></FabBotonComponent>
+    <FabBotonComponent
+      v-if="perfil == 'DIPLOMADO' || perfil == 'ECEF'"
+      :icon="'mdi-plus'"
+      @click="crearFicha"
+    ></FabBotonComponent>
   </v-container>
 </template>
 
 <script>
-import BuscadorComponent from '@/components/comun/BuscadorComponent.vue';
-import ListaCrudComponent from '../components/comun/ListaCrudComponent.vue';
-import FabBotonComponent from '@/components/comun/FabBotonComponent.vue';
-import { useFichasStore } from '@/store/fichasStore.js';
-import { useUsuariosStore } from '@/store/usuariosStore.js';
-import { mapActions, mapState } from 'pinia';
+import BuscadorComponent from "@/components/comun/BuscadorComponent.vue";
+import ListaCrudComponent from "../components/comun/ListaCrudComponent.vue";
+import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
+import { useFichasStore } from "@/store/fichasStore.js";
+import { useUsuariosStore } from "@/store/usuariosStore.js";
+import { mapActions, mapState } from "pinia";
 
 export default {
   components: { BuscadorComponent, ListaCrudComponent, FabBotonComponent },
   computed: {
-    ...mapState(useFichasStore, ['fichasRegistradas']),
-    ...mapState(useUsuariosStore, ['token', 'perfil']),
+    ...mapState(useFichasStore, ["fichasRegistradas"]),
+    ...mapState(useUsuariosStore, ["token", "perfil"]),
   },
   data() {
     return {
@@ -57,12 +81,11 @@ export default {
       misActions: [],
       cargando: false,
       soloPendientes: false,
-      fichasPropias: false
+      fichasPropias: false,
     };
   },
-  async created(){
+  async created() {
     this.arrancarServicioFicha(this.token);
-
   },
   async mounted() {
     this.cargando = true;
@@ -84,51 +107,58 @@ export default {
       } else {
         await this.cargarFichas();
       }
-    }
+    },
   },
   methods: {
-    ...mapActions(useFichasStore, ['arrancarServicioFicha', 
-    'cargarFichas', 'cargarPendientes','cargarPropias', 'borrarFicha']),
+    ...mapActions(useFichasStore, [
+      "arrancarServicioFicha",
+      "cargarFichas",
+      "cargarPendientes",
+      "cargarPropias",
+      "borrarFicha",
+    ]),
     verFicha(ficha) {
-      if(this.fichasPropias){
+      if (this.fichasPropias) {
         const href = ficha._links.self.href;
-        const id = href.split('/').pop();
-        this.$router.push('/fichas/' + id);
+        const id = href.split("/").pop();
+        this.$router.push("/fichas/" + id);
       } else {
-        this.$router.push('/fichas/' + ficha.id);
+        this.$router.push("/fichas/" + ficha.id);
       }
     },
     getColor(rpe) {
-      if (rpe < 6 || rpe == 'APROBADO') return 'green';
-      if ((rpe >= 6 && rpe < 9) || rpe == 'PENDIENTE') return 'orange';
-      return 'red';
+      if (rpe < 6 || rpe == "APROBADO") return "green";
+      if ((rpe >= 6 && rpe < 9) || rpe == "PENDIENTE") return "orange";
+      return "red";
     },
-    crearFicha(){
-      this.$router.push('/fichas/crear');
+    crearFicha() {
+      this.$router.push("/fichas/crear");
     },
-    editarFicha(fichaEditar){
+    editarFicha(fichaEditar) {
       const href = fichaEditar._links.self.href;
-      const id = href.split('/').pop();
-      this.$router.push({name:'editarFicha', params:{id}, query:{edicion:true}});
+      const id = href.split("/").pop();
+      this.$router.push({
+        name: "editarFicha",
+        params: { id },
+        query: { edicion: true },
+      });
     },
-    async eliminarFicha(ficha){
+    async eliminarFicha(ficha) {
       await this.borrarFicha(ficha._links.self.href);
       await this.cargarPropias();
-    }
-  }
+    },
+  },
 };
 </script>
 
-
 <style scoped>
-.flex-columna{
+.flex-columna {
   align-items: start;
 }
 .info-relevante {
   font-size: 17px;
 }
-.interruptor{
+.interruptor {
   max-height: 40px;
 }
-
 </style>

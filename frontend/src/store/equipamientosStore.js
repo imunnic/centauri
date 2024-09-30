@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import EquipamientosService from "@/services/equipamientoService.js";
 
 export const useEquipamientosStore = defineStore("equipamientos", {
@@ -21,7 +21,9 @@ export const useEquipamientosStore = defineStore("equipamientos", {
       await this.equipamientosService.modificarEquipamiento(equipamiento);
     },
     async eliminarEquipamiento(equipamiento) {
-      await this.equipamientosService.eliminarEquipamiento(equipamiento._links.self.href);
+      await this.equipamientosService.eliminarEquipamiento(
+        equipamiento._links.self.href
+      );
     },
     resetEquipamiento(equipamiento) {
       equipamiento.nombre = "";

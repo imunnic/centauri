@@ -2,33 +2,58 @@
   <v-container>
     <!-- https://vuejs.org/guide/built-ins/transition transiciones de componentes -->
     <transition name="fade">
-      <v-alert v-if="mostrarAlerta" :type="tipoAlerta" dismissible class="alert-container ma-2">
+      <v-alert
+        v-if="mostrarAlerta"
+        :type="tipoAlerta"
+        dismissible
+        class="alert-container ma-2"
+      >
         {{ mensajeAlerta }}
       </v-alert>
     </transition>
 
-    <ListaCrudComponent :items="ejerciciosRegistrados" :key="ejerciciosKey" @editar="editarEjercicio" @detalle="abrirDialogoDetalle"
-      @crear="crearEjercicio" :cargando="cargando" @eliminar="borrarEjercicio" :permisoCreacion="permisoCreacion">
+    <ListaCrudComponent
+      :items="ejerciciosRegistrados"
+      :key="ejerciciosKey"
+      @editar="editarEjercicio"
+      @detalle="abrirDialogoDetalle"
+      @crear="crearEjercicio"
+      :cargando="cargando"
+      @eliminar="borrarEjercicio"
+      :permisoCreacion="permisoCreacion"
+    >
     </ListaCrudComponent>
 
-    <EjercicioFormComponent v-if="mostrarForm" @cerrar="cerrarForm" :edicion="modoEdicion"
-      :ejercicio="ejercicioSeleccionado" @guardar="guardarEjercicio" />
+    <EjercicioFormComponent
+      v-if="mostrarForm"
+      @cerrar="cerrarForm"
+      :edicion="modoEdicion"
+      :ejercicio="ejercicioSeleccionado"
+      @guardar="guardarEjercicio"
+    />
 
-    <EjercicioDetalleComponent v-if="detalle" :ejercicio="ejercicioSeleccionado" @cerrar="cerrarDialogoDetalle" />
-
+    <EjercicioDetalleComponent
+      v-if="detalle"
+      :ejercicio="ejercicioSeleccionado"
+      @cerrar="cerrarDialogoDetalle"
+    />
   </v-container>
 </template>
 
 <script>
-import ListaCrudComponent from '@/components/comun/ListaCrudComponent.vue';
-import EjercicioFormComponent from '@/components/EjercicioFormComponent.vue';
-import EjercicioDetalleComponent from '@/components/EjercicioDetalleComponent.vue';
-import { mapState, mapActions } from 'pinia';
-import { useUsuariosStore } from '@/store/usuariosStore.js';
-import { useEjerciciosStore } from '@/store/ejerciciosStore.js';
+import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
+import EjercicioFormComponent from "@/components/EjercicioFormComponent.vue";
+import EjercicioDetalleComponent from "@/components/EjercicioDetalleComponent.vue";
+import { mapState, mapActions } from "pinia";
+import { useUsuariosStore } from "@/store/usuariosStore.js";
+import { useEjerciciosStore } from "@/store/ejerciciosStore.js";
 
 export default {
-  components: { ListaCrudComponent, EjercicioFormComponent, EjercicioDetalleComponent },
+  components: {
+    ListaCrudComponent,
+    EjercicioFormComponent,
+    EjercicioDetalleComponent,
+  },
   data() {
     return {
       ejercicioSeleccionado: {},
@@ -37,17 +62,17 @@ export default {
       detalle: false,
       ejerciciosKey: 0, //forzar renderizado https://michaelnthiessen.com/force-re-render/
       mostrarAlerta: false,
-      mensajeAlerta: '',
-      tipoAlerta: 'success',
-      cargando: false
+      mensajeAlerta: "",
+      tipoAlerta: "success",
+      cargando: false,
     };
   },
   computed: {
-    ...mapState(useUsuariosStore, ['token', 'perfil']),
-    ...mapState(useEjerciciosStore, ['ejerciciosRegistrados']),
+    ...mapState(useUsuariosStore, ["token", "perfil"]),
+    ...mapState(useEjerciciosStore, ["ejerciciosRegistrados"]),
     permisoCreacion() {
-      return this.perfil == 'ECEF';
-    }
+      return this.perfil == "ECEF";
+    },
   },
   watch: {
     ejerciciosRegistrados: {
@@ -59,18 +84,18 @@ export default {
   },
   methods: {
     ...mapActions(useEjerciciosStore, [
-      'arrancarServicioEjercicios',
-      'cargarEjercicios',
-      'resetEjercicio',
-      'modificarEjercicio',
-      'eliminarEjercicio',
-      'agregarEjercicio'
+      "arrancarServicioEjercicios",
+      "cargarEjercicios",
+      "resetEjercicio",
+      "modificarEjercicio",
+      "eliminarEjercicio",
+      "agregarEjercicio",
     ]),
     resetFormulario() {
       this.ejercicioSeleccionado = {};
       this.modoEdicion = false;
     },
-    mostrarAlertaTemporal(mensaje, tipo = 'success') {
+    mostrarAlertaTemporal(mensaje, tipo = "success") {
       this.mensajeAlerta = mensaje;
       this.tipoAlerta = tipo;
       this.mostrarAlerta = true;
@@ -82,10 +107,10 @@ export default {
     async guardarEjercicio(ejercicio) {
       if (this.modoEdicion) {
         await this.modificarEjercicio(ejercicio);
-        this.mostrarAlertaTemporal('Ejercicio modificado con éxito');
+        this.mostrarAlertaTemporal("Ejercicio modificado con éxito");
       } else {
         await this.agregarEjercicio(ejercicio);
-        this.mostrarAlertaTemporal('Ejercicio creado con éxito');
+        this.mostrarAlertaTemporal("Ejercicio creado con éxito");
       }
       await this.cargarEjercicios();
       this.cerrarForm();
@@ -118,9 +143,9 @@ export default {
       this.cargando = true;
       await this.cargarEjercicios();
       this.cargando = false;
-      this.mostrarAlertaTemporal('Ejercicio eliminado con éxito');
+      this.mostrarAlertaTemporal("Ejercicio eliminado con éxito");
       this.ejerciciosKey += 1;
-    }
+    },
   },
   async created() {
     this.cargando = true;
@@ -128,11 +153,9 @@ export default {
     await this.cargarEjercicios();
     this.cargando = false;
     this.resetEjercicio(this.ejercicioSeleccionado);
-  }
+  },
 };
 </script>
-
-
 
 <style scoped>
 .fade-enter-active,

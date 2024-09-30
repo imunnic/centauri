@@ -11,20 +11,39 @@
         <v-form ref="form" @submit.prevent="guardarEquipamiento">
           <div class="flex-container">
             <div class="flex-item">
-              <v-text-field v-model="equipamientoNuevo.nombre" label="Nombre" :rules="[reglas.necesario]"
-                required></v-text-field>
+              <v-text-field
+                v-model="equipamientoNuevo.nombre"
+                label="Nombre"
+                :rules="[reglas.necesario]"
+                required
+              ></v-text-field>
             </div>
             <div class="flex-item">
-              <v-text-field v-model="equipamientoNuevo.tipo" label="Tipo" ></v-text-field>
+              <v-text-field
+                v-model="equipamientoNuevo.tipo"
+                label="Tipo"
+              ></v-text-field>
             </div>
             <div class="flex-item">
-              <v-textarea v-model="equipamientoNuevo.descripcion" label="Descripción" :rules="[reglas.necesario]"
-              required></v-textarea>
+              <v-textarea
+                v-model="equipamientoNuevo.descripcion"
+                label="Descripción"
+                :rules="[reglas.necesario]"
+                required
+              ></v-textarea>
             </div>
             <div class="flex-item">
-              <v-text-field v-model="equipamientoNuevo.url" label="Enlace de Imagen" type="url"></v-text-field>
-              <v-img v-if="equipamientoNuevo.url" :src="equipamientoNuevo.url" class="image-preview"
-                max-height="200px"></v-img>
+              <v-text-field
+                v-model="equipamientoNuevo.url"
+                label="Enlace de Imagen"
+                type="url"
+              ></v-text-field>
+              <v-img
+                v-if="equipamientoNuevo.url"
+                :src="equipamientoNuevo.url"
+                class="image-preview"
+                max-height="200px"
+              ></v-img>
             </div>
           </div>
           <v-card-actions>
@@ -43,37 +62,41 @@ export default {
   props: {
     equipamiento: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     edicion: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      tituloFormulario: this.edicion ? 'Editar Equipamiento' : 'Crear Equipamiento',
+      tituloFormulario: this.edicion
+        ? "Editar Equipamiento"
+        : "Crear Equipamiento",
       mostrar: true,
       equipamientoNuevo: {},
       reglas: {
-      necesario: value => !!value || 'Este campo es requerido',
-    }
+        necesario: (value) => !!value || "Este campo es requerido",
+      },
     };
   },
   watch: {
     edicion(nuevoValor) {
-      this.tituloFormulario = nuevoValor ? 'Editar Equipamiento' : 'Crear Equipamiento';
+      this.tituloFormulario = nuevoValor
+        ? "Editar Equipamiento"
+        : "Crear Equipamiento";
     },
     equipamiento: {
       immediate: true,
       handler(nuevoValor) {
         this.equipamientoNuevo = { ...nuevoValor };
-      }
-    }
+      },
+    },
   },
   methods: {
     cerrarDialogo() {
-      this.$emit('cerrar');
+      this.$emit("cerrar");
       this.resetForm();
     },
     resetForm() {
@@ -82,14 +105,14 @@ export default {
     async guardarEquipamiento() {
       let isValido = await this.$refs.form.validate();
       if (isValido.valid) {
-        this.$emit('guardar', this.equipamientoNuevo);
+        this.$emit("guardar", this.equipamientoNuevo);
         this.cerrarDialogo();
       }
-    }
+    },
   },
   created() {
     this.resetForm();
-  }
+  },
 };
 </script>
 

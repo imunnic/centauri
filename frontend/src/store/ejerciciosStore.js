@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import EjercicioService from '@/services/ejercicioService.js';
 
 export const useEjerciciosStore = defineStore("ejercicios", {

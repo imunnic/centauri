@@ -24,7 +24,7 @@ export default class EjerciciosService {
         const response = await axios.get(urlPagina, config);
         ejercicios = ejercicios.concat(response.data._embedded.ejercicios);
         totalPaginas = response.data.page.totalPages;
-        
+
         if (paginaActual <= totalPaginas) {
           paginaActual++;
           urlPagina = url + "?page=" + paginaActual;
@@ -39,7 +39,11 @@ export default class EjerciciosService {
   }
 
   async modificarEjercicio(ejercicioModificado) {
-    return await axios.patch(ejercicioModificado._links.self.href, ejercicioModificado, config);
+    return await axios.patch(
+      ejercicioModificado._links.self.href,
+      ejercicioModificado,
+      config
+    );
   }
 
   async eliminarEjercicio(href) {
@@ -51,6 +55,6 @@ export default class EjerciciosService {
     return await axios.post(url, ejercicio, config);
   }
   async getEquipamientoDeEjercicio(href) {
-    return await axios.get(href,config);
+    return await axios.get(href, config);
   }
 }

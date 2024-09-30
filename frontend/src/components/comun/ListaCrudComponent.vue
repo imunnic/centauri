@@ -40,17 +40,35 @@
 <template>
   <v-container>
     <div v-if="cargando" class="circulo-carga">
-      <v-progress-circular :size="70" :width="7" indeterminate color="primary"></v-progress-circular>
+      <v-progress-circular
+        :size="70"
+        :width="7"
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
     </div>
 
     <template v-else>
-      <BuscadorComponent class="componente" :items="items" :filtros="filtrosCompletos"
-        @filtrada="updateItemsFiltrados" />
+      <BuscadorComponent
+        class="componente"
+        :items="items"
+        :filtros="filtrosCompletos"
+        @filtrada="updateItemsFiltrados"
+      />
 
-      <ItemListaComponent class="componente" v-for="(item, index) in itemsFiltrados" :key="index" :item="item"
-        :acciones="acciones"  :mostrar-imagen="mostrarImagen" :imagenPredeterminada="imagenPredeterminada" 
-        :descripcion="descripcion" @click="abrirDialogoDetalle(item)" @editar="emitEditar(item)" 
-        @eliminar="emitEliminar(item)">
+      <ItemListaComponent
+        class="componente"
+        v-for="(item, index) in itemsFiltrados"
+        :key="index"
+        :item="item"
+        :acciones="acciones"
+        :mostrar-imagen="mostrarImagen"
+        :imagenPredeterminada="imagenPredeterminada"
+        :descripcion="descripcion"
+        @click="abrirDialogoDetalle(item)"
+        @editar="emitEditar(item)"
+        @eliminar="emitEliminar(item)"
+      >
         <template v-slot:info-extra="{ item }">
           <slot name="info-extra" :item="item"></slot>
         </template>
@@ -62,45 +80,49 @@
 </template>
 
 <script>
-import BuscadorComponent from '@/components/comun/BuscadorComponent.vue';
-import ItemListaComponent from '@/components/comun/ItemListaComponent.vue';
-import FabBotonComponent from '@/components/comun/FabBotonComponent.vue';
+import BuscadorComponent from "@/components/comun/BuscadorComponent.vue";
+import ItemListaComponent from "@/components/comun/ItemListaComponent.vue";
+import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
 
 export default {
   components: { BuscadorComponent, ItemListaComponent, FabBotonComponent },
   props: {
     items: {
-      required: true
+      required: true,
     },
     descripcion: {
-      default: true
+      default: true,
     },
     cargando: {
-      required: true
+      required: true,
     },
     permisoCreacion: {
       type: Boolean,
-      default: true
+      default: true,
     },
     mostrarImagen: {
       type: Boolean,
-      default: false
+      default: false,
     },
     imagenPredeterminada: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
   computed: {
     acciones() {
-      return this.permisoCreacion ? [{ icon: 'mdi-pencil', color: 'default', evento: 'editar' },
-      { icon: 'mdi-trash-can', color: 'error', evento: 'eliminar' }] : [];
-    }
+      return this.permisoCreacion
+        ? [
+            { icon: "mdi-pencil", color: "default", evento: "editar" },
+            { icon: "mdi-trash-can", color: "error", evento: "eliminar" },
+          ]
+        : [];
+    },
   },
   data() {
     return {
       itemsFiltrados: [],
-      filtrosCompletos: []
+      filtrosCompletos: [],
     };
   },
   watch: {
@@ -111,26 +133,26 @@ export default {
         if (newItems.length > 0) {
           this.filtrosCompletos = Object.keys(newItems[0]);
         }
-      }
-    }
+      },
+    },
   },
   methods: {
     updateItemsFiltrados(itemsFiltrados) {
       this.itemsFiltrados = itemsFiltrados;
     },
     abrirDialogoDetalle(item) {
-      this.$emit('detalle', item);
+      this.$emit("detalle", item);
     },
     emitEditar(item) {
-      this.$emit('editar', item);
+      this.$emit("editar", item);
     },
     emitEliminar(item) {
-      this.$emit('eliminar', item);
+      this.$emit("eliminar", item);
     },
     emitCrear() {
-      this.$emit('crear');
-    }
-  }
+      this.$emit("crear");
+    },
+  },
 };
 </script>
 

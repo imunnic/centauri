@@ -30,8 +30,11 @@
 
       <!-- Imagen redonda -->
       <v-avatar size="60" class="ml-auto icono">
-        <img :src="aplicacion.icono" :alt="'Logo de la aplicación ' + aplicacion.nombre" 
-        class="avatar-img" />
+        <img
+          :src="aplicacion.icono"
+          :alt="'Logo de la aplicación ' + aplicacion.nombre"
+          class="avatar-img"
+        />
       </v-avatar>
     </v-app-bar>
   </div>
@@ -42,8 +45,8 @@ export default {
   props: {
     aplicacion: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {};

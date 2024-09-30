@@ -57,7 +57,10 @@
         </div>
       </div>
       <h3>Rutina</h3>
-      <FichaComponent :rondas="fichaLocal.rutina" @update-ficha="actualizarRutina" />
+      <FichaComponent
+        :rondas="fichaLocal.rutina"
+        @update-ficha="actualizarRutina"
+      />
       <v-textarea
         v-model="fichaLocal.descripcion"
         label="Descripción"
@@ -73,9 +76,9 @@
 </template>
 
 <script>
-import FichaComponent from './FichaComponent.vue';
-import { useFichasStore } from '@/store/fichasStore';
-import { mapActions } from 'pinia';
+import FichaComponent from "./FichaComponent.vue";
+import { useFichasStore } from "@/store/fichasStore";
+import { mapActions } from "pinia";
 
 export default {
   components: {
@@ -85,12 +88,12 @@ export default {
     ficha: {
       type: Object,
       default: () => ({
-        nombre: '',
-        tipoFicha: '',
+        nombre: "",
+        tipoFicha: "",
         rpeEstimado: 1,
         rutina: [],
         tiempoEstimado: 0,
-        descripcion: '',
+        descripcion: "",
       }),
     },
   },
@@ -98,22 +101,24 @@ export default {
     return {
       valid: false,
       fichaLocal: {
-        nombre: '',
-        tipoFicha: '',
+        nombre: "",
+        tipoFicha: "",
         rpeEstimado: 1,
         rutina: [],
         tiempoEstimado: 0,
-        descripcion: '',
+        descripcion: "",
       },
-      tiposFicha: ['RESISTENCIA', 'FUERZA'],
-      partesSesion: ['CALENTAMIENTO', 'FUNDAMENTAL', 'COORDINACION', 'CALMA'],
+      tiposFicha: ["RESISTENCIA", "FUERZA"],
+      partesSesion: ["CALENTAMIENTO", "FUNDAMENTAL", "COORDINACION", "CALMA"],
       nombreRules: [
-        v => !!v || 'El nombre es requerido',
-        v => v.length <= 50 || 'El nombre debe tener menos de 50 caracteres',
+        (v) => !!v || "El nombre es requerido",
+        (v) => v.length <= 50 || "El nombre debe tener menos de 50 caracteres",
       ],
-      tipoRules: [v => !!v || 'El tipo es requerido'],
-      parteRules: [v => !!v || 'La parte es requerida'],
-      rpeRules: [v => v > 0 && v <= 10 || 'El valor del rpe debe estar entre 1 y 10'],
+      tipoRules: [(v) => !!v || "El tipo es requerido"],
+      parteRules: [(v) => !!v || "La parte es requerida"],
+      rpeRules: [
+        (v) => (v > 0 && v <= 10) || "El valor del rpe debe estar entre 1 y 10",
+      ],
     };
   },
   computed: {
@@ -121,14 +126,14 @@ export default {
       get() {
         const minutes = Math.floor(this.fichaLocal.tiempoEstimado / 60)
           .toString()
-          .padStart(2, '0');
+          .padStart(2, "0");
         const seconds = (this.fichaLocal.tiempoEstimado % 60)
           .toString()
-          .padStart(2, '0');
+          .padStart(2, "0");
         return `${minutes}:${seconds}`;
       },
       set(value) {
-        const [minutes, seconds] = value.split(':').map(Number);
+        const [minutes, seconds] = value.split(":").map(Number);
         this.fichaLocal.tiempoEstimado = minutes * 60 + seconds;
       },
     },
@@ -142,19 +147,19 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useFichasStore, ['grabarFicha', 'editarFicha']),
+    ...mapActions(useFichasStore, ["grabarFicha", "editarFicha"]),
     actualizarRutina(rondas) {
       this.fichaLocal.rutina = rondas;
     },
     async guardarFicha() {
       let isValido = await this.$refs.formulario.validate();
-      if (this.$route.query.edicion == 'true'){
+      if (this.$route.query.edicion == "true") {
         await this.editarFicha(this.fichaLocal, this.$route.params.id);
-        this.$router.push({ path: '/fichas' });
+        this.$router.push({ path: "/fichas" });
       } else {
         if (isValido) {
           await this.grabarFicha(this.fichaLocal);
-          this.$router.push({ path: '/fichas' });
+          this.$router.push({ path: "/fichas" });
         }
       }
     },
@@ -190,7 +195,7 @@ export default {
 
 .rutina::before {
   border-radius: 5px 0px 0px 5px;
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0;

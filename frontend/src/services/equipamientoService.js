@@ -1,5 +1,5 @@
 import axios from "axios";
-import configuracion from '@/configuracion.json';
+import configuracion from "@/configuracion.json";
 let url = configuracion.urlBase + "equipamientos";
 let config = {
   headers: {
@@ -8,8 +8,7 @@ let config = {
 };
 
 export default class EquipamientosService {
-  constructor() {
-  }
+  constructor() {}
 
   actualizarCabecera(token) {
     config.headers.Authorization = config.headers.Authorization + token;
@@ -24,9 +23,11 @@ export default class EquipamientosService {
     while (paginaActual < totalPaginas) {
       try {
         const response = await axios.get(urlPagina, config);
-        equipamientos = equipamientos.concat(response.data._embedded.equipamientos);
+        equipamientos = equipamientos.concat(
+          response.data._embedded.equipamientos
+        );
         totalPaginas = response.data.page.totalPages;
-        
+
         if (paginaActual <= totalPaginas) {
           paginaActual++;
           urlPagina = url + "?page=" + paginaActual;
@@ -41,7 +42,7 @@ export default class EquipamientosService {
   }
 
   async getEquipamiento(href) {
-    return await axios.get(href,config)
+    return await axios.get(href, config);
   }
 
   async crearEquipamiento(equipamiento) {
@@ -49,12 +50,14 @@ export default class EquipamientosService {
   }
 
   async modificarEquipamiento(equipamientoModificado) {
-    return await axios.put(equipamientoModificado._links.self.href, equipamientoModificado, config);
+    return await axios.put(
+      equipamientoModificado._links.self.href,
+      equipamientoModificado,
+      config
+    );
   }
 
   async eliminarEquipamiento(href) {
     return await axios.delete(href, config);
   }
-
-
 }
