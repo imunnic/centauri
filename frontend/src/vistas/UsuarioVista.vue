@@ -112,6 +112,8 @@ export default {
     },
   },
   async created(){
+    let misGrupos = grupos.filter(grupo => grupo.miembros.includes(this.username));
+    this.gruposUsuario = misGrupos;
     let sesiones = await this.cargarSesiones(this.gruposUsuario);
     this.sesiones = sesiones;
   },
