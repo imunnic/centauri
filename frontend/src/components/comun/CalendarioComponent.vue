@@ -66,6 +66,7 @@
       <DetalleSesionComponent
         :sesion="sesionSeleccionada"
         :gruposConPermiso="gruposConPermiso"
+        @editarSesion="editarSesion"
         @borrarSesion="borrarSesion"
         @cerrarTarjeta="cerrarTarjeta"
       />
@@ -134,6 +135,10 @@ export default {
     },
     borrarSesion(sesion){
       this.$emit("borrarSesion", sesion.href);
+      this.mostrarTarjeta = false;
+    },
+    editarSesion(sesion){
+      this.$emit("editarSesion", sesion);
       this.mostrarTarjeta = false;
     },
     cerrarTarjeta() {

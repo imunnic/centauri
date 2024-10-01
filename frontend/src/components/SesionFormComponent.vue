@@ -2,7 +2,9 @@
   <v-dialog v-model="dialog" persistent max-width="600px">
     <v-card>
       <v-card-title class="flex-fila justify-space-between">
-        <span>Crear Nueva Sesión</span>
+        <span v-if="edicion">Editar Sesión</span>
+        <span v-else>Crear Nueva Sesión</span>
+
         <v-btn icon @click="cerrar" flat>
           <v-icon>mdi-close</v-icon>
         </v-btn>
@@ -12,7 +14,9 @@
           <v-text-field
             label="Nombre de la Sesión"
             v-model="nombre"
+            :rules="[reglas.required]"
             required
+            placeholder="Ingrese el nombre de la sesión"
             class="item-flex"
           ></v-text-field>
           <v-select
@@ -21,20 +25,25 @@
             :items="grupos"
             item-title="nombre"
             item-value="nombre"
+            :rules="[reglas.required]"
             required
+            placeholder="Seleccione un grupo"
             class="item-flex"
           ></v-select>
           <v-select
             label="Unidad"
             v-model="unidad"
             :items="unidadesRegistradas"
+            placeholder="Seleccione una unidad"
             class="item-flex"
           ></v-select>
           <v-text-field
             label="Fecha"
             v-model="fechaSesion"
             type="date"
+            :rules="[reglas.required]"
             required
+            placeholder="Seleccione una fecha"
             class="item-flex"
           ></v-text-field>
           <v-select
@@ -44,6 +53,7 @@
             item-title="nombre"
             item-value="id"
             multiple
+            placeholder="Seleccione calentamientos"
             class="item-flex"
           ></v-select>
           <v-select
@@ -53,6 +63,7 @@
             item-title="nombre"
             item-value="id"
             multiple
+            placeholder="Seleccione partes fundamentales"
             class="item-flex"
           ></v-select>
           <v-select
@@ -62,6 +73,7 @@
             item-title="nombre"
             item-value="id"
             multiple
+            placeholder="Seleccione coordinación funcional"
             class="item-flex"
           ></v-select>
           <v-select
@@ -71,9 +83,11 @@
             item-title="nombre"
             item-value="id"
             multiple
+            placeholder="Seleccione vuelta a la calma"
             class="item-flex"
           ></v-select>
-          <v-btn type="submit" class="claro">Crear Sesión</v-btn>
+          <v-btn v-if="!edicion" type="submit" class="claro">Crear Sesión</v-btn>
+          <v-btn v-else type="submit" class="claro">Editar Sesión</v-btn>
         </form>
       </v-card-text>
     </v-card>
@@ -96,6 +110,14 @@ export default {
       type: Date,
       required: false,
     },
+    sesion: {
+      type: Object,
+      required: false,
+    },
+    edicion: {
+      type: Boolean,
+      required: true,
+    },
   },
   computed: {
     ...mapState(useFichasStore, ["fichasRegistradas"]),
@@ -103,9 +125,9 @@ export default {
   data() {
     return {
       dialog: true,
-      nombre: "",
-      grupo: "",
-      unidad: "",
+      nombre: this.sesion.nombre || "",
+      grupo: this.sesion.grupo || "",
+      unidad: this.sesion.unidad || "",
       fechaSesion: "",
       unidadesRegistradas: unidades,
       calentamiento: [],
@@ -116,6 +138,9 @@ export default {
       fichasFundamental: [],
       fichasCoordinacion: [],
       fichasCalma: [],
+      reglas: {
+        required: (value) => !!value || "Este campo es requerido",
+      },
     };
   },
   methods: {
@@ -137,7 +162,7 @@ export default {
       const fichasCalmaHref = this.vueltaCalma.map(
         (ficha) => configuracion.urlBase + "fichas/" + ficha
       );
-      const nuevaSesion = {
+      let nuevaSesion = {
         nombre: this.nombre,
         grupo: this.grupo.nombre,
         unidad: this.unidad,
@@ -149,14 +174,24 @@ export default {
           ...fichasCalmaHref,
         ],
       };
-      this.$emit("sesionCreada", nuevaSesion);
+      if (this.edicion) {
+        nuevaSesion.href = this.sesion.href;
+        this.$emit("sesionEditada", nuevaSesion);
+      } else {
+        this.$emit("sesionCreada", nuevaSesion);
+      }
       this.resetForm();
       this.cerrar();
     },
     resetForm() {
       this.nombre = "";
       this.grupo = "";
+      this.unidad = "";
       this.fechaSesion = "";
+      this.calentamiento = [];
+      this.fundamental = [];
+      this.coordinacion = [];
+      this.vueltaCalma = [];
     },
     formatoFecha(fecha) {
       const dia = String(fecha.getDate()).padStart(2, "0");
@@ -165,10 +200,33 @@ export default {
 
       return `${ano}-${mes}-${dia}`;
     },
+    cargarFichasSeleccionadas() {
+      const fichasSesion = this.sesion.fichas;
+      const hrefFichasSesion = fichasSesion.map(
+        (ficha) => ficha._links.self.href
+      );
+      const idFichasSesion = hrefFichasSesion.map((ficha) =>
+        ficha.split("/").pop()
+      );
+
+      this.calentamiento = this.fichasCalentamiento.filter((ficha) =>
+        idFichasSesion.includes(ficha.id)
+      );
+
+      this.fundamental = this.fichasFundamental.filter((ficha) =>
+        idFichasSesion.includes(ficha.id)
+      );
+
+      this.coordinacion = this.fichasCoordinacion.filter((ficha) =>
+        idFichasSesion.includes(ficha.id)
+      );
+
+      this.vueltaCalma = this.fichasCalma.filter((ficha) =>
+        idFichasSesion.includes(ficha.id)
+      );
+    },
   },
   async created() {
-    this.fechaSesion = this.formatoFecha(this.fecha);
-    this.grupo = this.grupos[0];
     await this.cargarFichas();
     this.fichasCalentamiento = this.fichasRegistradas.filter(
       (ficha) => ficha.parteSesion == "CALENTAMIENTO"
@@ -182,6 +240,13 @@ export default {
     this.fichasCalma = this.fichasRegistradas.filter(
       (ficha) => ficha.parteSesion == "CALMA"
     );
+    if (this.edicion) {
+      this.fechaSesion = this.formatoFecha(this.fecha);
+      this.cargarFichasSeleccionadas();
+    } else {
+      this.fechaSesion = this.formatoFecha(this.fecha);
+      this.grupo = this.grupos[0];
+    }
   },
 };
 </script>

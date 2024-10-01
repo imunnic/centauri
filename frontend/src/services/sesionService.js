@@ -27,7 +27,11 @@ export default class sesionesService {
       return axios.get(href,config);
     }
 
+    async editarSesion(sesion){
+      return axios.patch(sesion.href, sesion, config);
+    }
+
     async eliminarSesion(href){
-      return axios.delete(href, config)
+      return axios.delete(href, config);
     }
 }

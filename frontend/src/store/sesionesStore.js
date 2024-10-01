@@ -34,6 +34,7 @@ export const useSesionesStore = defineStore("sesiones", {
               return {
                 grupo: grupo,
                 fecha: fechaFormateada,
+                unidad: sesion.unidad,
                 nombre: sesion.nombre,
                 fichas: fichas,
                 href: sesion._links.self.href
@@ -47,6 +48,9 @@ export const useSesionesStore = defineStore("sesiones", {
     },
     async crearSesion(sesion) {
       await this.sesionesService.crearSesion(sesion);
+    },
+    async modificarSesion(sesion){
+      await this.sesionesService.editarSesion(sesion);
     },
     async eliminarSesion(href) {
       await this.sesionesService.eliminarSesion(href);

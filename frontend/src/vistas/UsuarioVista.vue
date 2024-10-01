@@ -27,6 +27,7 @@
       <CalendarioComponent
         @fecha-seleccionada="nuevaSesion"
         @borrarSesion="borrarSesion"
+        @editarSesion="editarSesion"
         :modoInicial="modoInicial"
         :sesiones="sesiones"
         :gruposConPermiso="gruposEncargado"
@@ -34,9 +35,12 @@
       ></CalendarioComponent>
 
       <SesionFormComponent
-        v-if="edicion"
+        v-if="mostrarFormulario"
         :fecha="fechaSeleccionada"
         :grupos="gruposEncargado"
+        :sesion="sesionSeleccionada"
+        :edicion="edicion"
+        @sesionEditada="sesionEditada"
         @sesionCreada="sesionCreada"
         @cerrar="cerrarFormularioSesion"
       />
@@ -60,7 +64,7 @@ export default {
     SesionFormComponent,
   },
   computed: {
-    ...mapState(useUsuariosStore, ['username']),
+    ...mapState(useUsuariosStore, ["username"]),
     isLargeScreen() {
       return this.windowWidth > 1500;
     },
@@ -78,23 +82,34 @@ export default {
       gruposEncargado: [],
       fechaSeleccionada: null,
       sesiones: [],
-      edicion: false,
+      mostrarFormulario: false,
+      edicion:false,
+      sesionSeleccionada: null,
     };
   },
   methods: {
-    ...mapActions(useSesionesStore, ['crearSesion', 'cargarSesiones', 'eliminarSesion']),
+    ...mapActions(useSesionesStore, [
+      "crearSesion",
+      "cargarSesiones",
+      "eliminarSesion",
+      "modificarSesion"
+    ]),
     nuevaSesion(fecha) {
-      this.fechaSeleccionada = fecha;
-      this.edicion = true;
+      if(this.gruposEncargado.length >= 1){
+        this.sesionSeleccionada = {};
+        this.fechaSeleccionada = fecha;
+        this.mostrarFormulario = true;
+        this.edicion = false;
+      }
     },
     async sesionCreada(nuevaSesion) {
       await this.crearSesion(nuevaSesion);
-      this.edicion = false;
+      this.mostrarFormulario = false;
       let sesiones = await this.cargarSesiones(this.gruposUsuario);
       this.sesiones = sesiones;
     },
     cerrarFormularioSesion() {
-      this.edicion = false;
+      this.mostrarFormulario = false;
     },
     getCartaStyle(item) {
       return {
@@ -105,14 +120,36 @@ export default {
       let filtro = grupos.filter((grupo) => grupo.encargado === encargado);
       return filtro;
     },
-    async borrarSesion(href){
+    async borrarSesion(href) {
       await this.eliminarSesion(href);
       let sesiones = await this.cargarSesiones(this.gruposUsuario);
       this.sesiones = sesiones;
     },
+    editarSesion(sesion) {
+      this.edicion = true;
+      this.fechaSeleccionada = this.formatoFechaEdicion(sesion.fecha);
+      this.sesionSeleccionada = sesion;
+      this.mostrarFormulario = true;
+    },
+    async sesionEditada(sesion){
+      await this.modificarSesion(sesion)
+      this.edicion = false;
+      let sesiones = await this.cargarSesiones(this.gruposUsuario);
+      this.sesiones = sesiones;
+    },
+    formatoFechaEdicion(fecha) {
+      const partes = fecha.split("/");
+      const dia = parseInt(partes[0], 10);
+      const mes = parseInt(partes[1], 10) - 1;
+      const ano = parseInt(partes[2], 10);
+
+      return new Date(ano, mes, dia);
+    },
   },
-  async created(){
-    let misGrupos = grupos.filter(grupo => grupo.miembros.includes(this.username));
+  async created() {
+    let misGrupos = grupos.filter((grupo) =>
+      grupo.miembros.includes(this.username)
+    );
     this.gruposUsuario = misGrupos;
     let sesiones = await this.cargarSesiones(this.gruposUsuario);
     this.sesiones = sesiones;
