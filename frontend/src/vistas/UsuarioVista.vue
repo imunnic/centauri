@@ -75,46 +75,21 @@ export default {
       ],
       gruposEncargado: [],
       fechaSeleccionada: null,
-      sesiones: [
-        {
-          grupo: {
-            nombre: "Grupo 1",
-            color: { nombre: "rojo", valor: "#FF0000" },
-          },
-          fecha: "30/09/2024",
-          nombre: "Sesion 1",
-          fichas: [
-            { nombre: "Ficha 1.2" },
-            { nombre: "Ficha 3.2" },
-            { nombre: "Ficha 5.2" },
-          ],
-        },
-        {
-          grupo: {
-            nombre: "Grupo 2",
-            color: { nombre: "azul", valor: "#0000FF" },
-          },
-          fecha: "01/10/2024",
-          nombre: "Sesion 13",
-          fichas: [
-            { nombre: "Ficha 1.5" },
-            { nombre: "Ficha 3.1" },
-            { nombre: "Ficha 4.2" },
-          ],
-        },
-      ],
+      sesiones: [],
       edicion: false,
     };
   },
   methods: {
-    ...mapActions(useSesionesStore, ["crearSesion"]),
+    ...mapActions(useSesionesStore, ['crearSesion', 'cargarSesiones']),
     nuevaSesion(fecha) {
       this.fechaSeleccionada = fecha;
       this.edicion = true;
     },
-    sesionCreada(nuevaSesion) {
-      this.crearSesion(nuevaSesion);
+    async sesionCreada(nuevaSesion) {
+      await this.crearSesion(nuevaSesion);
       this.edicion = false;
+      let sesiones = await this.cargarSesiones(this.gruposUsuario);
+      this.sesiones = sesiones;
     },
     cerrarFormularioSesion() {
       this.edicion = false;
@@ -128,6 +103,10 @@ export default {
       let filtro = grupos.filter((grupo) => grupo.encargado === encargado);
       return filtro;
     },
+  },
+  async created(){
+    let sesiones = await this.cargarSesiones(this.gruposUsuario);
+    this.sesiones = sesiones;
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);

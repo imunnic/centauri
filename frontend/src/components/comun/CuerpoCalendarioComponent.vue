@@ -123,6 +123,12 @@ export default {
         this.generarCalendario();
       },
     },
+    sesiones: {
+      handler() {
+        this.generarCalendario();
+      },
+      deep: true,
+    },
   },
   methods: {
     generarCalendario() {

@@ -17,4 +17,13 @@ export default class sesionesService {
     crearSesion(sesion){
       return axios.post(url, sesion, config);
     }
+
+    getSesionesPorGrupo(grupo){
+      let href = url + "/search/findByGrupoIgnoreCase?grupo=" + grupo;
+      return axios.get(href, config);
+    }
+
+    getFichasDeSesion(href){
+      return axios.get(href,config);
+    }
 }

@@ -126,23 +126,22 @@ export default {
     },
     submitForm() {
       const fichasFundamentalHref = this.fundamental.map(
-        (ficha) => configuracion.urlBase + "fichas/" + ficha.id
+        (ficha) => configuracion.urlBase + "fichas/" + ficha
       );
       const fichasCalentamientoHref = this.calentamiento.map(
-        (ficha) => configuracion.urlBase + "fichas/" + ficha.id
+        (ficha) => configuracion.urlBase + "fichas/" + ficha
       );
       const fichasCoordinacionHref = this.coordinacion.map(
-        (ficha) => configuracion.urlBase + "fichas/" + ficha.id
+        (ficha) => configuracion.urlBase + "fichas/" + ficha
       );
       const fichasCalmaHref = this.vueltaCalma.map(
-        (ficha) => configuracion.urlBase + "fichas/" + ficha.id
+        (ficha) => configuracion.urlBase + "fichas/" + ficha
       );
-
       const nuevaSesion = {
         nombre: this.nombre,
         grupo: this.grupo.nombre,
         unidad: this.unidad,
-        fechaSesion: this.fechaSesion,
+        fecha: this.fechaSesion,
         fichas: [
           ...fichasCalentamientoHref,
           ...fichasFundamentalHref,
@@ -150,7 +149,6 @@ export default {
           ...fichasCalmaHref,
         ],
       };
-
       this.$emit("sesionCreada", nuevaSesion);
       this.resetForm();
       this.cerrar();
