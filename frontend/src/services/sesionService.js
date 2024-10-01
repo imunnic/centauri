@@ -14,16 +14,20 @@ export default class sesionesService {
       config.headers.Authorization = "Bearer " + token;
     }
 
-    crearSesion(sesion){
+    async crearSesion(sesion){
       return axios.post(url, sesion, config);
     }
 
-    getSesionesPorGrupo(grupo){
+    async getSesionesPorGrupo(grupo){
       let href = url + "/search/findByGrupoIgnoreCase?grupo=" + grupo;
       return axios.get(href, config);
     }
 
-    getFichasDeSesion(href){
+    async getFichasDeSesion(href){
       return axios.get(href,config);
+    }
+
+    async eliminarSesion(href){
+      return axios.delete(href, config)
     }
 }

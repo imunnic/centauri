@@ -16,15 +16,30 @@
   - emitirEvento: Emite el evento `sesion-seleccionada` al hacer clic en una sesión, pasando la sesión seleccionada como payload.
 -->
 <template>
-  <v-card class="pa-3">
-    <v-card-title class="d-flex justify-space-between align-center">
+  <v-card class="contenedor-flex">
+    <v-card-title class="espacio-completo">
       <span class="titulo-sesion">
         {{ sesion.nombre || "Sin nombre" }}
       </span>
-      <v-icon @click="cerrarTarjeta" class="icono-cerrar"> mdi-close </v-icon>
+      <v-icon @click="cerrarTarjeta" class="icono-cerrar">mdi-close</v-icon>
     </v-card-title>
 
-    <v-card-text>
+    <div class="contenedor-flex iconos">
+      <v-icon 
+        v-if="permisoEdicion" 
+        @click="editarSesion" 
+        class="icono-editar mr-2">
+        mdi-pencil
+      </v-icon>
+      <v-icon 
+        v-if="permisoEdicion" 
+        @click="borrarSesion" 
+        class="icono-borrar">
+        mdi-trash-can
+      </v-icon>
+    </div>
+
+    <v-card-text class="contenido">
       <p>{{ sesion.grupo.nombre }}</p>
       <v-list dense>
         <v-list-item v-for="(ficha, index) in sesion.fichas || []" :key="index">
@@ -35,7 +50,7 @@
       </v-list>
     </v-card-text>
 
-    <v-card-actions>
+    <v-card-actions class="botones">
       <v-btn color="primary" @click="cerrarTarjeta">Cerrar</v-btn>
     </v-card-actions>
   </v-card>
@@ -48,10 +63,26 @@ export default {
       type: Object,
       required: true,
     },
+    gruposConPermiso: {
+      type: Array,
+      required: true,
+      default:[]
+    },
+  },
+  computed: {
+    permisoEdicion() {
+      return this.gruposConPermiso.some(grupo => grupo.nombre === this.sesion.grupo.nombre);
+    }
   },
   methods: {
     cerrarTarjeta() {
-      this.$emit("cerrar-tarjeta");
+      this.$emit("cerrarTarjeta");
+    },
+    editarSesion() {
+      this.$emit("editarSesion", this.sesion);
+    },
+    borrarSesion() {
+      this.$emit("borrarSesion", this.sesion);
     },
   },
 };
@@ -62,13 +93,37 @@ export default {
   font-weight: bold;
   text-decoration: underline;
 }
-
-.icono-cerrar {
+.espacio-completo{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.contenedor-flex{
+  justify-content: flex-start;
+  width: 100%
+}
+.icono-cerrar,
+.icono-editar,
+.icono-borrar {
   cursor: pointer;
   color: gray;
 }
 
-v-list-item v-card {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+.icono-editar:hover{
+  color:var(--claro)
+}
+
+.icono-borrar:hover {
+  color: var(--rechazo);
+}
+.iconos{
+  padding-left: 1rem;
+}
+.contenido{
+  width: 100%
+}
+.botones{
+  width: 100%;
+  justify-self: flex-end;
 }
 </style>

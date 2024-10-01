@@ -26,8 +26,10 @@
     <div class="derecha">
       <CalendarioComponent
         @fecha-seleccionada="nuevaSesion"
+        @borrarSesion="borrarSesion"
         :modoInicial="modoInicial"
         :sesiones="sesiones"
+        :gruposConPermiso="gruposEncargado"
         class="calendario"
       ></CalendarioComponent>
 
@@ -80,7 +82,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useSesionesStore, ['crearSesion', 'cargarSesiones']),
+    ...mapActions(useSesionesStore, ['crearSesion', 'cargarSesiones', 'eliminarSesion']),
     nuevaSesion(fecha) {
       this.fechaSeleccionada = fecha;
       this.edicion = true;
@@ -102,6 +104,11 @@ export default {
     filtrarPorEncargado(encargado) {
       let filtro = grupos.filter((grupo) => grupo.encargado === encargado);
       return filtro;
+    },
+    async borrarSesion(href){
+      await this.eliminarSesion(href);
+      let sesiones = await this.cargarSesiones(this.gruposUsuario);
+      this.sesiones = sesiones;
     },
   },
   async created(){

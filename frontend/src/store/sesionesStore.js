@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import SesionService from "../services/sesionService.js";
-import { useUsuariosStore } from "./usuariosStore.js";
 
 export const useSesionesStore = defineStore("sesiones", {
   state: () => ({
@@ -37,6 +36,7 @@ export const useSesionesStore = defineStore("sesiones", {
                 fecha: fechaFormateada,
                 nombre: sesion.nombre,
                 fichas: fichas,
+                href: sesion._links.self.href
               };
             })
           );
@@ -48,5 +48,8 @@ export const useSesionesStore = defineStore("sesiones", {
     async crearSesion(sesion) {
       await this.sesionesService.crearSesion(sesion);
     },
+    async eliminarSesion(href) {
+      await this.sesionesService.eliminarSesion(href);
+    }
   },
 });

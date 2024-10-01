@@ -65,7 +65,9 @@
     <v-dialog v-model="mostrarTarjeta" max-width="400">
       <DetalleSesionComponent
         :sesion="sesionSeleccionada"
-        @cerrar-tarjeta="cerrarTarjeta"
+        :gruposConPermiso="gruposConPermiso"
+        @borrarSesion="borrarSesion"
+        @cerrarTarjeta="cerrarTarjeta"
       />
     </v-dialog>
   </v-container>
@@ -92,6 +94,11 @@ export default {
     modoInicial: {
       type: String,
       default: "mes",
+    },
+    gruposConPermiso: {
+      type: Array,
+      required: true,
+      default:[]
     },
   },
   data() {
@@ -124,6 +131,10 @@ export default {
     mostrarSesion(sesion) {
       this.sesionSeleccionada = sesion;
       this.mostrarTarjeta = true;
+    },
+    borrarSesion(sesion){
+      this.$emit("borrarSesion", sesion.href);
+      this.mostrarTarjeta = false;
     },
     cerrarTarjeta() {
       this.mostrarTarjeta = false;
