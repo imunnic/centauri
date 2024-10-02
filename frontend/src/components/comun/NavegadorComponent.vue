@@ -31,7 +31,7 @@
     </v-list>
   </v-navigation-drawer>
   <v-main class="contenidoPrincipal">
-    <v-breadcrumbs :items="migasDePan" class="v-container">
+    <v-breadcrumbs :items="migasDePan">
       <template v-slot:divider>
         <v-icon>mdi-chevron-right</v-icon>
       </template>

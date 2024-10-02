@@ -4,16 +4,15 @@ import configuracion from "@/configuracion.json";
 let url = configuracion.urlBase + "autenticacion/";
 let login = "login";
 let registro = "registro";
-let bearerToken;
-let user = "dparlop";
+// let user = "dparlop";
 
 export default class UsuariosService {
   constructor() {}
 
-  async login() {
+  async login(usuario) {
     const credenciales = {
-      username: user,
-      password: user,
+      username: usuario.username,
+      password: usuario.password,
     };
     let response = await axios.post(url + login, credenciales);
     return response.data;

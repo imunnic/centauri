@@ -1,5 +1,35 @@
 <template>
-  <div></div>
+  <v-container class="contenedor-flex">
+    <v-card elevation="3" class="carta">
+      Registro
+      <v-form class="formulario" @keyup.enter="intentarLogin()">
+        <v-text-field
+          v-model="logeo.username"
+          variant="outlined"
+          :rules="[reglas.required]"
+          label="Nombre de usuario"
+        >
+        </v-text-field>
+
+        <v-text-field
+          v-model="logeo.password"
+          variant="outlined"
+          :rules="[reglas.required]"
+          :append-inner-icon="mostrar ? 'mdi-eye' : 'mdi-eye-off'"
+          label="Contraseña"
+          :type="mostrar ? 'text' : 'password'"
+          @click:append-inner="mostrar = !mostrar"
+        >
+          <template v-if="intentos > 0" #details>
+            <v-spacer />
+            <p class="intentoFallido">Contraseña o usuario incorrectos</p>
+          </template>
+        </v-text-field>
+
+        <v-btn class="mt-2" @click="intentarLogin()"> Entrar </v-btn>
+      </v-form>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -11,10 +41,20 @@ import { useSesionesStore } from "@/store/sesionesStore.js";
 import { mapState, mapActions } from "pinia";
 export default {
   computed: {
-    ...mapState(useUsuariosStore, ["token", "isLogged"]),
+    ...mapState(useUsuariosStore, ["token", "isLogged", "login"]),
   },
   data() {
-    return {};
+    return {
+      logeo: {
+        username: "",
+        password: "",
+      },
+      reglas: {
+        required: (value) => !!value || "Campo requerido",
+      },
+      mostrar: false,
+      intentos: 0,
+    };
   },
   methods: {
     ...mapActions(useUsuariosStore, ["peticionLogin"]),
@@ -22,24 +62,61 @@ export default {
     ...mapActions(useEjerciciosStore, ["arrancarServicioEjercicios"]),
     ...mapActions(useEquipamientosStore, ["arrancarServicioEquipamientos"]),
     ...mapActions(useSesionesStore, ["arrancarServicioSesion"]),
-    redirigirConRetardo() {
-      setTimeout(() => {
-        this.$router.push("/usuario");
-      }, 1000);
+    async intentarLogin() {
+      try {
+        await this.peticionLogin(this.logeo);
+        this.arrancarServicioFicha(this.token);
+        this.arrancarServicioEjercicios(this.token);
+        this.arrancarServicioEquipamientos(this.token);
+        this.arrancarServicioSesion(this.token);
+        this.$router.push("/usuario")
+      } catch (error) {
+        console.error("Error en el login:", error);
+      }
     },
   },
-  async created() {
-    try {
-      await this.peticionLogin();
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-    this.arrancarServicioFicha(this.token);
-    this.arrancarServicioEjercicios(this.token);
-    this.arrancarServicioEquipamientos(this.token);
-    this.arrancarServicioSesion(this.token);
-    this.redirigirConRetardo();
-  },
+  async created() {},
 };
 </script>
-<style></style>
+<style scoped>
+.intentoFallido {
+  color: var(--rechazo);
+}
+
+.formulario {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  min-width: 300px;
+  width: 75%;
+  padding: 10px;
+}
+
+.carta{
+  padding: 10px;
+}
+.carta::before{
+  width: 0px;
+}
+
+.v-text-field {
+  width: 75%;
+}
+
+.contenedor {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 800px) {
+  .card {
+    width: 55%;
+  }
+}
+
+@media (max-width: 550px) {
+  .card {
+    width: 90%;
+  }
+}
+</style>

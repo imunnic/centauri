@@ -7,7 +7,7 @@
       ></HeaderComponent>
       <NavegadorComponent
         ref="navegadorComponent"
-        :menu-items-prop="menu"
+        :menu-items-prop="menuItems"
       ></NavegadorComponent>
     </v-main>
   </v-app>
@@ -44,6 +44,13 @@ export default {
   },
   computed: {
     ...mapState(useUsuariosStore, ["token", "isLogged"]),
+    menuItems() {
+      if (this.isLogged) {
+        return this.menu;
+      } else {
+        return this.menu.filter(item => item.title !== "Usuario");
+      }
+    },
   },
   methods: {
     ...mapActions(useUsuariosStore, ["peticionLogin"]),
@@ -52,9 +59,7 @@ export default {
     },
   },
   async created() {
-    if (!this.isLogged) {
-      await this.peticionLogin();
-    }
+
   },
 };
 </script>

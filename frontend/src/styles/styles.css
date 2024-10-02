@@ -95,6 +95,7 @@
 .contenedor-flex{
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .info {
