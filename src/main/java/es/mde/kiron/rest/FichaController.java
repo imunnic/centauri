@@ -3,7 +3,6 @@ package es.mde.kiron.rest;
 import es.mde.kiron.entidades.Ficha;
 import es.mde.kiron.modelos.Estado;
 import es.mde.kiron.repositorios.FichaDAO;
-import es.mde.kiron.repositorios.UsuarioDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

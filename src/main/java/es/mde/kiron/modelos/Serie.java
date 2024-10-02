@@ -1,7 +1,6 @@
 package es.mde.kiron.modelos;
 
 import es.mde.kiron.entidades.Ejercicio;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 public class Serie {
 

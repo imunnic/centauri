@@ -18,7 +18,7 @@ public class Sesion {
   private Set<Ficha> fichas;
 
   public Sesion() {
-    setFichas(new HashSet<Ficha>());
+    setFichas(new HashSet<>());
   }
 
   public String getId() {

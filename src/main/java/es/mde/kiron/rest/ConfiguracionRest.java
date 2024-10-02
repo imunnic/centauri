@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.net.URI;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class ConfiguracionRest {
     Map<Class<?>, Class<?>> controllersRegistrados = new HashMap<>();
     controllersRegistrados.put(Ficha.class, FichaController.class);
 
-    return new RepresentationModelProcessor<RepositorySearchesResource>() {
+    return new RepresentationModelProcessor<>() {
 
       @Override
       public RepositorySearchesResource process(RepositorySearchesResource searchResource) {
@@ -61,7 +62,7 @@ public class ConfiguracionRest {
                   .filter(p -> p.isAnnotationPresent(RequestParam.class)).map(Parameter::getName)
                   .collect(Collectors.joining(","));
               searchResource.add(
-                  Link.of(URLDecoder.decode(pathRecurso, "UTF-8") + "{?" + requestParams + "}",
+                  Link.of(URLDecoder.decode(pathRecurso, StandardCharsets.UTF_8) + "{?" + requestParams + "}",
                       m.getName()));
             } catch (Exception e) {
               e.printStackTrace();

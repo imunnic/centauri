@@ -54,6 +54,10 @@ export const useSesionesStore = defineStore("sesiones", {
     },
     async eliminarSesion(href) {
       await this.sesionesService.eliminarSesion(href);
+    },
+    async validarFichasSesion(sesion){
+      let response = await this.sesionesService.validarFichasSesion(sesion);
+      return response.data;
     }
   },
 });

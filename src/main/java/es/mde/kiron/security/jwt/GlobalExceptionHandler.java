@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<String> handlerRuntimeException(RuntimeException ex) {
-    return new ResponseEntity<String>(ex.getMessage(), HttpStatus.BAD_GATEWAY);
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_GATEWAY);
   }
 
 }

@@ -30,13 +30,13 @@
             placeholder="Seleccione un grupo"
             class="item-flex"
           ></v-select>
-          <v-select
+          <v-autocomplete
             label="Unidad"
             v-model="unidad"
             :items="unidadesRegistradas"
             placeholder="Seleccione una unidad"
             class="item-flex"
-          ></v-select>
+          ></v-autocomplete>
           <v-text-field
             label="Fecha"
             v-model="fechaSesion"
@@ -46,7 +46,7 @@
             placeholder="Seleccione una fecha"
             class="item-flex"
           ></v-text-field>
-          <v-select
+          <v-autocomplete
             label="Calentamiento"
             v-model="calentamiento"
             :items="fichasCalentamiento"
@@ -55,8 +55,8 @@
             multiple
             placeholder="Seleccione calentamientos"
             class="item-flex"
-          ></v-select>
-          <v-select
+          ></v-autocomplete>
+          <v-autocomplete
             label="Parte Fundamental"
             v-model="fundamental"
             :items="fichasFundamental"
@@ -64,9 +64,17 @@
             item-value="id"
             multiple
             placeholder="Seleccione partes fundamentales"
+            @update:model-value="validar"
             class="item-flex"
-          ></v-select>
-          <v-select
+          ></v-autocomplete>
+          <v-alert
+            v-if="!fichasSeleccionadasAdecuadas"
+            type="warning"
+            class="mt-3"
+          >
+            {{mensajeAlerta}}
+          </v-alert>
+          <v-autocomplete
             label="Coordinación funcional"
             v-model="coordinacion"
             :items="fichasCoordinacion"
@@ -75,8 +83,8 @@
             multiple
             placeholder="Seleccione coordinación funcional"
             class="item-flex"
-          ></v-select>
-          <v-select
+          ></v-autocomplete>
+          <v-autocomplete
             label="Vuelta a la calma"
             v-model="vueltaCalma"
             :items="fichasCalma"
@@ -85,7 +93,7 @@
             multiple
             placeholder="Seleccione vuelta a la calma"
             class="item-flex"
-          ></v-select>
+          ></v-autocomplete>
           <v-btn v-if="!edicion" type="submit" class="claro">Crear Sesión</v-btn>
           <v-btn v-else type="submit" class="claro">Editar Sesión</v-btn>
         </form>
@@ -98,6 +106,7 @@
 import unidades from "@/assets/unidades.json";
 import configuracion from "@/configuracion.json";
 import { useFichasStore } from "@/store/fichasStore.js";
+import { useSesionesStore } from "@/store/sesionesStore.js";
 import { mapState, mapActions } from "pinia";
 
 export default {
@@ -120,7 +129,23 @@ export default {
     },
   },
   computed: {
-    ...mapState(useFichasStore, ["fichasRegistradas"]),
+    ...mapState(useFichasStore, ['fichasRegistradas']),
+    mensajeAlerta() {
+      switch (this.tipoAlerta) {
+        case 0:
+          return '';
+        case 1:
+          return 'La carga de la ficha seleccionada es demasiado elevada.';
+        case 2:
+          return 'La sesión anterior tiene una carga elevada.';
+        case 3:
+          return 'La media de esfuerzo estimada de las fichas es demasiado elevada.';
+        case 4:
+          return 'La media de esfuerzo con la sesión anterior es demasiado elevada.';
+        default:
+          return '';
+      }
+    }
   },
   data() {
     return {
@@ -129,6 +154,8 @@ export default {
       grupo: this.sesion.grupo || "",
       unidad: this.sesion.unidad || "",
       fechaSesion: "",
+      fichasSeleccionadasAdecuadas:true,
+      tipoAlerta:0,
       unidadesRegistradas: unidades,
       calentamiento: [],
       fundamental: [],
@@ -144,7 +171,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useFichasStore, ["cargarFichas"]),
+    ...mapActions(useFichasStore, ['cargarFichas']),
+    ...mapActions(useSesionesStore, ['validarFichasSesion']),
     cerrar() {
       this.dialog = false;
       this.$emit("cerrar");
@@ -225,6 +253,23 @@ export default {
         idFichasSesion.includes(ficha.id)
       );
     },
+    async validar(){
+      let nuevaSesion = {
+        grupo: this.grupo.nombre,
+        fecha: this.fechaSesion,
+        fichas: [
+          ...this.fundamental,
+        ],
+      };
+      nuevaSesion.fichas = nuevaSesion.fichas.map(ficha => ({ id: ficha }));
+      this.tipoAlerta = await this.validarFichasSesion(nuevaSesion);
+      if(this.tipoAlerta == 0){
+        this.fichasSeleccionadasAdecuadas = true;  
+      } else {
+        this.fichasSeleccionadasAdecuadas = false;  
+      }
+      
+    }
   },
   async created() {
     await this.cargarFichas();

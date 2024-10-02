@@ -15,23 +15,28 @@ export default class sesionesService {
     }
 
     async crearSesion(sesion){
-      return axios.post(url, sesion, config);
+      return await axios.post(url, sesion, config);
     }
 
     async getSesionesPorGrupo(grupo){
       let href = url + "/search/findByGrupoIgnoreCase?grupo=" + grupo;
-      return axios.get(href, config);
+      return await axios.get(href, config);
     }
 
     async getFichasDeSesion(href){
-      return axios.get(href,config);
+      return await axios.get(href,config);
     }
 
     async editarSesion(sesion){
-      return axios.patch(sesion.href, sesion, config);
+      return await axios.patch(sesion.href, sesion, config);
     }
 
     async eliminarSesion(href){
-      return axios.delete(href, config);
+      return await axios.delete(href, config);
+    }
+
+    async validarFichasSesion(sesion){
+      let href = url + "/validar"
+      return await axios.post(href, sesion, config);
     }
 }

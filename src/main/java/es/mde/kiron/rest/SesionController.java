@@ -18,8 +18,8 @@ public class SesionController {
   private SesionDAO sesionDAO;
 
   @PostMapping("/validar")
-  public ResponseEntity<Boolean> validarSesion(@RequestBody Sesion sesion) {
-      boolean resultado = sesionService.validarSesion(sesion);
+  public ResponseEntity<Integer> validarSesion(@RequestBody Sesion sesion) {
+      int resultado = sesionService.validarSesion(sesion);
       return ResponseEntity.ok(resultado);
 
   }
