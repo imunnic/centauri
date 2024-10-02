@@ -108,4 +108,5 @@ public class Ficha {
   public void setTipoFicha(TipoFicha tipoFicha) {
     this.tipoFicha = tipoFicha;
   }
+
 }
