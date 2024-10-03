@@ -31,6 +31,7 @@ public class ConfiguracionSeguridad {
         .authorizeHttpRequests(authRequest -> authRequest
             // Permitir el acceso público a los endpoints de autenticación y al de /aprobado
             .requestMatchers("/api/autenticacion/**", "/api/fichas/aprobado").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/fichas/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/ejercicios").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/ejercicios/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/equipamientos").permitAll()
