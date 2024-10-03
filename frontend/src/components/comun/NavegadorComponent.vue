@@ -16,7 +16,6 @@
     genera enlaces (`href`) y títulos (`title`) para cada parte. La última parte está deshabilitada 
     para indicar que es la página actual.
 -->
-     
 
 <template>
   <v-navigation-drawer v-model="barraLateral" temporary app>
@@ -35,6 +34,11 @@
       <template v-slot:divider>
         <v-icon>mdi-chevron-right</v-icon>
       </template>
+      <template v-slot:item="{ item }">
+        <a @click="navegarARuta(item.href)" style="cursor: pointer">
+          {{ item.title }}
+        </a>
+      </template>
     </v-breadcrumbs>
     <router-view></router-view>
   </v-main>
@@ -45,26 +49,26 @@ export default {
   props: {
     menuItemsProp: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     migasDePan() {
-      const rutas = this.$route.path.split('/').filter(Boolean);
+      const rutas = this.$route.path.split("/").filter(Boolean);
 
       return rutas.map((parteRuta, index) => {
-        const href = '/' + rutas.slice(0, index + 1).join('/'); 
+        const href = "/" + rutas.slice(0, index + 1).join("/");
         return {
           title: this.primeraAMayuscula(parteRuta),
           href,
-          disabled: true
+          disabled: false,
         };
       });
-    }
+    },
   },
   data() {
     return {
-      barraLateral: false
+      barraLateral: false,
     };
   },
   methods: {
@@ -76,9 +80,9 @@ export default {
     },
     navegarARuta(ruta) {
       this.$router.push(ruta);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
