@@ -25,6 +25,10 @@ export const useUsuariosStore = defineStore("usuarios", {
       this.perfil = usuario.usuario.rol;
       this.href = configuracion.urlBase + "usuarios/" + usuario.id;
       this.isLogged = true;
+    },
+    async getUsuario(href){
+      let response = await this.usuarioService.getUsuario(href);
+      return response.data.nombre;
     }
   },
 });

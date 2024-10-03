@@ -27,21 +27,45 @@
           label="Nombre de la ficha"
           v-model="fichaSeleccionada.nombre"
           readonly
-          class="input-field"
+          class="input-medio"
         ></v-text-field>
         <v-text-field
           label="Tipo de ficha"
           v-model="fichaSeleccionada.tipoFicha"
           readonly
-          class="input-field"
+          class="input-medio"
         ></v-text-field>
         <v-text-field
           label="Parte del entrenamiento"
           v-model="fichaSeleccionada.parteSesion"
           readonly
-          class="input-field"
+          class="input-medio"
         ></v-text-field>
       </div>
+      <div class="contenedor-flex">
+        <v-text-field
+          label="RPE Estimado"
+          v-model="fichaSeleccionada.rpeEstimado"
+          readonly
+          class="input-corto"
+          :class="colorRpe"
+        ></v-text-field>
+        <v-text-field
+          label="Tiempo Estimado"
+          v-model="tiempoEstimado"
+          readonly
+          class="input-medio"
+        ></v-text-field>
+        <v-text-field
+          v-if="logeado"
+          label="Autor"
+          v-model="fichaSeleccionada.autor"
+          readonly
+          class="input-medio"
+        ></v-text-field>
+      </div>
+
+      <b>Descripcion: </b> {{ fichaSeleccionada.descripcion }} 
 
       <FichaComponent :rondas="fichaSeleccionada.rutina" :solo-lectura="true" />
 
@@ -121,11 +145,24 @@ export default {
       tipoAlerta: "",
       dialogAprobar: false,
       dialogRechazar: false,
+      tiempoEstimado: "",
+      logeado:"false"
     };
   },
   computed: {
     ...mapState(useFichasStore, ["fichasRegistradas"]),
     ...mapState(useUsuariosStore, ["perfil", "token", "isLogged"]),
+    colorRpe() {
+    const rpe = this.fichaSeleccionada?.rpeEstimado || 0;
+    if (rpe <= 5) {
+      return 'suave';
+    } else if (rpe >= 6 && rpe <= 8) {
+      return 'elevado';
+    } else if (rpe >= 9 && rpe <= 10) {
+      return 'muyAlto';
+    }
+    return '';
+  }
   },
   methods: {
     ...mapActions(useFichasStore, [
@@ -133,7 +170,7 @@ export default {
       "arrancarServicioFicha",
       "cambiarEstado",
     ]),
-    ...mapActions(useUsuariosStore, ["peticionLogin"]),
+    ...mapActions(useUsuariosStore, ["peticionLogin", "getUsuario"]),
 
     async confirmar(aprobado) {
       this.dialogAprobar = false;
@@ -163,15 +200,16 @@ export default {
   },
   async created() {
     this.cargando = true;
-    if (!this.isLogged) {
-      await this.peticionLogin();
-      this.arrancarServicioFicha(this.token);
-    }
   },
   async mounted() {
+    this.logeado = this.isLogged;
     let response = await this.cargarFichaDetalle(this.$route.params.id);
     this.fichaSeleccionada = response.data;
     this.cargando = false;
+    this.tiempoEstimado = this.fichaSeleccionada.tiempoEstimado + ' minutos'
+    if(this.logeado){
+      this.fichaSeleccionada.autor = await this.getUsuario(this.fichaSeleccionada._links.autor.href)
+    }
   },
 };
 </script>
@@ -184,10 +222,11 @@ export default {
 .contenedor-flex {
   gap: 10px;
   margin-bottom: 20px;
+  justify-content: start !important;
 }
 
-.input-field {
-  max-width: 300px;
+.input-medio {
+  max-width: 200px;
 }
 
 .circulo-carga {
@@ -215,5 +254,17 @@ export default {
   z-index: 9999;
   width: 90%;
   max-width: 500px;
+}
+.suave{
+  font-weight: 600;
+  color: var(--suave);
+}
+.elevado {
+  font-weight: 600;
+  color: var(--elevado);
+}
+.muyAlto{
+  font-weight: 600;
+  color: var(--rechazo);
 }
 </style>

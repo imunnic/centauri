@@ -127,9 +127,9 @@ export default {
       }
     },
     getColor(rpe) {
-      if (rpe < 6 || rpe == "APROBADO") return "green";
-      if ((rpe >= 6 && rpe < 9) || rpe == "PENDIENTE") return "orange";
-      return "red";
+      if (rpe < 6 || rpe == "APROBADO") return "var(--suave)";
+      if ((rpe >= 6 && rpe < 9) || rpe == "PENDIENTE") return "var(--elevado)";
+      return "var(--rechazo)";
     },
     crearFicha() {
       this.$router.push("/fichas/crear");

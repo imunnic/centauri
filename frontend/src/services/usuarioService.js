@@ -4,7 +4,11 @@ import configuracion from "@/configuracion.json";
 let url = configuracion.urlBase + "autenticacion/";
 let login = "login";
 let registro = "registro";
-// let user = "dparlop";
+let config = {
+  headers: {
+    Authorization: configuracion.headersDefecto.Authorization,
+  }
+};
 
 export default class UsuariosService {
   constructor() {}
@@ -15,6 +19,7 @@ export default class UsuariosService {
       password: usuario.password,
     };
     let response = await axios.post(url + login, credenciales);
+    config.headers.Authorization = "Bearer " + response.data.token;
     return response.data;
   }
 
@@ -34,5 +39,9 @@ export default class UsuariosService {
     };
     let response = await axios.post(url + login, credenciales);
     return response.data.usuario.rol;
+  }
+
+  async getUsuario(href){
+    return await axios.get(href,config);
   }
 }
