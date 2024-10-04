@@ -15,16 +15,28 @@ export const useFichasStore = defineStore("fichas", {
       await this.fichaService.cambiarEstado(ficha, estado);
     },
     async cargarFichas() {
-      let response = await this.fichaService.getAprobadas();
-      this.fichasRegistradas = response.data;
+      try {
+        let response = await this.fichaService.getAprobadas();
+        this.fichasRegistradas = response.data;
+      } catch (error) {
+        this.fichasRegistradas = [];
+      }
     },
     async cargarPendientes() {
-      let response = await this.fichaService.getPendientes();
-      this.fichasRegistradas = response.data;
+      try {
+        let response = await this.fichaService.getPendientes();
+        this.fichasRegistradas = response.data;
+      } catch (error) {
+        this.fichasRegistradas = [];
+      }
     },
     async cargarPropias() {
-      let response = await this.fichaService.getPropias(useUsuariosStore().id);
-      this.fichasRegistradas = response.data._embedded.fichas;
+      try {
+        let response = await this.fichaService.getPropias(useUsuariosStore().id);
+        this.fichasRegistradas = response.data._embedded.fichas;
+      } catch (error) {
+        this.fichasRegistradas = [];
+      }
     },
     async cargarFichaDetalle(id) {
       return await this.fichaService.getFicha(id);

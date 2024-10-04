@@ -8,8 +8,13 @@ export const useEquipamientosStore = defineStore("equipamientos", {
   }),
   actions: {
     async cargarEquipamientos() {
-      let response = await this.equipamientosService.getAll();
-      this.equipamientosRegistrados = response;
+      try{
+        let response = await this.equipamientosService.getAll();
+        this.equipamientosRegistrados = response;
+      }
+      catch(error){
+        this.equipamientosRegistrados = [];
+      }
     },
     arrancarServicioEquipamientos(token) {
       this.equipamientosService.actualizarCabecera(token);

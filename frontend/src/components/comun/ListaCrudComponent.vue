@@ -74,6 +74,8 @@
         </template>
       </ItemListaComponent>
 
+      <div class="contenedor-flex" v-if="itemsFiltrados.length == 0"> No hay datos disponibles. Compruebe la conexión de red.</div>
+
       <FabBotonComponent v-if="permisoCreacion" @click="emitCrear('crear')" />
     </template>
   </v-container>

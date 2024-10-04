@@ -9,8 +9,12 @@ export const useEjerciciosStore = defineStore("ejercicios", {
   }),
   actions: {
     async cargarEjercicios() {
-      let response = await this.ejerciciosService.getAll();
-      this.ejerciciosRegistrados = response;
+      try {
+        let response = await this.ejerciciosService.getAll();
+        this.ejerciciosRegistrados = response;
+      } catch (error) {
+        this.ejerciciosRegistrados = [];
+      }
     },
     arrancarServicioEjercicios(token) {
       this.ejerciciosService = new EjercicioService();
