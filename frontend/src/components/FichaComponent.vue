@@ -23,7 +23,7 @@
       v-model="localRondas"
       class="lista-rondas"
       :item-key="getItemKey"
-      :disabled="soloLectura"
+      :disabled="soloLectura || pantallaPequena"
     >
       <template #item="{ element, index }">
         <RondaComponent
@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       localRondas: [...this.rondas],
+      pantallaPequena: false,
     };
   },
   methods: {
@@ -99,6 +100,9 @@ export default {
     emitirActualizacion() {
       this.$emit("update-ficha", this.localRondas);
     },
+    comprobarTamanoPantalla() {
+      this.pantallaPequena = window.innerWidth < 1000;
+    },
   },
   watch: {
     rondas: {
@@ -107,6 +111,13 @@ export default {
         this.localRondas = [...newRondas];
       },
     },
+  },
+  mounted() {
+    this.comprobarTamanoPantalla(); 
+    window.addEventListener("resize", this.comprobarTamanoPantalla);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.comprobarTamanoPantalla);
   },
 };
 </script>
