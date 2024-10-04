@@ -66,6 +66,7 @@
             item-value="_links.self.href"
             requiered
             :disabled="soloLectura"
+            class="placeholder"
             placeholder="Seleccione un ejercicio"
           ></v-select>
           <div class="flex-container">
@@ -77,6 +78,8 @@
                 item-value="valor"
                 label="Tipo"
                 required
+                class="placeholder"
+                placeholder="Repeticiones"
                 :disabled="soloLectura"
               ></v-select>
             </div>
@@ -91,6 +94,8 @@
                 type="number"
                 required
                 :disabled="soloLectura"
+                class="placeholder"
+                placeholder="10"
                 hint="Cantidad"
                 min="1"
               ></v-text-field>
@@ -100,6 +105,8 @@
                 label="Tiempo"
                 type="time"
                 required
+                class="placeholder"
+                placeholder="00:10"
                 :disabled="soloLectura"
                 hint="Tiempo"
               ></v-text-field>
@@ -109,6 +116,8 @@
                 label="Distancia"
                 type="number"
                 required
+                class="placeholder"
+                placeholder="100"
                 :disabled="soloLectura"
                 hint="Distancia"
                 min="1"
@@ -121,7 +130,8 @@
             label="Carga (%)"
             type="number"
             required
-            class="input-corto"
+            class="input-corto placeholder"
+            placeholder="50"
             :disabled="soloLectura"
             hint="Porcentaje de carga"
           ></v-text-field>
@@ -174,7 +184,8 @@
               type="number"
               min="0"
               step="1"
-              class="input-corto"
+              class="input-corto placeholder"
+              placeholder="10"
             ></v-text-field>
           </div>
         </div>
@@ -203,7 +214,8 @@
               v-model="formatoMarca"
               :label="'Ritmo'"
               type="text"
-              class="input-corto"
+              class="input-corto placeholder"
+              placeholder="04:30"
               @input="onInput"
             ></v-text-field>
           </div>
@@ -241,7 +253,8 @@
               type="number"
               min="0"
               step="1"
-              class="input-corto"
+              class="input-corto placeholder"
+              placeholder="50"
             ></v-text-field>
           </div>
         </div>

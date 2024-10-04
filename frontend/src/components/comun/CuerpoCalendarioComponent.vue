@@ -15,7 +15,7 @@
 -->
 <template>
   <v-container fluid>
-    <v-row class="no-gutters">
+    <v-row class="no-gutters"> <!-- https://vuetifyjs.com/en/components/grids/#justify -->
       <v-col
         v-for="(dia, index) in diasDeLaSemana"
         :key="index"

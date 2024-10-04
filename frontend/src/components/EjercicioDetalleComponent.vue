@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title class="d-flex justify-space-between">
         <span>{{ ejercicio.nombre }}</span>
-        <v-btn icon @click="cerrar" flat>
+        <v-btn aria-label="cerrar" icon @click="cerrar" flat>
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-title>

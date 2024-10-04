@@ -33,6 +33,7 @@
         <v-card-actions v-if="acciones.length > 0">
           <v-btn 
             v-for="accion in acciones" 
+            :id="accion.evento"
             :key="accion.icon" 
             :icon="accion.icon" 
             :color="accion.color" 

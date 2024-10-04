@@ -35,7 +35,7 @@
         <v-icon>mdi-chevron-right</v-icon>
       </template>
       <template v-slot:item="{ item }">
-        <a @click="navegarARuta(item.href)" style="cursor: pointer">
+        <a @click="navegarARuta(item.href)" class="migas-pan">
           {{ item.title }}
         </a>
       </template>
@@ -92,5 +92,9 @@ export default {
 }
 .contenidoPrincipal {
   padding-top: 0px;
+}
+.migas-pan{
+  cursor:pointer;
+  color: #4f4e4e
 }
 </style>

@@ -2,19 +2,21 @@
   <v-container>
     <div class="contenedor-flex justify-start flex-columna">
       <v-switch
+        aria-label="fichas-propias"
         v-if="perfil == 'ECEF' || perfil == 'DIPLOMADO'"
         v-model="fichasPropias"
         label="Mostrar fichas propias"
-        color="blue"
-        active-color="blue"
+        color="var(--claro)"
+        active-color="var(--claro)"
         class="interruptor"
       ></v-switch>
       <v-switch
+        aria-label="fichas-pendientes"
         v-if="perfil == 'ECEF' && !fichasPropias"
         v-model="soloPendientes"
         label="Mostrar pendientes"
-        color="red"
-        active-color="red"
+        color="var(--claro)"
+        active-color="var(--claro)"
         class="interruptor"
       ></v-switch>
     </div>

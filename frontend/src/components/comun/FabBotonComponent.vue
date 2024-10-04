@@ -17,6 +17,7 @@
     class="fab-button"
     @click="$emit('click')"
     :class="clasesAdicionales"
+    :id="nombre"
   >
     <v-icon>{{ icon }}</v-icon>
   </v-btn>
@@ -25,6 +26,10 @@
 <script>
 export default {
   props: {
+    nombre: {
+      type: String,
+      default: "crear"
+    },
     icon: {
       type: String,
       default: "mdi-plus",

@@ -70,14 +70,16 @@
       <FichaComponent :rondas="fichaSeleccionada.rutina" :solo-lectura="true" />
 
       <FabBotonComponent
+        :nombre="'aprobar-ficha'"
         v-if="perfil == 'ECEF' && fichaSeleccionada.estado == 'PENDIENTE'"
         :icon="'mdi-thumb-up-outline'"
-        :clases-adicionales="'claro'"
+        :clases-adicionales="'claro margen'"
         @click="dialogAprobar = true"
       >
       </FabBotonComponent>
 
       <FabBotonComponent
+        :nombre="'rechazar-ficha'"
         v-if="perfil == 'ECEF' && fichaSeleccionada.estado == 'PENDIENTE'"
         :icon="'mdi-thumb-down-outline'"
         :clases-adicionales="'rechazo'"
@@ -94,10 +96,10 @@
         >
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialogAprobar = false"
+          <v-btn aria-label="cancelar" class="rechazo" elevation="1" @click="dialogAprobar = false"
             >Cancelar</v-btn
           >
-          <v-btn color="green darken-1" text @click="confirmar(true)"
+          <v-btn aria-label="aprobar" class="claro" elevation="1" @click="confirmar(true)"
             >Confirmar</v-btn
           >
         </v-card-actions>
@@ -112,10 +114,10 @@
         >
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialogRechazar = false"
+          <v-btn name="cancelar" class="rechazo" elevation="1" @click="dialogRechazar = false"
             >Cancelar</v-btn
           >
-          <v-btn color="red darken-1" text @click="confirmar(false)"
+          <v-btn name="rechazar" class="claro" elevation="1" @click="confirmar(false)"
             >Confirmar</v-btn
           >
         </v-card-actions>
@@ -215,7 +217,7 @@ export default {
 </script>
 
 <style scoped>
-.claro {
+.margen {
   margin-right: 60px;
 }
 

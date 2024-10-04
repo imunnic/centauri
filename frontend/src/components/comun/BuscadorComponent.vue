@@ -14,7 +14,9 @@
 <template>
   <div>
     <v-text-field
+      class="placeholder"
       v-model="queryBusqueda"
+      placeholder="Buscar"
       label="Buscar"
       @input="listaFiltrada"
       append-inner-icon="mdi-magnify"

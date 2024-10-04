@@ -7,7 +7,13 @@
         </div>
       </v-col>
       <v-col cols="6" class="d-flex justify-end" v-if="!soloLectura">
-        <v-btn icon @click="agregarRonda" size="x-small" class="claro">
+        <v-btn
+          aria-label="agregar-ronda"
+          icon
+          @click="agregarRonda"
+          size="x-small"
+          class="claro"
+        >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
       </v-col>

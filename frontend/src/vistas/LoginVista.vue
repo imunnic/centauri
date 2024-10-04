@@ -4,6 +4,8 @@
       Registro
       <v-form class="formulario" @keyup.enter="intentarLogin()">
         <v-text-field
+          class="placeholder"
+          color="black"
           v-model="logeo.username"
           variant="outlined"
           :rules="[reglas.required]"
@@ -13,6 +15,7 @@
 
         <v-text-field
           v-model="logeo.password"
+          class="placeholder"
           variant="outlined"
           :rules="[reglas.required]"
           :append-inner-icon="mostrar ? 'mdi-eye' : 'mdi-eye-off'"
@@ -26,7 +29,7 @@
           </template>
         </v-text-field>
 
-        <v-btn class="mt-2" @click="intentarLogin()"> Entrar </v-btn>
+        <v-btn aria-label="login" class="claro" @click="intentarLogin()"> Entrar </v-btn>
       </v-form>
     </v-card>
   </v-container>
@@ -106,6 +109,7 @@ export default {
 .contenedor {
   display: flex;
   justify-content: center;
+
 }
 
 @media (max-width: 800px) {

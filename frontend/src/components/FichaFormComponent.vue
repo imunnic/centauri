@@ -7,16 +7,16 @@
           label="Nombre de la ficha"
           v-model="fichaLocal.nombre"
           :rules="nombreRules"
-          class="input-field"
+          class="input-field placeholder"
           required
-          placeholder="Ficha 1.1"
+          placeholder="Ficha 1.1 - Calentamiento global"
         ></v-text-field>
         <v-select
           :items="tiposFicha"
           label="Tipo de ficha"
           v-model="fichaLocal.tipoFicha"
           :rules="tipoRules"
-          class="input-field"
+          class="input-field placeholder"
           required
           placeholder="Fuerza"
         ></v-select>
@@ -25,7 +25,7 @@
           label="Parte de la sesión"
           v-model="fichaLocal.parteSesion"
           :rules="parteRules"
-          class="input-field"
+          class="input-field placeholder"
           required
           placeholder="Calentamiento"
         ></v-select>
@@ -34,7 +34,7 @@
         <div class="rpe-estimado">
           <v-text-field
             v-model="fichaLocal.rpeEstimado"
-            class="input-corto"
+            class="input-corto placeholder"
             type="number"
             label="RPE estimado"
             hint="Esfuerzo previsto para la sesión"
@@ -47,7 +47,7 @@
         </div>
         <div class="tiempo-estimado">
           <v-text-field
-            class="input-corto"
+            class="input-corto placeholder"
             v-model="formatoTiempo"
             label="Tiempo"
             type="time"
@@ -66,11 +66,11 @@
         label="Descripción"
         placeholder="Ficha de calentamiento con flexiones, abdominales, etc"
         hint="Introduce una descripción de la ficha"
-        class="descripcion"
+        class="descripcion placeholder"
         rows="4"
         outlined
       ></v-textarea>
-      <v-btn class="guardar-btn" type="submit">Guardar</v-btn>
+      <v-btn aria-label="guardar" class="guardar-btn" type="submit">Guardar</v-btn>
     </v-form>
   </v-container>
 </template>

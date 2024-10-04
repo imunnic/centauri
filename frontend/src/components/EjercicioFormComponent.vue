@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title class="d-flex justify-space-between">
         <span class="headline">{{ tituloFormulario }}</span>
-        <v-btn icon @click="cerrarDialogo" flat>
+        <v-btn aria-label="cerrar" icon @click="cerrarDialogo" flat>
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-title>
@@ -12,6 +12,8 @@
           <div class="contenedor-flex">
             <div class="item-flex">
               <v-text-field
+                class="placeholder"
+                placeholder="Extensionde de brazos"
                 v-model="ejercicioNuevo.nombre"
                 label="Nombre"
                 :rules="[(v) => !!v || 'El nombre es obligatorio']"
@@ -21,6 +23,8 @@
             </div>
             <div class="item-flex">
               <v-textarea
+                class="placeholder"
+                placeholder="Descripción del ejercicio"
                 v-model="ejercicioNuevo.descripcion"
                 label="Descripción"
                 :rules="[(v) => !!v || 'La descripción es obligatoria']"
@@ -30,6 +34,8 @@
             </div>
             <div class="item-flex">
               <v-select
+                class="placeholder"
+                placeholder="Musculos principales"
                 v-model="ejercicioNuevo.musculosPrincipales"
                 :items="musculosItems"
                 label="Músculos principales"
@@ -39,6 +45,8 @@
             </div>
             <div class="item-flex">
               <v-select
+                class="placeholder"
+                placeholder="Musculos secundarios"
                 v-model="ejercicioNuevo.musculosSecundarios"
                 :items="musculosItems"
                 label="Músculos secundarios"
@@ -48,6 +56,8 @@
             </div>
             <div class="item-flex">
               <v-select
+                class="placeholder"
+                placeholder="Cualidad física"
                 v-model="ejercicioNuevo.cualidad"
                 :items="cualidadesItems"
                 label="Cualidad"
@@ -57,6 +67,8 @@
             </div>
             <div class="item-flex">
               <v-text-field
+                class="placeholder"
+                placeholder="Ejecutantes"
                 v-model="ejercicioNuevo.numeroEjecutantes"
                 label="Número de ejecutantes"
                 type="number"
@@ -65,6 +77,8 @@
             </div>
             <div class="item-flex">
               <v-select
+                class="placeholder"
+                placeholder="Equipamiento necesario"
                 v-model="ejercicioNuevo.equipamiento"
                 :items="equipamientosRegistrados"
                 item-title="nombre"
@@ -75,6 +89,8 @@
             </div>
             <div class="item-flex">
               <v-text-field
+                class="placeholder"
+                placeholder="Activo libre"
                 v-model="ejercicioNuevo.tipoMovimiento"
                 label="Tipo de movimiento"
               >
@@ -82,6 +98,8 @@
             </div>
             <div class="item-flex">
               <v-text-field
+                class="placeholder"
+                placeholder="Isotónico concéntrico"
                 v-model="ejercicioNuevo.tipoContraccion"
                 label="Tipo de contracción"
               >
@@ -89,17 +107,26 @@
             </div>
             <div class="item-flex">
               <v-text-field
+                class="placeholder"
+                placeholder="Normal"
                 v-model="ejercicioNuevo.velocidad"
                 label="Velocidad"
               >
               </v-text-field>
             </div>
             <div class="item-flex">
-              <v-text-field v-model="ejercicioNuevo.url" label="URL">
+              <v-text-field
+                class="placeholder"
+                placeholder="Enlace a video"
+                v-model="ejercicioNuevo.url"
+                label="URL"
+              >
               </v-text-field>
             </div>
             <div class="item-flex">
               <v-select
+                class="placeholder"
+                placeholder="1 RM"
                 v-model="ejercicioNuevo.tipoCarga"
                 :items="tipoCargaItems"
                 label="Carga"
@@ -113,8 +140,10 @@
           </div>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="cerrarDialogo">Cancelar</v-btn>
-            <v-btn color="primary" type="submit">Guardar</v-btn>
+            <v-btn aria-label="cerrar" color="primary" text @click="cerrarDialogo"
+              >Cancelar</v-btn
+            >
+            <v-btn aria-label="guardar" color="primary" type="submit">Guardar</v-btn>
           </v-card-actions>
         </v-form>
       </v-card-text>
@@ -160,7 +189,7 @@ export default {
         nombre: "",
         descripcion: "",
         cualidad: "",
-        numeroEjecutantes: 1,
+        numeroEjecutantes: 0,
         equipamiento: "",
         tipoMovimiento: "",
         tipoContraccion: "",
@@ -206,6 +235,7 @@ export default {
   async created() {
     this.resetForm();
     await this.cargarEquipamientos();
+    this.ejercicioNuevo.numeroEjecutantes = 1;
   },
 };
 </script>

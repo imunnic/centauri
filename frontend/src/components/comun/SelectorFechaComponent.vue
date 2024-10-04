@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div class="contenedor-flex">
-      <v-btn @click="$emit('cambiar-fecha', -1)" icon flat>
+      <v-btn aria-label="anterior-fecha" @click="$emit('cambiar-fecha', -1)" icon flat>
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
 
@@ -9,12 +9,13 @@
         <v-toolbar-title><b>{{ fechaMostrada }}</b></v-toolbar-title>
       </div>
 
-      <v-btn @click="$emit('cambiar-fecha', 1)" icon flat>
+      <v-btn aria-label="siguiente-fecha" @click="$emit('cambiar-fecha', 1)" icon flat>
         <v-icon>mdi-chevron-right</v-icon>
       </v-btn>
 
       <v-select
-        class="selector"
+        class="selector placeholder"
+        placeholder="Modo"
         v-model="modo"
         :items="modos"
         item-title="texto"

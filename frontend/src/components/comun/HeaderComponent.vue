@@ -21,14 +21,13 @@
   <div>
     <v-app-bar :elevation="2" class="fondo d-flex align-center">
       <template v-slot:prepend>
-        <v-app-bar-nav-icon @click="$emit('navegacion')"></v-app-bar-nav-icon>
+         <v-btn aria-label="menu" class="fondo" icon="mdi-menu" @click="$emit('navegacion')"></v-btn>
       </template>
 
       <v-app-bar-title class="mr-3">
         {{ aplicacion.nombre }}
       </v-app-bar-title>
 
-      <!-- Imagen redonda -->
       <v-avatar size="60" class="ml-auto icono">
         <img
           :src="aplicacion.icono"
@@ -57,14 +56,12 @@ export default {
 <style>
 .fondo {
   background-color: #fff;
-  /* Cambia el color de fondo si es necesario */
 }
 
 .avatar-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Asegura que la imagen se ajuste sin distorsionar */
 }
 
 .icono {

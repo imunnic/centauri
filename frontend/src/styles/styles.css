@@ -54,7 +54,7 @@
 .carta {
   position: relative;
   min-height: 50px;
-  padding-left: 10px; /* Espacio para la barra */
+  padding-left: 10px; /* Espacio para la barra lateral*/
 }
 
 .carta::before {
@@ -64,7 +64,7 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 5px; /* Ancho de la barra */
+  width: 5px; /* Ancho de la barra lateral*/
   background-color: var(--claro);
 }
 
@@ -119,4 +119,19 @@
 
 .texto{
   font-size: 17px;
+}
+
+.placeholder input::placeholder {
+  color: black !important;
+  opacity: 1;
+}
+
+.label-placeholder .v-label {
+  color: black;
+  opacity: 1;
+}
+
+.placeholder input,
+.label-placeholder input{
+  color:black !important;
 }

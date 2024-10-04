@@ -9,7 +9,8 @@
           item-value="valor"
           label="Tipo"
           required
-          class="input-medio"
+          placeholder="Tiempo"
+          class="input-medio placeholder"
           :disabled="soloLectura"
         ></v-select>
         <v-text-field
@@ -18,7 +19,8 @@
           label="Cantidad"
           type="number"
           required
-          class="input-corto"
+          class="input-corto placeholder"
+          placeholder="10"
           :disabled="soloLectura"
         ></v-text-field>
         <v-text-field
@@ -27,7 +29,8 @@
           label="Tiempo"
           type="time"
           required
-          class="input-corto"
+          class="input-corto placeholder"
+          placeholder="10:00"
           :disabled="soloLectura"
         ></v-text-field>
       </div>
@@ -41,6 +44,7 @@
       </div>
 
       <v-icon
+        aria-label="quitar-ronda"
         small
         @click="quitarRonda"
         color="error"
@@ -56,6 +60,7 @@
       </div>
       <div class="flex-item justify-end">
         <v-btn
+          aria-label="agregar-serie"
           icon
           @click.stop="agregarSerie"
           class="claro"

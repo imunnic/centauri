@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title class="d-flex justify-space-between">
         <span class="headline">{{ tituloFormulario }}</span>
-        <v-btn icon @click="cerrarDialogo" flat>
+        <v-btn aria-label="cerrar" icon @click="cerrarDialogo" flat>
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-title>
@@ -12,6 +12,8 @@
           <div class="flex-container">
             <div class="flex-item">
               <v-text-field
+                class="placeholder"
+                placeholder="Mancuernas"
                 v-model="equipamientoNuevo.nombre"
                 label="Nombre"
                 :rules="[reglas.necesario]"
@@ -20,12 +22,16 @@
             </div>
             <div class="flex-item">
               <v-text-field
+                class="placeholder"
+                placeholder="Fuerza"
                 v-model="equipamientoNuevo.tipo"
                 label="Tipo"
               ></v-text-field>
             </div>
             <div class="flex-item">
               <v-textarea
+                class="placeholder"
+                placeholder="Descripción del equipamiento"
                 v-model="equipamientoNuevo.descripcion"
                 label="Descripción"
                 :rules="[reglas.necesario]"
@@ -34,6 +40,8 @@
             </div>
             <div class="flex-item">
               <v-text-field
+                class="placeholder"
+                placeholder="Enlace a una imagen del equipamiento"
                 v-model="equipamientoNuevo.url"
                 label="Enlace de Imagen"
                 type="url"
@@ -48,8 +56,8 @@
           </div>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="cerrarDialogo">Cancelar</v-btn>
-            <v-btn color="primary" type="submit">Guardar</v-btn>
+            <v-btn aria-label="cancelar" color="primary" text @click="cerrarDialogo">Cancelar</v-btn>
+            <v-btn aria-label="guardar" color="primary" type="submit">Guardar</v-btn>
           </v-card-actions>
         </v-form>
       </v-card-text>

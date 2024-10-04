@@ -51,7 +51,7 @@
     </v-card-text>
 
     <v-card-actions class="botones">
-      <v-btn color="primary" @click="cerrarTarjeta">Cerrar</v-btn>
+      <v-btn aria-label="cerrar-tarjeta" color="primary" @click="cerrarTarjeta">Cerrar</v-btn>
     </v-card-actions>
   </v-card>
 </template>
