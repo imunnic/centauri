@@ -24,7 +24,6 @@ export const useUsuariosStore = defineStore("usuarios", {
       this.token = usuario.token;
       this.perfil = usuario.usuario.rol;
       this.href = configuracion.urlBase + "usuarios/" + this.id;
-      console.log(this.href);
       this.isLogged = true;
     },
     async getUsuario(href){

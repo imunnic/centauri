@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-
+import { useUsuariosStore } from "@/store/usuariosStore.js";
 const routes = [
   {
     path: "/",
@@ -14,6 +14,7 @@ const routes = [
     path: "/usuario",
     name: "usuario",
     component: () => import("../vistas/UsuarioVista.vue"),
+    meta: { requiresAuth: true },
   },
   {
     path: "/equipamientos",
@@ -34,11 +35,13 @@ const routes = [
     path: "/fichas/crear",
     name: "crearFicha",
     component: () => import("../vistas/CrearFichaVista.vue"),
+    meta: { requiresAuth: true, requiresRole: ['DIPLOMADO', 'ECEF'] }, // Rutas protegidas con roles
   },
   {
     path: "/fichas/editar/:id",
     name: "editarFicha",
     component: () => import("../vistas/EditarFichaVista.vue"),
+    meta: { requiresAuth: true, requiresRole: ['DIPLOMADO', 'ECEF'] }, // Rutas protegidas con roles
   },
   {
     path: "/ejercicios",
@@ -50,6 +53,22 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const usuariosStore = useUsuariosStore();
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!usuariosStore.isLogged) {
+      return next({ name: 'login' });
+    }
+
+    if (to.meta.requiresRole && !to.meta.requiresRole.includes(usuariosStore.perfil)) {
+      return next({ name: 'usuario' });
+    }
+  }
+
+  next();
 });
 
 export default router;

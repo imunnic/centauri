@@ -48,7 +48,15 @@ export default {
       if (this.isLogged) {
         return this.menu;
       } else {
-        return this.menu.filter(item => item.title !== "Usuario");
+        let menuSinRegistro = this.menu.filter(
+          (item) => item.title !== "Usuario"
+        );
+        menuSinRegistro.push({
+          title: "Registro",
+          prependIcon: "mdi-account",
+          ruta: "/login",
+        });
+        return menuSinRegistro;
       }
     },
   },
@@ -58,8 +66,6 @@ export default {
       this.$refs.navegadorComponent.mostrarNavegador();
     },
   },
-  async created() {
-
-  },
+  async created() {},
 };
 </script>
