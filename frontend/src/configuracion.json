@@ -1,5 +1,5 @@
 {
-    "urlBase": "http://localhost:8080/api/",
+    "urlBase": "https://centauri-f0529a419054.herokuapp.com/api",
     "headersDefecto": {
       "Authorization": "Bearer "
     },
