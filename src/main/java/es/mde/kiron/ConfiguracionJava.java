@@ -11,7 +11,7 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(
     {
         "classpath:configuracion/gestionDB.properties",
-        "classpath:configuracion/secret.properties",
+//        "classpath:configuracion/secret.properties",
 
     })
 public class ConfiguracionJava {
