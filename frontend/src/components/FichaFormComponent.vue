@@ -48,11 +48,10 @@
         <div class="tiempo-estimado">
           <v-text-field
             class="input-corto placeholder"
-            v-model="formatoTiempo"
+            v-model="fichaLocal.tiempoEstimado"
             label="Tiempo"
-            type="time"
-            hint="Tiempo previsto para la sesión hh:mm:ss"
-            step="2"
+            type="number"
+            hint="Tiempo previsto en minutos"
           ></v-text-field>
         </div>
       </div>
@@ -70,7 +69,7 @@
         rows="4"
         outlined
       ></v-textarea>
-      <v-btn aria-label="guardar" class="guardar-btn" type="submit">Guardar</v-btn>
+      <v-btn aria-label="guardar" class="guardar-btn claro" type="submit">Guardar</v-btn>
     </v-form>
   </v-container>
 </template>
@@ -120,23 +119,6 @@ export default {
         (v) => (v > 0 && v <= 10) || "El valor del rpe debe estar entre 1 y 10",
       ],
     };
-  },
-  computed: {
-    formatoTiempo: {
-      get() {
-        const minutes = Math.floor(this.fichaLocal.tiempoEstimado / 60)
-          .toString()
-          .padStart(2, "0");
-        const seconds = (this.fichaLocal.tiempoEstimado % 60)
-          .toString()
-          .padStart(2, "0");
-        return `${minutes}:${seconds}`;
-      },
-      set(value) {
-        const [minutes, seconds] = value.split(":").map(Number);
-        this.fichaLocal.tiempoEstimado = minutes * 60 + seconds;
-      },
-    },
   },
   watch: {
     ficha: {
