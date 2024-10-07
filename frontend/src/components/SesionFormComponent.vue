@@ -222,7 +222,6 @@ export default {
           ...fichasCalmaHref,
         ],
       };
-      console.log(nuevaSesion);
       if (this.edicion) {
         nuevaSesion.href = this.sesion.href;
         this.$emit("sesionEditada", nuevaSesion);
