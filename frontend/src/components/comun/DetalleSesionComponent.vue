@@ -1,20 +1,22 @@
 <!--
-  Este componente muestra un día específico en el calendario, con la lista de sesiones programadas 
-  para ese día. Si es el día actual, se resalta visualmente. Además, permite emitir un evento cuando 
-  se selecciona una sesión.
+  Este componente muestra la información detallada de una sesión específica en el calendario. 
+  Si el usuario tiene permisos de edición, puede editar o eliminar la sesión. Además, permite emitir 
+  eventos cuando se selecciona una acción como ver el detalle de la sesión, editarla, eliminarla o cerrar la tarjeta.
 
   Props:
-  - fecha: La fecha correspondiente al día que se está mostrando.
-  - sesiones: Array de sesiones programadas, de las cuales se filtran aquellas que pertenecen al día actual.
+  - sesion: Un objeto que contiene la información de la sesión seleccionada, como nombre, grupo y fichas asociadas.
+  - gruposConPermiso: Un array de objetos que contiene los grupos con permisos de edición, usado para determinar si el usuario puede editar o eliminar la sesión.
 
   Computed:
-  - fechaActual: Devuelve el día, mes y año actuales, usados para resaltar el día presente.
-  - dia: Devuelve el día y la fecha completa del día mostrado en el calendario.
-  - sesionesDelDia: Filtra las sesiones para obtener solo las que coinciden con el día mostrado.
+  - permisoEdicion: Retorna un booleano que indica si el grupo actual de la sesión está en la lista de grupos con permisos de edición.
 
-  Métodos:
-  - emitirEvento: Emite el evento `sesion-seleccionada` al hacer clic en una sesión, pasando la sesión seleccionada como payload.
+  Eventos:
+  - cerrarTarjeta: Se emite cuando el usuario cierra la tarjeta.
+  - editarSesion: Se emite cuando el usuario selecciona la opción de editar la sesión, entregando el objeto de la sesión como payload.
+  - borrarSesion: Se emite cuando el usuario selecciona la opción de eliminar la sesión, entregando el objeto de la sesión como payload.
+  - detalle: Se emite cuando el usuario selecciona la opción de ver la sesión completa, entregando el objeto de la sesión como payload.
 -->
+
 <template>
   <v-card class="contenedor-flex">
     <v-card-title class="espacio-completo">

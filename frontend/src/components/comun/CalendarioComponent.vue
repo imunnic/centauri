@@ -7,14 +7,15 @@
   - SelectorFechaComponent: Componente que permite seleccionar una fecha y cambiar el modo de 
     visualización (mes o día). Recibe la propiedad `fecha` y emite eventos `cambiar-fecha` y 
     `cambiar-modo`.
-  - CuerpoCalendarioComponent: Componente que representa el calendario mensual. Recibe la propiedad 
+  - CuerpoCalendarioComponent: Componente que representa el calendario mensual. Recibe las propiedades 
     `fecha` y `sesiones`, y emite los eventos `fecha-seleccionada` para seleccionar una fecha y 
     `sesion-seleccionada` para abrir una sesión específica.
   - CuerpoCalendarioDiaComponent: Componente que representa el calendario en modo día. Recibe 
-    la propiedad `fecha` y `sesiones`, y emite el evento `sesion-seleccionada` cuando se selecciona 
-    una sesión específica.
+    las propiedades `fecha` y `sesiones`, y emite los eventos `fecha-seleccionada` y 
+    `sesion-seleccionada` cuando se selecciona una sesión específica.
   - DetalleSesionComponent: Componente que muestra el detalle de una sesión seleccionada. Recibe 
-    la propiedad `sesion` y emite el evento `cerrar-tarjeta` para cerrar el diálogo de detalles.
+    las propiedades `sesion` y `gruposConPermiso`, y emite los eventos `editarSesion`, `borrarSesion`, 
+    `cerrar-tarjeta` y `detalle` para interactuar con la sesión seleccionada.
 
   Props:
   - sesiones: Array de sesiones que se muestran en el calendario. Cada sesión tiene una fecha, un 
@@ -22,20 +23,20 @@
   - modoInicial: Modo de visualización del calendario ("mes" o "día"), que se recibe como prop y define la 
     vista inicial del calendario. El valor inicial de la prop es gestionado internamente a través de 
     la variable `modo`.
-
-  Data:
-  - fecha: Fecha actual seleccionada para el calendario.
-  - modo: Modo de visualización del calendario, gestionado internamente por el componente.
-  - mostrarTarjeta: Booleano que indica si se debe mostrar la tarjeta de detalles de la sesión. 
-  - sesionSeleccionada: Objeto que contiene la sesión seleccionada actualmente.
-
-  Métodos:
-  - enviarFecha: Emite la fecha seleccionada en el calendario.
-  - cambiarFecha: Cambia la fecha en el calendario según el modo seleccionado (día o mes).
-  - cambiarModo: Cambia entre los modos de vista "mes" y "día", y actualiza `modo`.
-  - mostrarSesion: Muestra la tarjeta de detalles de una sesión seleccionada.
-  - cerrarTarjeta: Cierra la tarjeta de detalles de la sesión.
+  - gruposConPermiso: Array que define los grupos con permiso para ver o editar las sesiones en el detalle.
+  
+  Eventos:
+  - cambiar-fecha: Emitido por `SelectorFechaComponent` cuando se selecciona una nueva fecha.
+  - cambiar-modo: Emitido por `SelectorFechaComponent` cuando se cambia entre las vistas de "mes" y "día".
+  - fecha-seleccionada: Emitido por `CuerpoCalendarioComponent` y `CuerpoCalendarioDiaComponent` al seleccionar una fecha en el calendario.
+  - sesion-seleccionada: Emitido por `CuerpoCalendarioComponent` y `CuerpoCalendarioDiaComponent` cuando se selecciona una sesión específica.
+  - editarSesion: Emitido por `DetalleSesionComponent` al seleccionar la opción de editar una sesión.
+  - borrarSesion: Emitido por `DetalleSesionComponent` al seleccionar la opción de borrar una sesión.
+  - cerrar-tarjeta: Emitido por `DetalleSesionComponent` para cerrar la tarjeta de detalles de la sesión.
+  - detalle: Emitido por `DetalleSesionComponent` para ver más detalles de una sesión.
 -->
+
+
 
 <template>
   <v-container>

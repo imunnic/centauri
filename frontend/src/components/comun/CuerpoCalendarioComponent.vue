@@ -1,18 +1,16 @@
 <!--
-  Este componente permite seleccionar una fecha y cambiar el modo de visualización del calendario
-  entre "mes" y "día". Emite eventos para notificar cuando se realiza un cambio de fecha o de modo.
+  Este componente muestra un calendario en formato de mes y permite seleccionar una fecha. Además, 
+  muestra las sesiones del día y emite eventos cuando se selecciona una fecha o una sesión.
 
   Props:
-  - fecha: La fecha actualmente seleccionada que se muestra en el selector de fecha.
+  - fecha: La fecha actualmente seleccionada que se muestra en el calendario.
+  - sesiones: Un array de sesiones que se muestran en el calendario. Cada sesión tiene una fecha, un nombre, y un grupo con su color asociado.
 
   Eventos:
-  - cambiar-fecha: Se emite cuando el usuario cambia la fecha, entregando la nueva fecha como payload.
-  - cambiar-modo: Se emite cuando el usuario cambia el modo de visualización del calendario ("mes" o "día").
-
-  Métodos:
-  - actualizarFecha: Actualiza la fecha seleccionada cuando el usuario interactúa con el selector.
-  - cambiarModo: Cambia el modo de visualización entre "mes" y "día", emitiendo el evento correspondiente.
+  - fecha-seleccionada: Se emite cuando el usuario selecciona una fecha, entregando la fecha completa como payload.
+  - sesion-seleccionada: Se emite cuando el usuario selecciona una sesión específica, entregando el objeto de la sesión como payload.
 -->
+
 <template>
   <v-container fluid>
     <v-row class="no-gutters"> <!-- https://vuetifyjs.com/en/components/grids/#justify -->

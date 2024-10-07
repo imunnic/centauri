@@ -6,6 +6,9 @@
   Props:
   - aplicacion: Objeto que contiene el nombre y la ruta del icono de la aplicación desde la 
   carpeta raíz. Ej: {nombre:'mi nombre', icono:'/src/assets/favicon.png'}
+
+  Eventos:
+  - navegacion: Se emite cuando el usuario clicka sobre el botón.
   
   Para controlar el navegador se puede utilizar este código en el componente padre al 
   emitir el evento navegación:

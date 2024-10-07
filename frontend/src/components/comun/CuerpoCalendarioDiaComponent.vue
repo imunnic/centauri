@@ -1,20 +1,21 @@
 <!--
-  Este componente muestra un día específico en el calendario, con la lista de sesiones programadas 
-  para ese día. Si es el día actual, se resalta visualmente. Además, permite emitir un evento cuando 
-  se selecciona una sesión.
+  Este componente muestra las sesiones programadas para un día específico en el calendario. Si es el día actual, 
+  se resalta visualmente. También emite eventos cuando se selecciona una sesión o una fecha.
 
   Props:
-  - fecha: La fecha correspondiente al día que se está mostrando.
-  - sesiones: Array de sesiones programadas, de las cuales se filtran aquellas que pertenecen al día actual.
+  - fecha: La fecha del día que se está mostrando en el calendario.
+  - sesiones: Array de sesiones programadas, de las cuales se filtran las que corresponden al día mostrado.
 
   Computed:
   - fechaActual: Devuelve el día, mes y año actuales, usados para resaltar el día presente.
-  - dia: Devuelve el día y la fecha completa del día mostrado en el calendario.
-  - sesionesDelDia: Filtra las sesiones para obtener solo las que coinciden con el día mostrado.
+  - dia: Devuelve la información del día mostrado, incluyendo su fecha completa.
+  - sesionesDelDia: Filtra y devuelve solo las sesiones que pertenecen al día mostrado.
 
-  Métodos:
-  - emitirEvento: Emite el evento `sesion-seleccionada` al hacer clic en una sesión, pasando la sesión seleccionada como payload.
+  Eventos:
+  - sesion-seleccionada: Se emite cuando se selecciona una sesión, entregando el objeto de la sesión como payload.
+  - fecha-seleccionada: Se emite cuando se selecciona una fecha, entregando la fecha completa como payload.
 -->
+
 <template>
   <v-container fluid>
     <v-card class="carta-dia" elevation="2" @click="emitirFecha(dia)">

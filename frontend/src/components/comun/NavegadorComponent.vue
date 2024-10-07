@@ -1,20 +1,11 @@
 <!--
-  Este componente forma la barra lateral de navegación de forma que se pueda visualizar o no.
-  Utiliza la librería de Vuetify(https://vuetifyjs.com/)como apoyo. Cuenta con migas de pan
-  automáticas y las items del menú se personalizan pasandolos por propiedad.
+  Este componente forma la barra lateral de navegación y las migas de pan automáticas para la interfaz de la aplicación. Utiliza la librería Vuetify (https://vuetifyjs.com/) como base de diseño.
 
   Props:
-  - menuItemsProp: Array de objetos que define los elementos del menú lateral. Cada objeto debe 
-    contener las propiedades `title` (texto del menú), `prependIcon` (ícono del menú) y `ruta` 
-    (ruta a la que se debe navegar al hacer clic en el ítem).
-
-  Data:
-  - barraLateral: Booleano que controla la visibilidad del menú lateral.
-
-  Computed:
-  - migasDePan: Computa las migas de pan basadas en la ruta actual. Divide la ruta en partes y 
-    genera enlaces (`href`) y títulos (`title`) para cada parte. La última parte está deshabilitada 
-    para indicar que es la página actual.
+  - menuItemsProp: Array de objetos que define los elementos del menú lateral. Cada objeto del array debe tener las siguientes propiedades:
+    - `title`: El texto que se mostrará para el ítem del menú.
+    - `prependIcon`: El ícono que se mostrará antes del texto (íconos de Material Design).
+    - `ruta`: La ruta a la que se navega al hacer clic en el ítem del menú.
 -->
 
 <template>

@@ -1,42 +1,29 @@
 <!--
-  Este componente actúa integra varios subcomponentes de forma que se muestre un elemento que
-  permita la búsqueda y visualización de cualquier listado de elementos, así como el poder
-  realizar distintas acciones sobre ellos. Se apoya en la librería de Vuetify (https://vuetifyjs.com/).
-
-  Componentes:
-  - BuscadorComponent: Componente de búsqueda que permite filtrar los ítems de la lista. Recibe 
-    las propiedades `items` y `filtros`, y emite un evento `filtrada` con los ítems filtrados. Al 
-    buscador se le pasa un listado con todas las propiedades de los objetos del listado para buscar
-    por ellas.
-  - ItemListaComponent: Componente que representa cada ítem en la lista. Recibe la propiedad 
-    `item` y un array de `acciones` para cada ítem, y emite eventos para manejar clics, ediciones, 
-    y eliminaciones. También permite la inserción de contenido adicional a través del slot `info-extra`.
-  - FabBotonComponent: Botón flotante que aparece en la esquina inferior derecha de la pantalla. 
-    Se muestra solo si la propiedad `permisoCreacion` es `true` y emite un evento `click` para 
-    crear un nuevo ítem.
+  Este componente representa un elemento en una lista, diseñado para ser utilizado dentro de un componente padre. Está construido con Vuetify (https://vuetifyjs.com/), permitiendo mostrar información y realizar acciones específicas sobre cada ítem.
 
   Props:
-  - items: Array de ítems que se mostrarán en la lista. Debe ser proporcionado por el componente 
-    padre.
-  - cargando: Booleano que indica si los datos están siendo cargados. Si es `true`, muestra un 
-    spinner de carga.
-  - permisoCreacion: Booleano que determina si el botón flotante de acción está habilitado. Por 
-    defecto es `true`.
-  - descripcion: booleano que muestra o deja de mostrar la descripción de los objetos que 
-    se representan en la lista. Por defecto es verdadero.
-  - mostrarImagen: muestra imagen si la tienen los objetos que se representan en la lista.
-  - imagenPredeterminada: enlace a una imagen predeterminada para mostrar en caso de que los objetos
-    no tengan imagen.
+  - item: Objeto que representa el ítem mostrado en la tarjeta. Debe contener al menos las propiedades:
+      - `nombre`: El nombre del ítem.
+      - `descripcion`: Una breve descripción del ítem.
+      - `url`: (opcional) URL de la imagen asociada al ítem.
+  - acciones: Array de objetos que define las acciones disponibles para el ítem. Cada objeto debe contener:
+      - `icon`: El nombre del icono (de Material Design Icons).
+      - `color`: El color del botón de acción.
+      - `evento`: El evento que se emitirá al hacer clic en el botón.
+    Por defecto, se incluyen dos acciones: editar (ícono 'mdi-pencil') y eliminar (ícono 'mdi-trash-can').
+  - descripcion: Booleano que indica si se debe mostrar o no la descripción del ítem. El valor predeterminado es `true`.
+  - mostrarImagen: Booleano que indica si se debe mostrar la imagen asociada al ítem. El valor predeterminado es `false`.
+  - imagenPredeterminada: String que especifica la URL de una imagen predeterminada que se mostrará si el ítem no tiene una imagen propia. El valor por defecto es '/no-imagen.png'.
 
-  Data:
-  - itemsFiltrados: Array que contiene los ítems después de aplicar los filtros.
-  - filtrosCompletos: Array de claves de los ítems que se usan para los filtros.
+  Slots:
+  - info-extra: Un slot opcional que permite inyectar contenido extra debajo de la descripción del ítem.
 
-  Computed:
-  - acciones: Devuelve un array de acciones disponibles para los ítems basadas en el permiso de 
-    creación.
-
+  Eventos:
+  - editar: Se emite cuando se hace clic en el botón de editar.
+  - eliminar: Se emite cuando se hace clic en el botón de eliminar.
+  (Estos son los eventos predeterminados, pero pueden variar si se modifican las acciones).
 -->
+
 <template>
   <v-container>
     <div v-if="cargando" class="circulo-carga">

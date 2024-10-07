@@ -6,7 +6,7 @@
       "nombre":"rojo",
       "valor": "#a20505"
     }, 
-    "miembros":["dparlop", "aminman","imunnic"]
+    "miembros":["dparlop", "aminman","imunnic", "jgodoylo"]
   },
   {
     "nombre":"Grupo 2",
@@ -15,7 +15,16 @@
       "nombre":"azul",
       "valor": "#0202aa"
     },
-    "miembros":["dparlop", "aminman","imunnic"]
+    "miembros":["dparlop", "aminman","imunnic", "jgodoylo"]
+  },
+  {
+    "nombre":"Grupo 3",
+    "encargado":"jgodoylo",
+    "color":{
+      "nombre":"azul",
+      "valor": "#0202aa"
+    },
+    "miembros":["dparlop", "aminman","imunnic", "jgodoylo"]
   },
   {
     "nombre":"Patrulla de tiro",
@@ -24,6 +33,6 @@
       "nombre":"gris",
       "valor": "#737373"
     },
-    "miembros":["dparlop", "aminman","imunnic"]
+    "miembros":["dparlop", "aminman","imunnic", "jgodoylo"]
   }
 ]
