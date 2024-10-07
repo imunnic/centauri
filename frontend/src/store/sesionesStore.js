@@ -58,6 +58,10 @@ export const useSesionesStore = defineStore("sesiones", {
     async validarFichasSesion(sesion){
       let response = await this.sesionesService.validarFichasSesion(sesion);
       return response.data;
+    },
+    async getFichasDeSesionConId(sesionId){
+      let response = await this.sesionesService.getFichasDeSesionConId(sesionId);
+      return response.data._embedded.fichas;
     }
   },
 });

@@ -69,6 +69,7 @@
         @editarSesion="editarSesion"
         @borrarSesion="borrarSesion"
         @cerrarTarjeta="cerrarTarjeta"
+        @detalle="verDetalle" 
       />
     </v-dialog>
   </v-container>
@@ -144,6 +145,9 @@ export default {
     cerrarTarjeta() {
       this.mostrarTarjeta = false;
     },
+    verDetalle(sesion){
+      this.$emit("detalle",sesion.href);
+    }
   },
 };
 </script>
