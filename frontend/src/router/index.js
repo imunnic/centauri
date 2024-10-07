@@ -54,6 +54,10 @@ const routes = [
     component: () => import("../vistas/SesionDetalleVista.vue"),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/:catchAll(.*)',
+    redirect: '/usuario'
+  }
 ];
 
 const router = createRouter({

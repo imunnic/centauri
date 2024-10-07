@@ -133,6 +133,7 @@ export default {
       this.mostrarFormulario = true;
     },
     async sesionEditada(sesion){
+      console.log(sesion);
       await this.modificarSesion(sesion)
       this.edicion = false;
       let sesiones = await this.cargarSesiones(this.gruposUsuario);

@@ -94,7 +94,11 @@
             placeholder="Seleccione vuelta a la calma"
             class="item-flex placeholder"
           ></v-autocomplete>
-          <v-btn aria-label="crear-sesion" v-if="!edicion" type="submit" class="claro"
+          <v-btn
+            aria-label="crear-sesion"
+            v-if="!edicion"
+            type="submit"
+            class="claro"
             >Crear Sesión</v-btn
           >
           <v-btn aria-label="editar-sesion" v-else type="submit" class="claro"
@@ -183,16 +187,28 @@ export default {
     },
     submitForm() {
       const fichasFundamentalHref = this.fundamental.map(
-        (ficha) => configuracion.urlBase + "fichas/" + ficha
+        (ficha) =>
+          configuracion.urlBase +
+          "fichas/" +
+          (typeof ficha === "object" ? ficha.id : ficha)
       );
       const fichasCalentamientoHref = this.calentamiento.map(
-        (ficha) => configuracion.urlBase + "fichas/" + ficha
+        (ficha) =>
+          configuracion.urlBase +
+          "fichas/" +
+          (typeof ficha === "object" ? ficha.id : ficha)
       );
       const fichasCoordinacionHref = this.coordinacion.map(
-        (ficha) => configuracion.urlBase + "fichas/" + ficha
+        (ficha) =>
+          configuracion.urlBase +
+          "fichas/" +
+          (typeof ficha === "object" ? ficha.id : ficha)
       );
       const fichasCalmaHref = this.vueltaCalma.map(
-        (ficha) => configuracion.urlBase + "fichas/" + ficha
+        (ficha) =>
+          configuracion.urlBase +
+          "fichas/" +
+          (typeof ficha === "object" ? ficha.id : ficha)
       );
       let nuevaSesion = {
         nombre: this.nombre,
@@ -206,6 +222,7 @@ export default {
           ...fichasCalmaHref,
         ],
       };
+      console.log(nuevaSesion);
       if (this.edicion) {
         nuevaSesion.href = this.sesion.href;
         this.$emit("sesionEditada", nuevaSesion);
