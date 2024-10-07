@@ -28,6 +28,7 @@
         @fecha-seleccionada="nuevaSesion"
         @borrarSesion="borrarSesion"
         @editarSesion="editarSesion"
+        @detalle="navegarADetalleSesion"
         :modoInicial="modoInicial"
         :sesiones="sesiones"
         :gruposConPermiso="gruposEncargado"
@@ -132,6 +133,7 @@ export default {
       this.mostrarFormulario = true;
     },
     async sesionEditada(sesion){
+      console.log(sesion);
       await this.modificarSesion(sesion)
       this.edicion = false;
       let sesiones = await this.cargarSesiones(this.gruposUsuario);
@@ -145,6 +147,10 @@ export default {
 
       return new Date(ano, mes, dia);
     },
+    navegarADetalleSesion(sesionHref) {
+      let id = sesionHref.split("/").pop();
+      this.$router.push("/sesiones/" + id);
+    }
   },
   async created() {
     let misGrupos = grupos.filter((grupo) =>

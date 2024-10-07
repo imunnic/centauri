@@ -39,4 +39,9 @@ export default class sesionesService {
       let href = url + "/validar"
       return await axios.post(href, sesion, config);
     }
+
+    async getFichasDeSesionConId(sesionId){
+      let href = url + "/" + sesionId + "/fichas";
+      return await axios.get(href, config);
+    }
 }

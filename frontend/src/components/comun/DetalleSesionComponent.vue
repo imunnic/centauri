@@ -51,6 +51,7 @@
     </v-card-text>
 
     <v-card-actions class="botones">
+      <v-btn aria-label="ver-sesion" class="claro" @click="detalle">Ver sesión completa</v-btn>
       <v-btn aria-label="cerrar-tarjeta" class="claro" @click="cerrarTarjeta">Cerrar</v-btn>
     </v-card-actions>
   </v-card>
@@ -84,6 +85,9 @@ export default {
     borrarSesion() {
       this.$emit("borrarSesion", this.sesion);
     },
+    detalle(){
+      this.$emit("detalle", this.sesion);
+    }
   },
 };
 </script>
