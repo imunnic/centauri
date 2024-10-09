@@ -51,8 +51,7 @@ Este proyecto se inció el 2 de septiembre de 2024 y se encuentra en **proceso d
 
 ## URLs del proyecto:
    
-![GitLab](https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white)   
- Repositorio proyecto: https://git.institutomilitar.com/imunnic/centauri ![GitLab](https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white)   
+![GitLab](https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white)  Repositorio proyecto: https://git.institutomilitar.com/imunnic/centauri  
 
 ![Heroku](https://img.shields.io/badge/heroku-%23430098.svg?style=for-the-badge&logo=heroku&logoColor=white)  Despliegue API: https://centauri-f0529a419054.herokuapp.com/api  
 
