@@ -16,6 +16,11 @@ export const useSesionesRealizadasStore = defineStore("sesionesRealizadas", {
           hrefUsuario
         );
         this.sesionesRealizadasRegistradas = response.data._embedded.sesionesRealizadas;
+        this.sesionesRealizadasRegistradas.sort((a, b) => {
+          let fechaA = new Date(a.fechaSesion);
+          let fechaB = new Date(b.fechaSesion);
+          return fechaB - fechaA;
+      });
     },
     async crearSesionRealizada(sesionRealizada) {
       await this.sesionesRealizadasService.crearSesionRealizada(

@@ -1,52 +1,57 @@
 <template>
-  <div class="contenedor flex-fila">
-    <div v-if="isPantallaGrande" class="contenedor grupos izquierda">
-      <b>Grupos:</b>
-      <v-card
-        v-for="(item, index) in gruposUsuario"
-        :key="index"
-        class="carta contenedor"
-        elevation="2"
-        :style="getCartaStyle(item)"
-      >
-        <p class="texto">{{ item.nombre }}</p>
-      </v-card>
-
-      <b>Encargado de:</b>
-      <v-card
-        v-for="(item, index) in gruposEncargado"
-        :key="index"
-        class="carta contenedor"
-        elevation="2"
-        :style="getCartaStyle(item)"
-      >
-        <p class="texto">{{ item.nombre }}</p>
-      </v-card>
-      <b>Últimas sesiones:</b>
-      <v-card
-        v-for="(item, index) in sesionesRealizadasRegistradas"
-        :key="index"
-        class="carta contenedor"
-        elevation="2"
-        @click="navegarADetalleSesion(item.sesionId)"
-      >
-        <b
-          ><div class="contenedor-flex">
-            <p class="texto">{{ item.nombreSesion }}</p>
-            <p class="texto">
-              {{ formatoFechaConBarra(item.fechaSesion) }}
-            </p>
-          </div></b
+  <div class="contenedor-flex agenda">
+    <div class="contenedor grupos izquierda">
+      <div v-if="isPantallaGrande">
+        <b>Grupos:</b>
+        <v-card
+          v-for="(item, index) in gruposUsuario"
+          :key="index"
+          class="carta contenedor"
+          elevation="2"
+          :style="getCartaStyle(item)"
         >
-        <div class="contenedor-flex resultados">
-          <p class="texto">RPE: {{ item.rpe }}</p>
-          <p class="texto">Tiempo: {{ item.tiempo }}</p>
-          <p class="texto">Comentarios: {{ item.comentarios }}</p>
-        </div>
-        <v-icon :class="iconClass(item.rpe)" class="icono-rpe">
-          {{ getIcon(item.rpe) }}
-        </v-icon>
-      </v-card>
+          <p class="texto">{{ item.nombre }}</p>
+        </v-card>
+      </div>
+      <div v-if="isPantallaGrande">
+        <b>Encargado de:</b>
+        <v-card
+          v-for="(item, index) in gruposEncargado"
+          :key="index"
+          class="carta contenedor"
+          elevation="2"
+          :style="getCartaStyle(item)"
+        >
+          <p class="texto">{{ item.nombre }}</p>
+        </v-card>
+      </div>
+      <div>
+        <b>Últimas sesiones:</b>
+        <v-card
+          v-for="(item, index) in sesionesRealizadasRegistradas"
+          :key="index"
+          class="carta contenedor ultimas-sesiones"
+          elevation="2"
+          @click="navegarADetalleSesion(item.sesionId)"
+        >
+          <b
+            ><div class="contenedor-flex">
+              <p class="texto">{{ item.nombreSesion }}</p>
+              <p class="texto">
+                {{ formatoFechaConBarra(item.fechaSesion) }}
+              </p>
+            </div></b
+          >
+          <div class="contenedor-flex resultados">
+            <p class="texto">RPE: {{ item.rpe }}</p>
+            <p class="texto">Tiempo: {{ item.tiempo }}</p>
+            <p class="texto">Comentarios: {{ item.comentarios }}</p>
+          </div>
+          <v-icon :class="iconClass(item.rpe)" class="icono-rpe">
+            {{ getIcon(item.rpe) }}
+          </v-icon>
+        </v-card>
+      </div>
     </div>
     <div class="derecha">
       <CalendarioComponent
@@ -230,6 +235,9 @@ export default {
         return "icono-rojo";
       }
     },
+    manejarCambioTamano(){
+      this.anchoPantalla= window.innerWidth
+    }
   },
   async created() {
     let misGrupos = grupos.filter((grupo) =>
@@ -290,7 +298,7 @@ export default {
 
 .carta::before {
   width: 5px;
-  background-color: var(--claro);
+  background-color: var(--bg-color);
 }
 
 .icono-rpe {
@@ -303,6 +311,10 @@ export default {
   color: white;
 }
 
+.carta.ultimas-sesiones::before{
+  background-color: var(--claro);
+}
+
 .icono-verde {
   background-color: var(--suave);
 }
@@ -313,5 +325,26 @@ export default {
 
 .icono-rojo {
   background-color: var(--rechazo);
+}
+
+@media (max-width: 1500px) {
+  .agenda {
+    flex-flow: column-reverse; 
+    align-items: center
+  }
+
+  .grupos{
+    max-width: 1200px;
+    padding: 16px;
+  }
+
+  .izquierda {
+    width: 100% !important; 
+  }
+
+  .derecha {
+    width: 100%;
+    padding-left: 0; 
+  }
 }
 </style>
