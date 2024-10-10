@@ -20,14 +20,8 @@
         >
       </v-card-subtitle>
       <v-card-text>
-        <iframe
-          v-if="ejercicio.url"
-          :src="formatoUrl(ejercicio.url)"
-          frameborder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          class="iframe-centrado"
-        ></iframe>
+        <LiteYouTubeEmbed v-if="ejercicio.url" :id="videoId(ejercicio.url)"></LiteYouTubeEmbed>
+
         <div v-else class="contenedor-imagen">
           <p class="mensaje-video-no-disponible">No hay video disponible</p>
           <img
@@ -67,10 +61,13 @@
 
 <script>
 import configuracion from "@/configuracion.json";
+import LiteYouTubeEmbed from 'vue-lite-youtube-embed'
+import 'vue-lite-youtube-embed/style.css'
 import { useEjerciciosStore } from "@/store/ejerciciosStore.js";
 import { mapActions } from "pinia";
 
 export default {
+  components:{LiteYouTubeEmbed},
   props: {
     ejercicio: {
       type: Object,
@@ -100,8 +97,10 @@ export default {
   },
   methods: {
     ...mapActions(useEjerciciosStore, ["getEquipamientoDeEjercicio"]),
-    formatoUrl(url) {
-      return url.replace("watch?v=", "embed/");
+    videoId(url) {
+      console.log(url);
+      console.log(url.split('=').pop());
+      return url.split('=').pop();
     },
     cerrar() {
       this.dialog = false;

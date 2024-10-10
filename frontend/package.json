@@ -15,6 +15,8 @@
     "roboto-fontface": "*",
     "uuid": "^10.0.0",
     "vue": "^3.3.0",
+    "vue-lite-youtube-embed": "^1.2.4",
+    "vue-youtube-embed": "^2.2.2",
     "vuedraggable": "^4.1.0",
     "vuetify": "^3.0.0"
   },
