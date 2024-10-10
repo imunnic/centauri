@@ -15,19 +15,32 @@
 <template>
   <v-container>
     <div class="contenedor-flex">
-      <v-btn aria-label="anterior-fecha" @click="$emit('cambiar-fecha', -1)" icon flat>
+      <v-btn
+        aria-label="anterior-fecha"
+        @click="$emit('cambiar-fecha', -1)"
+        icon
+        flat
+      >
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
 
       <div class="contenedor-texto">
-        <v-toolbar-title><b>{{ fechaMostrada }}</b></v-toolbar-title>
+        <v-toolbar-title
+          ><b>{{ fechaMostrada }}</b></v-toolbar-title
+        >
       </div>
 
-      <v-btn aria-label="siguiente-fecha" @click="$emit('cambiar-fecha', 1)" icon flat>
+      <v-btn
+        aria-label="siguiente-fecha"
+        @click="$emit('cambiar-fecha', 1)"
+        icon
+        flat
+      >
         <v-icon>mdi-chevron-right</v-icon>
       </v-btn>
 
       <v-select
+        v-if="isPantallaGrande"
         class="selector placeholder"
         placeholder="Modo"
         v-model="modo"
@@ -44,39 +57,58 @@ export default {
   props: {
     fecha: {
       type: Date,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     fechaMostrada() {
-      if (this.modo === 'dia') {
-        const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        return this.mayusculaPrimero(this.fecha.toLocaleDateString('es-ES', opciones));
-      } else if (this.modo === 'mes') {
-        const opciones = { year: 'numeric', month: 'long' };
-        return this.mayusculaPrimero(this.fecha.toLocaleDateString('es-ES', opciones));
+      if (this.modo === "dia") {
+        const opciones = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        return this.mayusculaPrimero(
+          this.fecha.toLocaleDateString("es-ES", opciones)
+        );
+      } else if (this.modo === "mes") {
+        const opciones = { year: "numeric", month: "long" };
+        return this.mayusculaPrimero(
+          this.fecha.toLocaleDateString("es-ES", opciones)
+        );
       }
-    }
+    },
+    isPantallaGrande() {
+      return this.anchoPantalla > 600;
+    },
   },
   data() {
     return {
-      modo: 'mes',
+      anchoPantalla: window.innerWidth,
+      modo: "mes",
       modos: [
-        { valor: 'dia', texto: 'Día' },
-        { valor: 'mes', texto: 'Mes' }
-      ]
+        { valor: "dia", texto: "Día" },
+        { valor: "mes", texto: "Mes" },
+      ],
     };
   },
   methods: {
     mayusculaPrimero(texto) {
       return texto.charAt(0).toUpperCase() + texto.slice(1);
-    }
+    },
   },
   watch: {
     modo(nuevoModo) {
-      this.$emit('cambiar-modo', nuevoModo);
-    }
-  }
+      this.$emit("cambiar-modo", nuevoModo);
+    },
+  },
+  mounted() {
+    window.addEventListener("resize", this.manejarCambioTamano);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.manejarCambioTamano);
+  },
 };
 </script>
 

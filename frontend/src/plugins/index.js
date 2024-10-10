@@ -1,4 +1,3 @@
-
 import vuetify from './vuetify'
 import router from '@/router'
 import { createPinia } from 'pinia'

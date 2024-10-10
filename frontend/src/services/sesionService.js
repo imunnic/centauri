@@ -7,7 +7,7 @@ let config = {
   },
 };
 
-export default class sesionesService {
+export default class SesionesService {
     constructor() {}
   
     actualizarCabecera(token) {
@@ -44,4 +44,5 @@ export default class sesionesService {
       let href = url + "/" + sesionId + "/fichas";
       return await axios.get(href, config);
     }
+
 }

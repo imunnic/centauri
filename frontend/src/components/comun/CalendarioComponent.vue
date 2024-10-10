@@ -1,10 +1,10 @@
 <!--
   Este componente permite la visualización de sesiones en un calendario, con la opción de cambiar 
-  entre la vista de mes y día. Además, integra un selector de fecha y un detalle para ver las 
-  sesiones seleccionadas. Se apoya en la librería de Vuetify (https://vuetifyjs.com/).
+  entre la vista de mes y día. Además, integra un selector de fecha y un detalle de sesiones seleccionadas. 
+  Se apoya en la librería Vuetify (https://vuetifyjs.com/).
 
   Componentes:
-  - SelectorFechaComponent: Componente que permite seleccionar una fecha y cambiar el modo de 
+  - SelectorFechaComponent: Componente para seleccionar una fecha y cambiar el modo de 
     visualización (mes o día). Recibe la propiedad `fecha` y emite eventos `cambiar-fecha` y 
     `cambiar-modo`.
   - CuerpoCalendarioComponent: Componente que representa el calendario mensual. Recibe las propiedades 
@@ -20,11 +20,13 @@
   Props:
   - sesiones: Array de sesiones que se muestran en el calendario. Cada sesión tiene una fecha, un 
     nombre y un listado de fichas asociadas.
-  - modoInicial: Modo de visualización del calendario ("mes" o "día"), que se recibe como prop y define la 
-    vista inicial del calendario. El valor inicial de la prop es gestionado internamente a través de 
-    la variable `modo`.
+  - modoInicial: Modo de visualización del calendario ("mes" o "día"), que define la 
+    vista inicial del calendario. Se gestiona internamente mediante la variable `modo`.
   - gruposConPermiso: Array que define los grupos con permiso para ver o editar las sesiones en el detalle.
-  
+
+  Slots:
+  - detalle-sesion: Slot que permite personalizar el contenido del detalle de la sesión mostrada en el diálogo.
+
   Eventos:
   - cambiar-fecha: Emitido por `SelectorFechaComponent` cuando se selecciona una nueva fecha.
   - cambiar-modo: Emitido por `SelectorFechaComponent` cuando se cambia entre las vistas de "mes" y "día".
@@ -33,10 +35,7 @@
   - editarSesion: Emitido por `DetalleSesionComponent` al seleccionar la opción de editar una sesión.
   - borrarSesion: Emitido por `DetalleSesionComponent` al seleccionar la opción de borrar una sesión.
   - cerrar-tarjeta: Emitido por `DetalleSesionComponent` para cerrar la tarjeta de detalles de la sesión.
-  - detalle: Emitido por `DetalleSesionComponent` para ver más detalles de una sesión.
 -->
-
-
 
 <template>
   <v-container>
@@ -64,14 +63,12 @@
     />
 
     <v-dialog v-model="mostrarTarjeta" max-width="400">
-      <DetalleSesionComponent
-        :sesion="sesionSeleccionada"
-        :gruposConPermiso="gruposConPermiso"
-        @editarSesion="editarSesion"
-        @borrarSesion="borrarSesion"
-        @cerrarTarjeta="cerrarTarjeta"
-        @detalle="verDetalle" 
-      />
+      <v-card class="tarjeta">
+        <v-icon @click="cerrarTarjeta" class="icono-cerrar">mdi-close</v-icon>
+        <slot name="detalle-sesion">
+          
+        </slot>
+      </v-card>
     </v-dialog>
   </v-container>
 </template>
@@ -79,14 +76,12 @@
 <script>
 import SelectorFechaComponent from "./SelectorFechaComponent.vue";
 import CuerpoCalendarioComponent from "./CuerpoCalendarioComponent.vue";
-import DetalleSesionComponent from "./DetalleSesionComponent.vue";
 import CuerpoCalendarioDiaComponent from "./CuerpoCalendarioDiaComponent.vue";
 
 export default {
   components: {
     SelectorFechaComponent,
     CuerpoCalendarioComponent,
-    DetalleSesionComponent,
     CuerpoCalendarioDiaComponent,
   },
   props: {
@@ -132,6 +127,7 @@ export default {
       this.$emit("modo-cambiado", nuevoModo);
     },
     mostrarSesion(sesion) {
+      this.$emit("sesion-seleccionada", sesion);
       this.sesionSeleccionada = sesion;
       this.mostrarTarjeta = true;
     },
@@ -145,9 +141,6 @@ export default {
     },
     cerrarTarjeta() {
       this.mostrarTarjeta = false;
-    },
-    verDetalle(sesion){
-      this.$emit("detalle",sesion.href);
     }
   },
 };
@@ -156,5 +149,14 @@ export default {
 <style scoped>
 .calendario {
   width: 100%;
+}
+.icono-cerrar{
+  padding: 10px;
+  cursor: pointer;
+  color: gray;
+  align-self: flex-end;
+}
+.tarjeta{
+  display: flex;
 }
 </style>

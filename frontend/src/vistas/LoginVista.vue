@@ -41,6 +41,7 @@ import { useFichasStore } from "@/store/fichasStore.js";
 import { useEjerciciosStore } from "@/store/ejerciciosStore.js";
 import { useEquipamientosStore } from "@/store/equipamientosStore.js";
 import { useSesionesStore } from "@/store/sesionesStore.js";
+import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js"
 import { mapState, mapActions } from "pinia";
 export default {
   computed: {
@@ -65,6 +66,7 @@ export default {
     ...mapActions(useEjerciciosStore, ["arrancarServicioEjercicios"]),
     ...mapActions(useEquipamientosStore, ["arrancarServicioEquipamientos"]),
     ...mapActions(useSesionesStore, ["arrancarServicioSesion"]),
+    ...mapActions(useSesionesRealizadasStore, ["arrancarServicioSesionRealizada"]),
     async intentarLogin() {
       try {
         await this.peticionLogin(this.logeo);
@@ -72,6 +74,7 @@ export default {
         this.arrancarServicioEjercicios(this.token);
         this.arrancarServicioEquipamientos(this.token);
         this.arrancarServicioSesion(this.token);
+        this.arrancarServicioSesionRealizada(this.token);
         this.$router.push("/usuario")
       } catch (error) {
         console.error("Error en el login:", error);

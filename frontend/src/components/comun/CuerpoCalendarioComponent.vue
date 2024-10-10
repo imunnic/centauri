@@ -229,9 +229,11 @@ export default {
 }
 
 .carta-evento {
+  height: 30px;
   margin-bottom: 2px;
   padding: 2px 5px;
-  font-size: 12px;
+  font-size: 18px;
+  font-weight: 400;
   border-radius: 4px;
   color: white;
 }
