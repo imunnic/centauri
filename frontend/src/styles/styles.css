@@ -25,6 +25,9 @@
   background-color: var(--rechazo) !important;
   color: var(--texto) !important;
 }
+.elevado{
+  background-color: var(--elevado) !important;
+}
 .rechazo:hover{
   background-color: var(--rechazo) !important;
   color: var(--texto) !important;

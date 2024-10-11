@@ -1,20 +1,20 @@
 <template>
   <div class="contenedor-flex agenda">
     <div class="contenedor grupos izquierda">
-      <div v-if="isPantallaGrande">
-        <b>Grupos:</b>
+      <v-card elevation="2" v-if="isPantallaGrande" class="grupos">
+        <v-card-title>Grupos:</v-card-title>
         <v-card
           v-for="(item, index) in gruposUsuario"
           :key="index"
-          class="carta contenedor"
+          class="carta contenedor grupo"
           elevation="2"
           :style="getCartaStyle(item)"
         >
           <p class="texto">{{ item.nombre }}</p>
         </v-card>
-      </div>
-      <div v-if="isPantallaGrande">
-        <b>Encargado de:</b>
+      </v-card>
+      <v-card elevation="2" v-if="isPantallaGrande" class="grupos">
+        <v-card-title>Encargado de:</v-card-title>
         <v-card
           v-for="(item, index) in gruposEncargado"
           :key="index"
@@ -24,7 +24,12 @@
         >
           <p class="texto">{{ item.nombre }}</p>
         </v-card>
-      </div>
+        <FabBotonComponent
+          class="boton"
+          :texto="'Nuevo grupo'"
+          @click="abrirFormGrupo"
+        ></FabBotonComponent>
+      </v-card>
       <div>
         <b>Últimas sesiones:</b>
         <v-card
@@ -48,7 +53,7 @@
             <p class="texto">Comentarios: {{ item.comentarios }}</p>
           </div>
           <v-icon :class="iconClass(item.rpe)" class="icono-rpe">
-            {{ getIcon(item.rpe) }}
+            {{ getIcono(item.rpe) }}
           </v-icon>
         </v-card>
       </div>
@@ -87,6 +92,14 @@
         @sesionCreada="sesionCreada"
         @cerrar="cerrarFormularioSesion"
       />
+
+      <GrupoFormComponent
+      v-if="mostrarFormularioGrupo"
+      @crear-grupo="nuevoGrupo"
+      @cerrar="cerrarGrupo"
+      >
+
+      </GrupoFormComponent>
     </div>
   </div>
 </template>
@@ -96,9 +109,12 @@ import DetalleSesionComponent from "@/components/DetalleSesionComponent.vue";
 import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
 import CalendarioComponent from "@/components/comun/CalendarioComponent.vue";
 import SesionFormComponent from "@/components/SesionFormComponent.vue";
+import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
+import GrupoFormComponent from "@/components/GrupoFormComponent.vue";
 import { useSesionesStore } from "@/store/sesionesStore.js";
 import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
-import { useUsuariosStore } from "@/store/usuariosStore";
+import { useUsuariosStore } from "@/store/usuariosStore.js";
+import { useGruposStore } from "@/store/gruposStore.js";
 import { mapActions, mapState } from "pinia";
 import grupos from "@/assets/grupos.json";
 
@@ -108,6 +124,8 @@ export default {
     CalendarioComponent,
     SesionFormComponent,
     DetalleSesionComponent,
+    FabBotonComponent,
+    GrupoFormComponent
   },
   computed: {
     ...mapState(useUsuariosStore, ["username", "href"]),
@@ -116,7 +134,7 @@ export default {
       return this.anchoPantalla > 1500;
     },
     modoInicial() {
-      return this.isPantallaGrande ? "mes" : "dia";
+      return this.anchoPantalla >1000 ? "mes" : "dia";
     },
   },
   data() {
@@ -130,6 +148,7 @@ export default {
       fechaSeleccionada: null,
       sesiones: [],
       mostrarFormulario: false,
+      mostrarFormularioGrupo:false,
       edicion: false,
       sesionSeleccionada: null,
     };
@@ -145,6 +164,10 @@ export default {
       "crearSesionRealizada",
       "cargarSesionesRealizadas",
     ]),
+    ...mapActions(useGruposStore, [
+      "crearGrupo"
+    ]),
+
     nuevaSesion(fecha) {
       if (this.gruposEncargado.length >= 1) {
         this.sesionSeleccionada = {};
@@ -153,63 +176,38 @@ export default {
         this.edicion = false;
       }
     },
+
     async sesionCreada(nuevaSesion) {
       await this.crearSesion(nuevaSesion);
       this.mostrarFormulario = false;
       let sesiones = await this.cargarSesiones(this.gruposUsuario);
       this.sesiones = sesiones;
     },
+
     cerrarFormularioSesion() {
       this.mostrarFormulario = false;
     },
-    getCartaStyle(item) {
-      return {
-        "--bg-color": item.color.valor,
-      };
-    },
-    filtrarPorEncargado(encargado) {
-      let filtro = grupos.filter((grupo) => grupo.encargado === encargado);
-      return filtro;
-    },
+
     async borrarSesion(href) {
       await this.eliminarSesion(href);
       let sesiones = await this.cargarSesiones(this.gruposUsuario);
       this.sesiones = sesiones;
     },
+
     editarSesion(sesion) {
       this.edicion = true;
       this.fechaSeleccionada = this.formatoFechaEdicion(sesion.fecha);
       this.sesionSeleccionada = sesion;
       this.mostrarFormulario = true;
     },
+
     async sesionEditada(sesion) {
-      console.log(sesion);
       await this.modificarSesion(sesion);
       this.edicion = false;
       let sesiones = await this.cargarSesiones(this.gruposUsuario);
       this.sesiones = sesiones;
     },
-    formatoFechaEdicion(fecha) {
-      const partes = fecha.split("/");
-      const dia = parseInt(partes[0], 10);
-      const mes = parseInt(partes[1], 10) - 1;
-      const ano = parseInt(partes[2], 10);
 
-      return new Date(ano, mes, dia);
-    },
-    formatoFechaConBarra(fecha) {
-      let partesFecha = fecha.split("-");
-      let nuevaFecha =
-        partesFecha[2] + "/" + partesFecha[1] + "/" + partesFecha[0];
-      return nuevaFecha;
-    },
-    navegarADetalleSesion(sesionHref) {
-      let id = sesionHref.split("/").pop();
-      this.$router.push("/sesiones/" + id);
-    },
-    seleccionarSesion(sesion) {
-      this.sesionSeleccionada = sesion;
-    },
     async sesionRealizada(sesion) {
       sesion.usuario = this.href;
       await this.crearSesionRealizada(sesion);
@@ -217,7 +215,43 @@ export default {
         !this.$refs.calendario.mostrarTarjeta;
       await this.cargarSesionesRealizadas(this.href);
     },
-    getIcon(rpe) {
+
+    seleccionarSesion(sesion) {
+      this.sesionSeleccionada = sesion;
+    },
+
+    navegarADetalleSesion(sesionHref) {
+      let id = sesionHref.split("/").pop();
+      this.$router.push("/sesiones/" + id);
+    },
+
+    filtrarPorEncargado(encargado) {
+      let filtro = grupos.filter((grupo) => grupo.encargado === encargado);
+      return filtro;
+    },
+
+    formatoFechaEdicion(fecha) {
+      const partes = fecha.split("/");
+      const dia = parseInt(partes[0], 10);
+      const mes = parseInt(partes[1], 10) - 1;
+      const ano = parseInt(partes[2], 10);
+      return new Date(ano, mes, dia);
+    },
+
+    formatoFechaConBarra(fecha) {
+      let partesFecha = fecha.split("-");
+      let nuevaFecha =
+        partesFecha[2] + "/" + partesFecha[1] + "/" + partesFecha[0];
+      return nuevaFecha;
+    },
+
+    getCartaStyle(item) {
+      return {
+        "--bg-color": item.color.valor,
+      };
+    },
+
+    getIcono(rpe) {
       if (rpe < 6) {
         return "mdi-speedometer-slow";
       } else if (rpe === 6 || rpe === 7) {
@@ -226,17 +260,31 @@ export default {
         return "mdi-speedometer";
       }
     },
+
     iconClass(rpe) {
       if (rpe < 6) {
-        return "icono-verde";
+        return "claro";
       } else if (rpe === 6 || rpe === 7) {
-        return "icono-naranja";
+        return "elevado";
       } else if (rpe >= 8) {
-        return "icono-rojo";
+        return "rechazo";
       }
     },
-    manejarCambioTamano(){
-      this.anchoPantalla= window.innerWidth
+
+    manejarCambioTamano() {
+      this.anchoPantalla = window.innerWidth;
+    },
+
+    abrirFormGrupo() {
+      this.mostrarFormularioGrupo = true;
+    },
+    cerrarGrupo(){
+      this.mostrarFormularioGrupo = false;
+    },
+    async nuevoGrupo(grupo){
+      grupo.encargado = this.href;
+      grupo.miembros = [this.href];
+      await this.crearGrupo(grupo)
     }
   },
   async created() {
@@ -244,9 +292,13 @@ export default {
       grupo.miembros.includes(this.username)
     );
     this.gruposUsuario = misGrupos;
-    let sesiones = await this.cargarSesiones(this.gruposUsuario);
+
+    const [sesiones] = await Promise.all([
+      this.cargarSesiones(this.gruposUsuario),
+      this.cargarSesionesRealizadas(this.href),
+    ]);
+
     this.sesiones = sesiones;
-    await this.cargarSesionesRealizadas(this.href);
   },
   mounted() {
     window.addEventListener("resize", this.manejarCambioTamano);
@@ -292,8 +344,16 @@ export default {
   padding-left: 20px;
 }
 
+.grupo {
+  margin-bottom: 5px !important;
+}
+
 .grupos {
   max-width: 20vw;
+  display: flex;
+  flex-flow: column;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
 .carta::before {
@@ -311,40 +371,37 @@ export default {
   color: white;
 }
 
-.carta.ultimas-sesiones::before{
+.carta.ultimas-sesiones::before {
   background-color: var(--claro);
 }
 
-.icono-verde {
-  background-color: var(--suave);
-}
-
-.icono-naranja {
-  background-color: var(--elevado);
-}
-
-.icono-rojo {
-  background-color: var(--rechazo);
+.boton {
+  position: relative !important;
+  align-self: flex-end;
+  width: fit-content;
+  border-radius: 10px;
+  padding: 5px 5px;
+  height: fit-content;
 }
 
 @media (max-width: 1500px) {
   .agenda {
-    flex-flow: column-reverse; 
-    align-items: center
+    flex-flow: column-reverse;
+    align-items: center;
   }
 
-  .grupos{
+  .grupos {
     max-width: 1200px;
     padding: 16px;
   }
 
   .izquierda {
-    width: 100% !important; 
+    width: 100% !important;
   }
 
   .derecha {
     width: 100%;
-    padding-left: 0; 
+    padding-left: 0;
   }
 }
 </style>

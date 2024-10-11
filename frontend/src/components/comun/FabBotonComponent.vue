@@ -4,6 +4,8 @@
   pantalla y puede ser utilizado para realizar acciones destacadas.
 
   Props:
+  - nombre: Define la id del boton
+  - texto: Define el texto que tendrá el botón a la derecha del icono
   - icon: Define el icono que se mostrará dentro del botón. Es una cadena que debe coincidir con 
     los nombres de los iconos de Material Design Icons (por defecto, usa 'mdi-plus').
   - clasesAdicionales: Permite agregar clases adicionales al botón para personalizar su estilo. 
@@ -20,6 +22,7 @@
     :id="nombre"
   >
     <v-icon>{{ icon }}</v-icon>
+    {{ texto }}
   </v-btn>
 </template>
 
@@ -38,6 +41,11 @@ export default {
       type: String,
       default: "claro",
     },
+    texto:{
+      type:String,
+      default:"",
+      required:false
+    }
   },
 };
 </script>

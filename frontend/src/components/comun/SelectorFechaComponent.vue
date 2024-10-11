@@ -97,6 +97,15 @@ export default {
     mayusculaPrimero(texto) {
       return texto.charAt(0).toUpperCase() + texto.slice(1);
     },
+    manejarCambioTamano(){
+      this.anchoPantalla = window.innerWidth;
+      console.log(this.anchoPantalla);
+      if (this.anchoPantalla < 1000) {
+        this.modo = "dia";
+      } else {
+        this.modo = "mes";
+      }
+    }
   },
   watch: {
     modo(nuevoModo) {
