@@ -55,6 +55,12 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/grupos",
+    name: "grupos",
+    component: () => import("../vistas/GruposVista.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/:catchAll(.*)',
     redirect: '/usuario'
   }

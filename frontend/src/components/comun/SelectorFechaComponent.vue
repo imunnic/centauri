@@ -99,7 +99,6 @@ export default {
     },
     manejarCambioTamano(){
       this.anchoPantalla = window.innerWidth;
-      console.log(this.anchoPantalla);
       if (this.anchoPantalla < 1000) {
         this.modo = "dia";
       } else {

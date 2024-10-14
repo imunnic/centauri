@@ -2,7 +2,7 @@
   Este componente representa un elemento en una lista, diseñado para ser utilizado dentro de un componente padre. Está construido con Vuetify (https://vuetifyjs.com/), permitiendo mostrar información y realizar acciones específicas sobre cada ítem.
 
   Props:
-  - item: Objeto que representa el ítem mostrado en la tarjeta. Debe contener al menos las propiedades:
+  - items: Array de objetos a mostrar.
       - `nombre`: El nombre del ítem.
       - `descripcion`: Una breve descripción del ítem.
       - `url`: (opcional) URL de la imagen asociada al ítem.
@@ -21,7 +21,7 @@
   Eventos:
   - editar: Se emite cuando se hace clic en el botón de editar.
   - eliminar: Se emite cuando se hace clic en el botón de eliminar.
-  (Estos son los eventos predeterminados, pero pueden variar si se modifican las acciones).
+  (Estos son los eventos predeterminados cuando se de permisos de creación, pero pueden variar si se modifican las acciones).
 -->
 
 <template>
@@ -44,6 +44,7 @@
       />
 
       <ItemListaComponent
+        v-bind="$attrs"
         class="componente"
         v-for="(item, index) in itemsFiltrados"
         :key="index"
@@ -53,15 +54,16 @@
         :imagenPredeterminada="imagenPredeterminada"
         :descripcion="descripcion"
         @click="abrirDialogoDetalle(item)"
-        @editar="emitEditar(item)"
-        @eliminar="emitEliminar(item)"
+        v-on="$attrs"
       >
         <template v-slot:info-extra="{ item }">
           <slot name="info-extra" :item="item"></slot>
         </template>
       </ItemListaComponent>
 
-      <div class="contenedor-flex" v-if="itemsFiltrados.length == 0"> No hay datos disponibles. Compruebe la conexión de red.</div>
+      <div class="contenedor-flex" v-if="itemsFiltrados.length == 0">
+        No hay datos disponibles. Compruebe la conexión de red.
+      </div>
 
       <FabBotonComponent v-if="permisoCreacion" @click="emitCrear('crear')" />
     </template>
@@ -97,15 +99,17 @@ export default {
       type: String,
       default: "",
     },
+    accionesPersonalizadas: {
+      type: Object,
+      default: [
+        { icon: "mdi-pencil", color: "default", evento: "editar" },
+        { icon: "mdi-trash-can", color: "error", evento: "eliminar" },
+      ],
+    },
   },
   computed: {
     acciones() {
-      return this.permisoCreacion
-        ? [
-            { icon: "mdi-pencil", color: "default", evento: "editar" },
-            { icon: "mdi-trash-can", color: "error", evento: "eliminar" },
-          ]
-        : [];
+      return this.permisoCreacion ? this.accionesPersonalizadas : [];
     },
   },
   data() {
@@ -131,12 +135,6 @@ export default {
     },
     abrirDialogoDetalle(item) {
       this.$emit("detalle", item);
-    },
-    emitEditar(item) {
-      this.$emit("editar", item);
-    },
-    emitEliminar(item) {
-      this.$emit("eliminar", item);
     },
     emitCrear() {
       this.$emit("crear");

@@ -46,6 +46,11 @@ export default {
     ...mapState(useUsuariosStore, ["token", "isLogged"]),
     menuItems() {
       if (this.isLogged) {
+        let menuLogeado = this.menu.push({
+          title: "Grupos",
+          prependIcon: "mdi-account-group",
+          ruta: "/grupos",
+        })
         return this.menu;
       } else {
         let menuSinRegistro = this.menu.filter(

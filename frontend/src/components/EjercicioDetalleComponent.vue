@@ -98,8 +98,6 @@ export default {
   methods: {
     ...mapActions(useEjerciciosStore, ["getEquipamientoDeEjercicio"]),
     videoId(url) {
-      console.log(url);
-      console.log(url.split('=').pop());
       return url.split('=').pop();
     },
     cerrar() {

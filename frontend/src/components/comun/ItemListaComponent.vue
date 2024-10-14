@@ -2,7 +2,7 @@
   Este componente representa un elemento en una lista, diseñado para ser utilizado dentro de un componente padre. Está construido con Vuetify (https://vuetifyjs.com/), permitiendo mostrar información y realizar acciones específicas sobre cada ítem.
 
   Props:
-  - item: Objeto que representa el ítem mostrado en la tarjeta. Debe contener al menos las propiedades:
+  - item: Objeto que representa el ítem mostrado en la tarjeta. Las propiedades para las que está diseñado son:
       - `nombre`: El nombre del ítem.
       - `descripcion`: Una breve descripción del ítem.
       - `url`: (opcional) URL de la imagen asociada al ítem.
