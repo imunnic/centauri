@@ -48,9 +48,9 @@ export default {
         },
         async negarSolicitud(solicitud){
             await this.rechazarSolicitud(solicitud._links.self.href);
-            this.cargando=false;
+            this.cargando=true;
             await this.getSolicitudes();
-            this.cargando = true;
+            this.cargando = false;
         }
     },
     async mounted(){

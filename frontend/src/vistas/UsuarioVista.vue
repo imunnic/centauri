@@ -1,4 +1,14 @@
 <template>
+  <transition name="fade">
+    <v-alert
+      v-if="mostrarAlerta"
+      :type="tipoAlerta"
+      dismissible
+      class="alert-container ma-2"
+    >
+      {{ mensajeAlerta }}
+    </v-alert>
+  </transition>
   <div class="contenedor-flex agenda">
     <div class="contenedor grupos izquierda">
       <v-card elevation="2" v-if="isPantallaGrande" class="grupos">
@@ -12,13 +22,18 @@
         >
           <p class="texto">{{ item.nombre }}</p>
         </v-card>
+        <FabBotonComponent
+          class="boton"
+          :texto="'Nueva Solicitud'"
+          @click="abrirFormSolicitud"
+        ></FabBotonComponent>
       </v-card>
       <v-card elevation="2" v-if="isPantallaGrande" class="grupos">
         <v-card-title>Encargado de:</v-card-title>
         <v-card
           v-for="(item, index) in gruposEncargado"
           :key="index"
-          class="carta contenedor"
+          class="carta contenedor grupo"
           elevation="2"
           :style="getCartaStyle(item)"
         >
@@ -98,8 +113,16 @@
       @crear-grupo="nuevoGrupo"
       @cerrar="cerrarGrupo"
       >
-
       </GrupoFormComponent>
+
+      <SolicitudFormComponent
+      v-if="mostrarFormularioSolicitud"
+      :grupos="gruposSinUsuario"
+      @solicitar-acceso="nuevaSolicitud"
+      @cerrar="cerrarFormSolicitud"
+      ></SolicitudFormComponent>
+
+
     </div>
   </div>
 </template>
@@ -111,12 +134,14 @@ import CalendarioComponent from "@/components/comun/CalendarioComponent.vue";
 import SesionFormComponent from "@/components/SesionFormComponent.vue";
 import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
 import GrupoFormComponent from "@/components/GrupoFormComponent.vue";
+import SolicitudFormComponent from "@/components/SolicitudFormComponent.vue";
 import { useSesionesStore } from "@/store/sesionesStore.js";
 import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useGruposStore } from "@/store/gruposStore.js";
 import { mapActions, mapState } from "pinia";
 import grupos from "@/assets/grupos.json";
+import configuracion from "@/configuracion.json";
 
 export default {
   components: {
@@ -125,10 +150,11 @@ export default {
     SesionFormComponent,
     DetalleSesionComponent,
     FabBotonComponent,
-    GrupoFormComponent
+    GrupoFormComponent,
+    SolicitudFormComponent
   },
   computed: {
-    ...mapState(useUsuariosStore, ["username", "href"]),
+    ...mapState(useUsuariosStore, ["username", "href", "id"]),
     ...mapState(useSesionesRealizadasStore, ["sesionesRealizadasRegistradas"]),
     isPantallaGrande() {
       return this.anchoPantalla > 1500;
@@ -145,12 +171,17 @@ export default {
         { nombre: "Grupo 2", color: { nombre: "azul", valor: "#0000FF" } },
       ],
       gruposEncargado: [],
+      gruposSinUsuario:[],
       fechaSeleccionada: null,
       sesiones: [],
       mostrarFormulario: false,
       mostrarFormularioGrupo:false,
+      mostrarFormularioSolicitud:false,
       edicion: false,
       sesionSeleccionada: null,
+      mostrarAlerta: false,
+      mensajeAlerta: "",
+      tipoAlerta: "success",
     };
   },
   methods: {
@@ -165,9 +196,17 @@ export default {
       "cargarSesionesRealizadas",
     ]),
     ...mapActions(useGruposStore, [
-      "crearGrupo"
+      "crearGrupo", "getGruposSinUsuario", "realizarSolicitud"
     ]),
+    mostrarAlertaTemporal(mensaje, tipo = "success") {
+      this.mensajeAlerta = mensaje;
+      this.tipoAlerta = tipo;
+      this.mostrarAlerta = true;
 
+      setTimeout(() => {
+        this.mostrarAlerta = false;
+      }, 3000);
+    },
     nuevaSesion(fecha) {
       if (this.gruposEncargado.length >= 1) {
         this.sesionSeleccionada = {};
@@ -285,6 +324,30 @@ export default {
       grupo.encargado = this.href;
       grupo.miembros = [this.href];
       await this.crearGrupo(grupo)
+    },
+    async abrirFormSolicitud(){
+      let response = await this.getGruposSinUsuario(this.id);
+      this.gruposSinUsuario = response.data;
+      this.mostrarFormularioSolicitud = true;
+    },
+    cerrarFormSolicitud(){
+      this.mostrarFormularioSolicitud = false;
+      this.gruposSinUsuario = [];
+
+    },
+    async nuevaSolicitud(grupoId){
+      let solicitud = {
+        grupo:configuracion.urlBase + 'grupos/' + grupoId,
+        usuario:this.href
+      }
+      try {
+        await this.realizarSolicitud(solicitud);
+        this.mostrarAlertaTemporal("Solicitud realizada con éxito");
+      } catch (error) {
+        this.tipoAlerta="error";
+        this.mostrarAlertaTemporal("No se ha podido realizar la solicitud");
+        this.tipoAlerta="success";
+      }
     }
   },
   async created() {
@@ -376,12 +439,33 @@ export default {
 }
 
 .boton {
+  margin-top: 15px;
   position: relative !important;
   align-self: flex-end;
   width: fit-content;
   border-radius: 10px;
   padding: 5px 5px;
   height: fit-content;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.alert-container {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: 90%;
+  max-width: 500px;
 }
 
 @media (max-width: 1500px) {

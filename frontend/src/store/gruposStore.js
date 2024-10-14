@@ -15,6 +15,9 @@ export const useGruposStore = defineStore("grupos", {
     async crearGrupo(grupo) {
       await this.grupoService.postGrupo(grupo);
     },
+    async getGruposSinUsuario(usuarioId){
+      return await this.grupoService.getGruposSinMiembro(usuarioId);
+    },
     async getGruposEncargado(usuariohref){
       let response = await this.grupoService.getGruposPorEncargado(usuariohref);
       this.gruposEncargado = response.data._embedded.grupos;
@@ -33,6 +36,9 @@ export const useGruposStore = defineStore("grupos", {
         }
         this.solicitudesAcceso = solicitudesTotales
         console.log(this.solicitudesAcceso);
+    },
+    async realizarSolicitud(solicitud){
+      await this.grupoService.postSolicitudGrupo(solicitud);
     },
     async aceptarSolicitud(hrefSolicitud){
       let idSolicitud = hrefSolicitud.split('/').pop()

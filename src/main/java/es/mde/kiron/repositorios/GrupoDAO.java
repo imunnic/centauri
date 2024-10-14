@@ -9,8 +9,10 @@ import java.util.List;
 
 @RepositoryRestResource(path = "grupos", itemResourceRel = "grupo",
     collectionResourceRel = "grupos")
-public interface GrupoDAO extends MongoRepository<Grupo, String> {
+public interface GrupoDAO extends MongoRepository<Grupo, String>{
   List<Grupo> findByEncargado(Usuario encargado);
   List<Grupo> findByMiembrosContaining(Usuario miembro);
   Grupo findByNombre(String nombre);
+
+
 }

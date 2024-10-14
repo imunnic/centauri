@@ -19,6 +19,11 @@ export default class GrupoService {
     let urlGetGruposPorEncargado = url + "/search/findByEncargado?encargado=" + hrefUsuario;
     return await axios.get(urlGetGruposPorEncargado, config);
   }
+
+  async getGruposSinMiembro(idUsuario){
+    let urlSinMiembro = url + "/encontrarGruposSinUsuario?usuarioId=" + idUsuario;
+    return await axios.get(urlSinMiembro, config);
+  }
   
   async postGrupo(grupo) {
     return await axios.post(url, grupo, config);
@@ -42,4 +47,5 @@ export default class GrupoService {
     let urlSolicitudGrupo = urlSolicitud + "/search/findByGrupo?grupo=" + hrefGrupo;
     return await axios.get(urlSolicitudGrupo, config);
   }
+
 }
