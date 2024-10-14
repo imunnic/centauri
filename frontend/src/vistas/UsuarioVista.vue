@@ -14,7 +14,7 @@
       <v-card elevation="2" v-if="isPantallaGrande" class="grupos">
         <v-card-title>Grupos:</v-card-title>
         <v-card
-          v-for="(item, index) in gruposUsuario"
+          v-for="(item, index) in gruposRegistrados"
           :key="index"
           class="carta contenedor grupo"
           elevation="2"
@@ -156,6 +156,7 @@ export default {
   computed: {
     ...mapState(useUsuariosStore, ["username", "href", "id"]),
     ...mapState(useSesionesRealizadasStore, ["sesionesRealizadasRegistradas"]),
+    ...mapState(useGruposStore, ["gruposRegistrados","gruposEncargado"]),
     isPantallaGrande() {
       return this.anchoPantalla > 1500;
     },
@@ -166,11 +167,6 @@ export default {
   data() {
     return {
       anchoPantalla: window.innerWidth,
-      gruposUsuario: [
-        { nombre: "Grupo 1", color: { nombre: "rojo", valor: "#FF0000" } },
-        { nombre: "Grupo 2", color: { nombre: "azul", valor: "#0000FF" } },
-      ],
-      gruposEncargado: [],
       gruposSinUsuario:[],
       fechaSeleccionada: null,
       sesiones: [],
@@ -181,7 +177,7 @@ export default {
       sesionSeleccionada: null,
       mostrarAlerta: false,
       mensajeAlerta: "",
-      tipoAlerta: "success",
+      tipoAlerta: "error",
     };
   },
   methods: {
@@ -196,9 +192,9 @@ export default {
       "cargarSesionesRealizadas",
     ]),
     ...mapActions(useGruposStore, [
-      "crearGrupo", "getGruposSinUsuario", "realizarSolicitud"
+      "crearGrupo", "getGruposSinUsuario", "realizarSolicitud", "getGruposUsuario", "getGruposEncargado"
     ]),
-    mostrarAlertaTemporal(mensaje, tipo = "success") {
+    mostrarAlertaTemporal(mensaje, tipo) {
       this.mensajeAlerta = mensaje;
       this.tipoAlerta = tipo;
       this.mostrarAlerta = true;
@@ -286,7 +282,7 @@ export default {
 
     getCartaStyle(item) {
       return {
-        "--bg-color": item.color.valor,
+        "--bg-color": item.color,
       };
     },
 
@@ -323,7 +319,9 @@ export default {
     async nuevoGrupo(grupo){
       grupo.encargado = this.href;
       grupo.miembros = [this.href];
-      await this.crearGrupo(grupo)
+      await this.crearGrupo(grupo);
+      this.getGruposEncargado(this.href);
+      this.getGruposUsuario(this.href);
     },
     async abrirFormSolicitud(){
       let response = await this.getGruposSinUsuario(this.id);
@@ -341,31 +339,25 @@ export default {
         usuario:this.href
       }
       try {
-        await this.realizarSolicitud(solicitud);
+        await this.realizarSolicitud(solicitud, "success");
         this.mostrarAlertaTemporal("Solicitud realizada con éxito");
       } catch (error) {
-        this.tipoAlerta="error";
-        this.mostrarAlertaTemporal("No se ha podido realizar la solicitud");
-        this.tipoAlerta="success";
+        this.mostrarAlertaTemporal("No se ha podido realizar la solicitud", "error");
       }
     }
   },
   async created() {
-    let misGrupos = grupos.filter((grupo) =>
-      grupo.miembros.includes(this.username)
-    );
-    this.gruposUsuario = misGrupos;
-
+    await this.getGruposUsuario(this.href);
+    await this.getGruposEncargado(this.href);
     const [sesiones] = await Promise.all([
-      this.cargarSesiones(this.gruposUsuario),
+      this.cargarSesiones(this.gruposRegistrados),
       this.cargarSesionesRealizadas(this.href),
     ]);
 
     this.sesiones = sesiones;
   },
-  mounted() {
+  async mounted() {
     window.addEventListener("resize", this.manejarCambioTamano);
-    this.gruposEncargado = this.filtrarPorEncargado(this.username);
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.manejarCambioTamano);

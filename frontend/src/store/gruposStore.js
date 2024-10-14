@@ -18,8 +18,12 @@ export const useGruposStore = defineStore("grupos", {
     async getGruposSinUsuario(usuarioId){
       return await this.grupoService.getGruposSinMiembro(usuarioId);
     },
-    async getGruposEncargado(usuariohref){
-      let response = await this.grupoService.getGruposPorEncargado(usuariohref);
+    async getGruposUsuario(usuarioHref){
+      let response = await this.grupoService.getGruposPorMiembro(usuarioHref);
+      this.gruposRegistrados = response.data._embedded.grupos;
+    },
+    async getGruposEncargado(usuarioHref){
+      let response = await this.grupoService.getGruposPorEncargado(usuarioHref);
       this.gruposEncargado = response.data._embedded.grupos;
     },
     async getSolicitudes(){

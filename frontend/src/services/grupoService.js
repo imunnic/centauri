@@ -15,6 +15,11 @@ export default class GrupoService {
     config.headers.Authorization = "Bearer " + token;
   }
 
+  async getGruposPorMiembro(hrefUsuario){
+    let urlGetGruposPorMiembro = url + "/search/findByMiembrosContaining?miembro=" + hrefUsuario;
+    return await axios.get(urlGetGruposPorMiembro, config);
+  }
+
   async getGruposPorEncargado(hrefUsuario){
     let urlGetGruposPorEncargado = url + "/search/findByEncargado?encargado=" + hrefUsuario;
     return await axios.get(urlGetGruposPorEncargado, config);
