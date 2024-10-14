@@ -1,10 +1,12 @@
 package es.mde.kiron.entidades;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
+@CompoundIndex(def="{'grupo':1,'usuario':1}", unique = true)
 public class SolicitudAccesoGrupo {
   @Id
   private String id;

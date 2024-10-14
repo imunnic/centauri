@@ -319,9 +319,14 @@ export default {
     async nuevoGrupo(grupo){
       grupo.encargado = this.href;
       grupo.miembros = [this.href];
-      await this.crearGrupo(grupo);
-      this.getGruposEncargado(this.href);
-      this.getGruposUsuario(this.href);
+      try {
+        await this.crearGrupo(grupo);
+        this.mostrarAlertaTemporal("Solicitud realizada con éxito", "success");
+        this.getGruposEncargado(this.href);
+        this.getGruposUsuario(this.href);
+      } catch (error) {
+        this.mostrarAlertaTemporal("No se ha podido realizar la solicitud", "error");
+      }
     },
     async abrirFormSolicitud(){
       let response = await this.getGruposSinUsuario(this.id);

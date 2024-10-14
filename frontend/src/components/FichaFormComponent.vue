@@ -139,7 +139,7 @@ export default {
         await this.editarFicha(this.fichaLocal, this.$route.params.id);
         this.$router.push({ path: "/fichas" });
       } else {
-        if (isValido) {
+        if (isValido.valid) {
           await this.grabarFicha(this.fichaLocal);
           this.$router.push({ path: "/fichas" });
         }

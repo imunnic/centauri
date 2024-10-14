@@ -26,6 +26,10 @@ export const useGruposStore = defineStore("grupos", {
       let response = await this.grupoService.getGruposPorEncargado(usuarioHref);
       this.gruposEncargado = response.data._embedded.grupos;
     },
+    async existeGrupo(nombre){
+      let response = await this.grupoService.existsGrupoByNombre(nombre)
+      return response.data;
+    },
     async getSolicitudes(){
         let solicitudesTotales = [];
         for (let grupo of this.gruposEncargado) {

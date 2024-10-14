@@ -34,6 +34,11 @@ export default class GrupoService {
     return await axios.post(url, grupo, config);
   }
 
+  async existsGrupoByNombre(nombre){
+    let urlExists = url + "/search/existsGrupoByNombreIgnoreCase?nombre=" + nombre;
+    return await axios.get(urlExists, config);
+  }
+
   async postSolicitudGrupo(solicitud){
     return await axios.post(urlSolicitud, solicitud, config);
   }
@@ -52,5 +57,7 @@ export default class GrupoService {
     let urlSolicitudGrupo = urlSolicitud + "/search/findByGrupo?grupo=" + hrefGrupo;
     return await axios.get(urlSolicitudGrupo, config);
   }
+
+
 
 }
