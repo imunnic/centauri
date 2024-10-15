@@ -115,8 +115,9 @@ export default {
 }
 
 .titulo{
-  overflow: hidden;
-  text-overflow: ellipsis; 
+  white-space: normal;  /* Permite el salto de línea automático */
+  overflow: visible;    /* Asegura que el contenido no se oculte */
+  word-wrap: break-word; /* Si es necesario, permite romper las palabras largas */
   max-width: 100%; 
 }
 </style>

@@ -109,20 +109,18 @@
       />
 
       <GrupoFormComponent
-      v-if="mostrarFormularioGrupo"
-      @crear-grupo="nuevoGrupo"
-      @cerrar="cerrarGrupo"
+        v-if="mostrarFormularioGrupo"
+        @crear-grupo="nuevoGrupo"
+        @cerrar="cerrarGrupo"
       >
       </GrupoFormComponent>
 
       <SolicitudFormComponent
-      v-if="mostrarFormularioSolicitud"
-      :grupos="gruposSinUsuario"
-      @solicitar-acceso="nuevaSolicitud"
-      @cerrar="cerrarFormSolicitud"
+        v-if="mostrarFormularioSolicitud"
+        :grupos="gruposSinUsuario"
+        @solicitar-acceso="nuevaSolicitud"
+        @cerrar="cerrarFormSolicitud"
       ></SolicitudFormComponent>
-
-
     </div>
   </div>
 </template>
@@ -151,28 +149,28 @@ export default {
     DetalleSesionComponent,
     FabBotonComponent,
     GrupoFormComponent,
-    SolicitudFormComponent
+    SolicitudFormComponent,
   },
   computed: {
     ...mapState(useUsuariosStore, ["username", "href", "id"]),
     ...mapState(useSesionesRealizadasStore, ["sesionesRealizadasRegistradas"]),
-    ...mapState(useGruposStore, ["gruposRegistrados","gruposEncargado"]),
+    ...mapState(useGruposStore, ["gruposRegistrados", "gruposEncargado"]),
     isPantallaGrande() {
       return this.anchoPantalla > 1500;
     },
     modoInicial() {
-      return this.anchoPantalla >1000 ? "mes" : "dia";
+      return this.anchoPantalla > 1000 ? "mes" : "dia";
     },
   },
   data() {
     return {
       anchoPantalla: window.innerWidth,
-      gruposSinUsuario:[],
+      gruposSinUsuario: [],
       fechaSeleccionada: null,
       sesiones: [],
       mostrarFormulario: false,
-      mostrarFormularioGrupo:false,
-      mostrarFormularioSolicitud:false,
+      mostrarFormularioGrupo: false,
+      mostrarFormularioSolicitud: false,
       edicion: false,
       sesionSeleccionada: null,
       mostrarAlerta: false,
@@ -192,7 +190,11 @@ export default {
       "cargarSesionesRealizadas",
     ]),
     ...mapActions(useGruposStore, [
-      "crearGrupo", "getGruposSinUsuario", "realizarSolicitud", "getGruposUsuario", "getGruposEncargado"
+      "crearGrupo",
+      "getGruposSinUsuario",
+      "realizarSolicitud",
+      "getGruposUsuario",
+      "getGruposEncargado",
     ]),
     mostrarAlertaTemporal(mensaje, tipo) {
       this.mensajeAlerta = mensaje;
@@ -215,7 +217,7 @@ export default {
     async sesionCreada(nuevaSesion) {
       await this.crearSesion(nuevaSesion);
       this.mostrarFormulario = false;
-      let sesiones = await this.cargarSesiones(this.gruposUsuario);
+      let sesiones = await this.cargarSesiones(this.gruposRegistrados);
       this.sesiones = sesiones;
     },
 
@@ -225,7 +227,7 @@ export default {
 
     async borrarSesion(href) {
       await this.eliminarSesion(href);
-      let sesiones = await this.cargarSesiones(this.gruposUsuario);
+      let sesiones = await this.cargarSesiones(this.gruposRegistrados);
       this.sesiones = sesiones;
     },
 
@@ -239,12 +241,15 @@ export default {
     async sesionEditada(sesion) {
       await this.modificarSesion(sesion);
       this.edicion = false;
-      let sesiones = await this.cargarSesiones(this.gruposUsuario);
+      let sesiones = await this.cargarSesiones(this.gruposRegistrados);
       this.sesiones = sesiones;
     },
 
     async sesionRealizada(sesion) {
-      sesion.usuario = this.href;
+      sesion.sesion = {
+        id: sesion.sesion.split("/").pop(),
+      };
+      sesion.usuario = { id: this.id };
       await this.crearSesionRealizada(sesion);
       this.$refs.calendario.mostrarTarjeta =
         !this.$refs.calendario.mostrarTarjeta;
@@ -313,10 +318,10 @@ export default {
     abrirFormGrupo() {
       this.mostrarFormularioGrupo = true;
     },
-    cerrarGrupo(){
+    cerrarGrupo() {
       this.mostrarFormularioGrupo = false;
     },
-    async nuevoGrupo(grupo){
+    async nuevoGrupo(grupo) {
       grupo.encargado = this.href;
       grupo.miembros = [this.href];
       try {
@@ -325,31 +330,36 @@ export default {
         this.getGruposEncargado(this.href);
         this.getGruposUsuario(this.href);
       } catch (error) {
-        this.mostrarAlertaTemporal("No se ha podido realizar la solicitud", "error");
+        this.mostrarAlertaTemporal(
+          "No se ha podido realizar la solicitud",
+          "error"
+        );
       }
     },
-    async abrirFormSolicitud(){
+    async abrirFormSolicitud() {
       let response = await this.getGruposSinUsuario(this.id);
       this.gruposSinUsuario = response.data;
       this.mostrarFormularioSolicitud = true;
     },
-    cerrarFormSolicitud(){
+    cerrarFormSolicitud() {
       this.mostrarFormularioSolicitud = false;
       this.gruposSinUsuario = [];
-
     },
-    async nuevaSolicitud(grupoId){
+    async nuevaSolicitud(grupoId) {
       let solicitud = {
-        grupo:configuracion.urlBase + 'grupos/' + grupoId,
-        usuario:this.href
-      }
+        grupo: configuracion.urlBase + "grupos/" + grupoId,
+        usuario: this.href,
+      };
       try {
-        await this.realizarSolicitud(solicitud, "success");
-        this.mostrarAlertaTemporal("Solicitud realizada con éxito");
+        await this.realizarSolicitud(solicitud);
+        this.mostrarAlertaTemporal("Solicitud realizada con éxito", "success");
       } catch (error) {
-        this.mostrarAlertaTemporal("No se ha podido realizar la solicitud", "error");
+        this.mostrarAlertaTemporal(
+          "No se ha podido realizar la solicitud",
+          "error"
+        );
       }
-    }
+    },
   },
   async created() {
     await this.getGruposUsuario(this.href);
@@ -358,7 +368,7 @@ export default {
       this.cargarSesiones(this.gruposRegistrados),
       this.cargarSesionesRealizadas(this.href),
     ]);
-
+    console.log;
     this.sesiones = sesiones;
   },
   async mounted() {

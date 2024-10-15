@@ -1,6 +1,7 @@
 package es.mde.kiron.repositorios;
 
 
+import es.mde.kiron.entidades.Grupo;
 import es.mde.kiron.entidades.Sesion;
 import es.mde.kiron.entidades.SesionRealizada;
 import es.mde.kiron.entidades.Usuario;

@@ -39,6 +39,11 @@ export default class GrupoService {
     return await axios.get(urlExists, config);
   }
 
+  async getMiembrosGrupo(hrefGrupo){
+    let href = hrefGrupo + "/miembros";
+    return await axios.get(href, config);
+  }
+
   async postSolicitudGrupo(solicitud){
     return await axios.post(urlSolicitud, solicitud, config);
   }

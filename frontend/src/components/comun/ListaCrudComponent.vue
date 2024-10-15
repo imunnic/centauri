@@ -22,6 +22,7 @@
   - editar: Se emite cuando se hace clic en el botón de editar.
   - eliminar: Se emite cuando se hace clic en el botón de eliminar.
   (Estos son los eventos predeterminados cuando se de permisos de creación, pero pueden variar si se modifican las acciones).
+  - detalle: Se emite al hacer click sobre uno de los elementos para poder pasar la información del mismo.
 -->
 
 <template>
@@ -36,7 +37,9 @@
     </div>
 
     <template v-else>
+      <h1>{{ titulo }}</h1>
       <BuscadorComponent
+        v-if="busqueda"
         class="componente"
         :items="items"
         :filtros="filtrosCompletos"
@@ -87,6 +90,10 @@ export default {
     cargando: {
       required: true,
     },
+    permisoEdicion:{
+      type: Boolean,
+      default: true,
+    },
     permisoCreacion: {
       type: Boolean,
       default: true,
@@ -99,6 +106,10 @@ export default {
       type: String,
       default: "",
     },
+    busqueda:{
+      type: Boolean,
+      default:true
+    },
     accionesPersonalizadas: {
       type: Object,
       default: [
@@ -106,10 +117,14 @@ export default {
         { icon: "mdi-trash-can", color: "error", evento: "eliminar" },
       ],
     },
+    titulo:{
+      type:String,
+      default:""
+    }
   },
   computed: {
     acciones() {
-      return this.permisoCreacion ? this.accionesPersonalizadas : [];
+      return this.permisoEdicion ? this.accionesPersonalizadas : [];
     },
   },
   data() {
