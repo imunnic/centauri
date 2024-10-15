@@ -33,9 +33,11 @@
         @detalle="verMiembro"
       >
       </ListaCrudComponent>
-      <DetalleUsuarioSesiones v-if="mostrarDetalleUsuario" 
-      :sesionesRealizadas="sesionesRealizadasDeUsuario"
-      @cerrar="cerrarMiembro"></DetalleUsuarioSesiones>
+      <DetalleUsuarioSesiones
+        v-if="mostrarDetalleUsuario"
+        :sesionesRealizadas="sesionesRealizadasDeUsuario"
+        @cerrar="cerrarMiembro"
+      ></DetalleUsuarioSesiones>
     </div>
   </v-container>
 </template>
@@ -67,7 +69,7 @@ export default {
       miembrosGrupoSeleccionado: [],
       cargandoMiembros: false,
       sesionesRealizadasDeUsuario: [],
-      mostrarDetalleUsuario: false
+      mostrarDetalleUsuario: false,
     };
   },
   computed: {
@@ -124,10 +126,10 @@ export default {
         );
       this.mostrarDetalleUsuario = true;
     },
-    cerrarMiembro(){
-      this.mostrarDetalleUsuario= false;
+    cerrarMiembro() {
+      this.mostrarDetalleUsuario = false;
       this.sesionesRealizadasDeUsuario = [];
-    }
+    },
   },
   async mounted() {
     this.cargando = true;

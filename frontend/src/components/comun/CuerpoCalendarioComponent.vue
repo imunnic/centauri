@@ -62,13 +62,13 @@
               v-for="(sesion, sesionIndex) in sesionesPorDia(dia)"
               :key="sesionIndex"
               :style="{
-                backgroundColor: sesion.grupo.color.valor + ' !important',
+                backgroundColor: sesion.grupo.color + ' !important',
               }"
               class="carta-evento claro"
               flat
               @click.stop="emitirEvento(sesion)"
             >
-              {{ sesion.nombre }} - {{ sesion.grupo.nombre }}
+              <p class="evento-descripcion">{{ sesion.nombre }} - {{ sesion.grupo.nombre }}</p>
             </v-card>
           </v-container>
         </v-card>
@@ -229,13 +229,26 @@ export default {
 }
 
 .carta-evento {
-  height: 30px;
+  height: auto;
+  min-height: 40px;
   margin-bottom: 2px;
   padding: 2px 5px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   border-radius: 4px;
   color: white;
+  display: flex;
+  align-items: center;
+}
+
+.evento-descripcion {
+  display: box;
+  box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  max-height: 2.4em;
+  white-space: normal; 
 }
 
 .v-card-title {

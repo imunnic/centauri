@@ -368,7 +368,6 @@ export default {
       this.cargarSesiones(this.gruposRegistrados),
       this.cargarSesionesRealizadas(this.href),
     ]);
-    console.log;
     this.sesiones = sesiones;
   },
   async mounted() {
