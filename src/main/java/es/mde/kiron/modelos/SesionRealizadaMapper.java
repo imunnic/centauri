@@ -18,7 +18,7 @@ public class SesionRealizadaMapper {
     response.setId(sesionRealizada.getId());
     response.setUsuarioNombre(sesionRealizada.getUsuario().getNombre());
     response.setSesionId(sesionRealizada.getSesionId());
-    response.setNombre(sesionRealizada.getNombreSesion());
+    response.setNombre(sesionRealizada.getNombre());
     response.setGrupo(sesionRealizada.getSesion().getGrupo());
     response.setFecha(sesionRealizada.getFechaSesion());
     response.setRpe(sesionRealizada.getRpe());

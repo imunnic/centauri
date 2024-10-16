@@ -159,6 +159,7 @@ export default {
 }
 .info-relevante {
   font-size: 17px;
+  padding-left: 15px;
 }
 .interruptor {
   max-height: 40px;

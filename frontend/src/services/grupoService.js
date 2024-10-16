@@ -33,6 +33,11 @@ export default class GrupoService {
   async cambiarEncargado(grupoHref, grupo){
     return await axios.patch(grupoHref, grupo, config)
   }
+
+  async abandonarGrupo(solicitud){
+    let urlAbandonar = url + "/abandonar-grupo"
+    return await axios.patch(urlAbandonar, solicitud, config);
+  }
   
   async postGrupo(grupo) {
     return await axios.post(url, grupo, config);

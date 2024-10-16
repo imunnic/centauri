@@ -1,8 +1,5 @@
 package es.mde.kiron.entidades;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -70,7 +67,7 @@ public class SesionRealizada {
     this.comentarios = comentarios;
   }
 
-  public String getNombreSesion(){
+  public String getNombre(){
     return getSesion().getNombre();
   }
 

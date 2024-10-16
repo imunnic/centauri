@@ -1,11 +1,12 @@
 <!--
-  Este componente representa un elemento en una lista, diseñado para ser utilizado dentro de un componente padre. Está construido con Vuetify (https://vuetifyjs.com/), permitiendo mostrar información y realizar acciones específicas sobre cada ítem.
+  Este componente `ItemListaComponent` representa un elemento en una lista, diseñado para ser utilizado dentro de un componente padre. Está construido con Vuetify (https://vuetifyjs.com/), permitiendo mostrar información detallada y realizar acciones específicas sobre cada ítem.
 
   Props:
-  - item: Objeto que representa el ítem mostrado en la tarjeta. Las propiedades para las que está diseñado son:
+  - item: Objeto que representa el ítem mostrado en la tarjeta. Las propiedades que puede tener son:
       - `nombre`: El nombre del ítem.
-      - `descripcion`: Una breve descripción del ítem.
+      - `descripcion(opcional)`: Una breve descripción del ítem.
       - `url`: (opcional) URL de la imagen asociada al ítem.
+      - `color`: (opcional) Color de fondo para la tarjeta.
   - acciones: Array de objetos que define las acciones disponibles para el ítem. Cada objeto debe contener:
       - `icon`: El nombre del icono (de Material Design Icons).
       - `color`: El color del botón de acción.
@@ -13,7 +14,7 @@
     Por defecto, se incluyen dos acciones: editar (ícono 'mdi-pencil') y eliminar (ícono 'mdi-trash-can').
   - descripcion: Booleano que indica si se debe mostrar o no la descripción del ítem. El valor predeterminado es `true`.
   - mostrarImagen: Booleano que indica si se debe mostrar la imagen asociada al ítem. El valor predeterminado es `false`.
-  - imagenPredeterminada: String que especifica la URL de una imagen predeterminada que se mostrará si el ítem no tiene una imagen propia. El valor por defecto es '/no-imagen.png'.
+  - imagenPredeterminada: String que especifica la URL de una imagen predeterminada que se mostrará si el ítem no tiene una imagen propia. El valor predeterminado es '/no-imagen.png'.
 
   Slots:
   - info-extra: Un slot opcional que permite inyectar contenido extra debajo de la descripción del ítem.
@@ -25,7 +26,7 @@
 -->
 
 <template>
-  <v-card class="carta" flat>
+  <v-card class="carta" :style="{ '--color-background': item.color || 'var(--claro)' }" flat>
     <div class="contenedor-flex">
       <div v-if="mostrarImagen" class="imagen-contenedor">
         <v-img 
@@ -36,22 +37,24 @@
         />
       </div>
       <div class="contenido">
-        <v-card-title class="titulo">{{ item.nombre }}</v-card-title>
-        <v-card-text>
-          <p class="texto" v-if="descripcion">{{ item.descripcion }}</p>
+        <div class="titulo-acciones">
+          <v-card-title class="titulo">{{ item.nombre }}</v-card-title>
+          <v-card-actions class="acciones" v-if="acciones.length > 0">
+            <v-btn 
+              v-for="accion in acciones" 
+              :id="accion.evento"
+              :key="accion.icon" 
+              :icon="accion.icon" 
+              :color="accion.color" 
+              @click="emitAccion(accion.evento, item, $event)">
+              <v-icon>{{ accion.icon }}</v-icon>
+            </v-btn>
+          </v-card-actions>
+        </div>
+        <v-card-text class="altura-ajustable">
+          <p class="texto descripcion" v-if="descripcion">{{ item.descripcion }}</p>
           <slot name="info-extra" :item="item"></slot>
         </v-card-text>
-        <v-card-actions v-if="acciones.length > 0">
-          <v-btn 
-            v-for="accion in acciones" 
-            :id="accion.evento"
-            :key="accion.icon" 
-            :icon="accion.icon" 
-            :color="accion.color" 
-            @click="emitAccion(accion.evento, item, $event)">
-            <v-icon>{{ accion.icon }}</v-icon>
-          </v-btn>
-        </v-card-actions>
       </div>
     </div>
   </v-card>
@@ -70,7 +73,7 @@ export default {
     acciones: {
       type: Array,
       default: () => ([
-        { icon: 'mdi-pencil', color: 'default', evento: 'editar' },
+        { icon: 'mdi-pencil', color: 'var(--claro)', evento: 'editar' },
         { icon: 'mdi-trash-can', color: 'error', evento: 'eliminar' }
       ])
     },
@@ -96,12 +99,19 @@ export default {
 .carta {
   margin-bottom: 16px;
 }
+.carta::before {
+  background-color: var(--color-background);
+}
 
 .imagen-contenedor {
   margin-left: 16px;
   margin-right: 16px;
 }
-
+.altura-ajustable{
+  margin: 0px;
+  padding: 0px;
+  height: fit-content;
+}
 .imagen {
   border-radius: 50%;
   object-fit: cover;
@@ -114,10 +124,25 @@ export default {
   overflow: hidden; 
 }
 
+.titulo-acciones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .titulo{
-  white-space: normal;  /* Permite el salto de línea automático */
-  overflow: visible;    /* Asegura que el contenido no se oculte */
-  word-wrap: break-word; /* Si es necesario, permite romper las palabras largas */
+  white-space: normal;
+  overflow: visible;
+  word-wrap: break-word;
   max-width: 100%; 
+}
+
+.descripcion{
+  padding-left: 15px;
+}
+
+.acciones {
+  display: flex;
+  gap: 8px;
 }
 </style>

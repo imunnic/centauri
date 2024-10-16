@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <v-dialog v-model="dialog" persistent max-width="600px" width="fit-content">
       <v-card>
         <v-card-title class="flex-fila justify-space-between">
           <span>Solicitar Acceso</span>

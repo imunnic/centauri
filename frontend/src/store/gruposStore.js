@@ -64,6 +64,13 @@ export const useGruposStore = defineStore("grupos", {
       let idSolicitud = hrefSolicitud.split('/').pop()
       let solicitud = {id: idSolicitud};
       await this.grupoService.rechazarSolicitud(solicitud);
+    },
+    async abandonarGrupo(idGrupo, idUsuario){
+      let peticionAbandonar={
+        usuarioId: idUsuario,
+        grupoId: idGrupo
+      }
+      await this.grupoService.abandonarGrupo(peticionAbandonar);
     }
   },
 });

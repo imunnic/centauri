@@ -1,28 +1,28 @@
 <!--
-  Este componente representa un elemento en una lista, diseñado para ser utilizado dentro de un componente padre. Está construido con Vuetify (https://vuetifyjs.com/), permitiendo mostrar información y realizar acciones específicas sobre cada ítem.
+  Este componente representa una lista de elementos, diseñado para ser utilizado dentro de un componente padre. Está construido con Vuetify (https://vuetifyjs.com/), lo que permite mostrar información de manera estructurada y realizar acciones específicas sobre cada ítem.
 
   Props:
-  - items: Array de objetos a mostrar.
-      - `nombre`: El nombre del ítem.
-      - `descripcion`: Una breve descripción del ítem.
-      - `url`: (opcional) URL de la imagen asociada al ítem.
-  - acciones: Array de objetos que define las acciones disponibles para el ítem. Cada objeto debe contener:
+  - items: Array de objetos que se mostrarán en la lista. Este prop es obligatorio.
+  - descripcion: Booleano que indica si se debe mostrar la descripción de cada ítem. El valor predeterminado es `true`.
+  - cargando: Booleano que indica si la lista está en proceso de carga. Este prop es obligatorio.
+  - permisoEdicion: Booleano que define si el usuario tiene permiso para editar los ítems. El valor predeterminado es `true`.
+  - permisoCreacion: Booleano que define si el usuario tiene permiso para crear nuevos ítems. El valor predeterminado es `true`.
+  - mostrarImagen: Booleano que indica si se debe mostrar la imagen asociada a cada ítem. El valor predeterminado es `false`.
+  - imagenPredeterminada: String que especifica la URL de una imagen predeterminada que se mostrará si un ítem no tiene imagen propia. El valor predeterminado es una cadena vacía.
+  - busqueda: Booleano que indica si se debe mostrar un componente de búsqueda para filtrar los ítems. El valor predeterminado es `true`.
+  - accionesPersonalizadas: Array de objetos que define las acciones disponibles para cada ítem. Cada objeto debe contener:
       - `icon`: El nombre del icono (de Material Design Icons).
       - `color`: El color del botón de acción.
       - `evento`: El evento que se emitirá al hacer clic en el botón.
     Por defecto, se incluyen dos acciones: editar (ícono 'mdi-pencil') y eliminar (ícono 'mdi-trash-can').
-  - descripcion: Booleano que indica si se debe mostrar o no la descripción del ítem. El valor predeterminado es `true`.
-  - mostrarImagen: Booleano que indica si se debe mostrar la imagen asociada al ítem. El valor predeterminado es `false`.
-  - imagenPredeterminada: String que especifica la URL de una imagen predeterminada que se mostrará si el ítem no tiene una imagen propia. El valor por defecto es '/no-imagen.png'.
+  - titulo: String que se muestra como título de la lista. El valor predeterminado es una cadena vacía.
 
   Slots:
-  - info-extra: Un slot opcional que permite inyectar contenido extra debajo de la descripción del ítem.
+  - info-extra: Un slot opcional que permite inyectar contenido adicional debajo de cada ítem de la lista.
 
   Eventos:
-  - editar: Se emite cuando se hace clic en el botón de editar.
-  - eliminar: Se emite cuando se hace clic en el botón de eliminar.
-  (Estos son los eventos predeterminados cuando se de permisos de creación, pero pueden variar si se modifican las acciones).
-  - detalle: Se emite al hacer click sobre uno de los elementos para poder pasar la información del mismo.
+  - detalle: Se emite cuando se hace clic en un ítem para proporcionar la información del mismo.
+  - crear: Se emite cuando se desea crear un nuevo ítem (por ejemplo, al hacer clic en un botón flotante).
 -->
 
 <template>
@@ -37,7 +37,7 @@
     </div>
 
     <template v-else>
-      <h1>{{ titulo }}</h1>
+      <h2>{{ titulo }}</h2>
       <BuscadorComponent
         v-if="busqueda"
         class="componente"
@@ -113,7 +113,7 @@ export default {
     accionesPersonalizadas: {
       type: Object,
       default: [
-        { icon: "mdi-pencil", color: "default", evento: "editar" },
+        { icon: "mdi-pencil", color: "var(--claro)", evento: "editar" },
         { icon: "mdi-trash-can", color: "error", evento: "eliminar" },
       ],
     },

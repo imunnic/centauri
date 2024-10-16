@@ -8,16 +8,16 @@
   <div class="contenedor-flex agenda">
     <div class="contenedor grupos izquierda">
       <v-card elevation="2" v-if="isPantallaGrande" class="grupos">
-        <v-card-title>Grupos:</v-card-title>
-        <v-card
-          v-for="(item, index) in gruposRegistrados"
-          :key="index"
-          class="carta contenedor grupo"
-          elevation="2"
-          :style="getCartaStyle(item)"
-        >
-          <p class="texto">{{ item.nombre }}</p>
-        </v-card>
+        <ListaCrudComponent
+          :busqueda="false"
+          :titulo="'Grupos: '"
+          :items="gruposRegistrados"
+          :permiso-edicion="true"
+          :permiso-creacion="false"
+          :accionesPersonalizadas="accionesGrupos"
+          @abandonar="solicitarAbandonarGrupo"
+          :cargando="cargandoGrupos"
+        ></ListaCrudComponent>
         <FabBotonComponent
           class="boton"
           :texto="'Nueva Solicitud'"
@@ -25,49 +25,45 @@
         ></FabBotonComponent>
       </v-card>
       <v-card elevation="2" v-if="isPantallaGrande" class="grupos">
-        <v-card-title>Encargado de:</v-card-title>
-        <v-card
-          v-for="(item, index) in gruposEncargado"
-          :key="index"
-          class="carta contenedor grupo"
-          elevation="2"
-          :style="getCartaStyle(item)"
-        >
-          <p class="texto">{{ item.nombre }}</p>
-        </v-card>
+        <ListaCrudComponent
+          :busqueda="false"
+          :titulo="'Encargado de:'"
+          :items="gruposEncargado"
+          :permiso-edicion="false"
+          :permiso-creacion="false"
+          :cargando="cargandoEncargado"
+        ></ListaCrudComponent>
         <FabBotonComponent
           class="boton"
           :texto="'Nuevo grupo'"
           @click="abrirFormGrupo"
         ></FabBotonComponent>
       </v-card>
-      <div>
-        <b>Últimas sesiones:</b>
-        <v-card
-          v-for="(item, index) in sesionesRealizadasRegistradas"
-          :key="index"
-          class="carta contenedor ultimas-sesiones"
-          elevation="2"
-          @click="navegarADetalleSesion(item.sesionId)"
+      <v-card elevation="2">
+        <ListaCrudComponent
+          :busqueda="false"
+          :titulo="'Ultimas sesiones:'"
+          :items="sesionesRealizadasRegistradas"
+          :permiso-edicion="false"
+          :permiso-creacion="false"
+          @detalle="navegarADetalleSesionConSesion"
+          :cargando="cargandoSesionesRealizadas"
         >
-          <b
-            ><div class="contenedor-flex">
-              <p class="texto">{{ item.nombreSesion }}</p>
-              <p class="texto">
+          <template v-slot:info-extra="{ item }">
+            <div class="contenedor-flex resultados">
+              <b class="texto">
                 {{ formatoFechaConBarra(item.fechaSesion) }}
-              </p>
-            </div></b
-          >
-          <div class="contenedor-flex resultados">
-            <p class="texto">RPE: {{ item.rpe }}</p>
-            <p class="texto">Tiempo: {{ item.tiempo }}</p>
-            <p class="texto">Comentarios: {{ item.comentarios }}</p>
-          </div>
-          <v-icon :class="iconClass(item.rpe)" class="icono-rpe">
-            {{ getIcono(item.rpe) }}
-          </v-icon>
-        </v-card>
-      </div>
+              </b>
+              <p class="texto">RPE: {{ item.rpe }}</p>
+              <p class="texto">Tiempo: {{ item.tiempo }}</p>
+              <p class="texto">Comentarios: {{ item.comentarios }}</p>
+            </div>
+            <v-icon :class="iconClass(item.rpe)" class="icono-rpe">
+              {{ getIcono(item.rpe) }}
+            </v-icon>
+          </template>
+        </ListaCrudComponent>
+      </v-card>
     </div>
     <div class="derecha">
       <CalendarioComponent
@@ -174,6 +170,16 @@ export default {
       mostrarAlerta: false,
       mensajeAlerta: "",
       tipoAlerta: "error",
+      accionesGrupos: [
+        {
+          icon: "mdi-trash-can",
+          color: "var(--rechazo)",
+          evento: "abandonar",
+        },
+      ],
+      cargandoGrupos:false,
+      cargandoSesionesRealizadas:false,
+      cargandoEncargado:false
     };
   },
   methods: {
@@ -193,12 +199,14 @@ export default {
       "realizarSolicitud",
       "getGruposUsuario",
       "getGruposEncargado",
+      "abandonarGrupo"
     ]),
     mostrarAlertaTemporal(mensaje, tipo) {
       this.mensajeAlerta = mensaje;
       this.tipoAlerta = tipo;
       this.mostrarAlerta = true;
     },
+
     nuevaSesion(fecha) {
       if (this.gruposEncargado.length >= 1) {
         this.sesionSeleccionada = {};
@@ -208,11 +216,33 @@ export default {
       }
     },
 
+    async mostrarSesiones(){
+      let sesiones = await this.cargarSesiones(this.gruposRegistrados);
+      this.sesiones = sesiones;
+    },
+
+    async mostrarGruposEncargado(){
+      this.cargandoEncargado = true;
+      await this.getGruposEncargado(this.href);
+      this.cargandoEncargado = false;
+    },
+    
+    async mostrarGrupos(){
+      this.cargandoGrupos = true;
+      await this.getGruposUsuario(this.href);
+      this.cargandoGrupos = false;
+    },
+
+    async mostrarSesionesRealizadas(){
+      this.cargandoSesionesRealizadas = true;
+      await this.cargarSesionesRealizadas(this.href);
+      this.cargandoSesionesRealizadas = false;
+    },
+
     async sesionCreada(nuevaSesion) {
       await this.crearSesion(nuevaSesion);
       this.mostrarFormulario = false;
-      let sesiones = await this.cargarSesiones(this.gruposRegistrados);
-      this.sesiones = sesiones;
+      await this.mostrarSesiones();
     },
 
     cerrarFormularioSesion() {
@@ -221,8 +251,7 @@ export default {
 
     async borrarSesion(href) {
       await this.eliminarSesion(href);
-      let sesiones = await this.cargarSesiones(this.gruposRegistrados);
-      this.sesiones = sesiones;
+      await this.mostrarSesiones();
     },
 
     editarSesion(sesion) {
@@ -235,8 +264,7 @@ export default {
     async sesionEditada(sesion) {
       await this.modificarSesion(sesion);
       this.edicion = false;
-      let sesiones = await this.cargarSesiones(this.gruposRegistrados);
-      this.sesiones = sesiones;
+      await this.mostrarSesiones();
     },
 
     async sesionRealizada(sesion) {
@@ -247,7 +275,7 @@ export default {
       await this.crearSesionRealizada(sesion);
       this.$refs.calendario.mostrarTarjeta =
         !this.$refs.calendario.mostrarTarjeta;
-      await this.cargarSesionesRealizadas(this.href);
+      await this.mostrarSesionesRealizadas();
     },
 
     seleccionarSesion(sesion) {
@@ -256,6 +284,10 @@ export default {
 
     navegarADetalleSesion(sesionHref) {
       let id = sesionHref.split("/").pop();
+      this.$router.push("/sesiones/" + id);
+    },
+    navegarADetalleSesionConSesion(sesion) {
+      let id = sesion.sesionId;
       this.$router.push("/sesiones/" + id);
     },
 
@@ -277,12 +309,6 @@ export default {
       let nuevaFecha =
         partesFecha[2] + "/" + partesFecha[1] + "/" + partesFecha[0];
       return nuevaFecha;
-    },
-
-    getCartaStyle(item) {
-      return {
-        "--bg-color": item.color,
-      };
     },
 
     getIcono(rpe) {
@@ -321,8 +347,8 @@ export default {
       try {
         await this.crearGrupo(grupo);
         this.mostrarAlertaTemporal("Solicitud realizada con éxito", "success");
-        this.getGruposEncargado(this.href);
-        this.getGruposUsuario(this.href);
+        await this.mostrarGruposEncargado();
+        await this.mostrarGrupos();
       } catch (error) {
         this.mostrarAlertaTemporal(
           "No se ha podido realizar la solicitud",
@@ -354,10 +380,19 @@ export default {
         );
       }
     },
+    async solicitarAbandonarGrupo(grupo) {
+      let idGrupo = grupo._links.self.href.split('/').pop();
+      await this.abandonarGrupo(idGrupo, this.id);
+      await this.mostrarGrupos();
+      await this.mostrarSesiones();
+    },
+    eliminarGrupo(grupo) {
+      console.log(grupo);
+    },
   },
   async created() {
-    await this.getGruposUsuario(this.href);
-    await this.getGruposEncargado(this.href);
+    await this.mostrarGrupos();
+    await this.mostrarGruposEncargado(this.href);
     const [sesiones] = await Promise.all([
       this.cargarSesiones(this.gruposRegistrados),
       this.cargarSesionesRealizadas(this.href),
@@ -374,6 +409,7 @@ export default {
 </script>
 
 <style scoped>
+
 .texto {
   padding-top: 10px;
   padding-left: 10px;
@@ -388,6 +424,8 @@ export default {
 .resultados {
   flex-flow: column;
   justify-content: start;
+  padding-top: 0;
+  padding-bottom: 5px;
 }
 
 .flex-fila {
