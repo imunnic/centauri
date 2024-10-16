@@ -29,6 +29,10 @@ export default class GrupoService {
     let urlSinMiembro = url + "/encontrarGruposSinUsuario?usuarioId=" + idUsuario;
     return await axios.get(urlSinMiembro, config);
   }
+
+  async cambiarEncargado(grupoHref, grupo){
+    return await axios.patch(grupoHref, grupo, config)
+  }
   
   async postGrupo(grupo) {
     return await axios.post(url, grupo, config);

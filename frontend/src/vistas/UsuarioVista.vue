@@ -1,14 +1,10 @@
 <template>
-  <transition name="fade">
-    <v-alert
-      v-if="mostrarAlerta"
-      :type="tipoAlerta"
-      dismissible
-      class="alert-container ma-2"
-    >
-      {{ mensajeAlerta }}
-    </v-alert>
-  </transition>
+  <MensajeAlertaComponent
+    :mostrar="mostrarAlerta"
+    :mensaje="mensajeAlerta"
+    :tipo="tipoAlerta"
+    @cerrar="mostrarAlerta = false"
+  ></MensajeAlertaComponent>
   <div class="contenedor-flex agenda">
     <div class="contenedor grupos izquierda">
       <v-card elevation="2" v-if="isPantallaGrande" class="grupos">
@@ -133,6 +129,7 @@ import SesionFormComponent from "@/components/SesionFormComponent.vue";
 import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
 import GrupoFormComponent from "@/components/GrupoFormComponent.vue";
 import SolicitudFormComponent from "@/components/SolicitudFormComponent.vue";
+import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useSesionesStore } from "@/store/sesionesStore.js";
 import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
@@ -150,6 +147,7 @@ export default {
     FabBotonComponent,
     GrupoFormComponent,
     SolicitudFormComponent,
+    MensajeAlertaComponent,
   },
   computed: {
     ...mapState(useUsuariosStore, ["username", "href", "id"]),
@@ -200,10 +198,6 @@ export default {
       this.mensajeAlerta = mensaje;
       this.tipoAlerta = tipo;
       this.mostrarAlerta = true;
-
-      setTimeout(() => {
-        this.mostrarAlerta = false;
-      }, 3000);
     },
     nuevaSesion(fecha) {
       if (this.gruposEncargado.length >= 1) {
@@ -452,26 +446,6 @@ export default {
   border-radius: 10px;
   padding: 5px 5px;
   height: fit-content;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.alert-container {
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 9999;
-  width: 90%;
-  max-width: 500px;
 }
 
 @media (max-width: 1500px) {

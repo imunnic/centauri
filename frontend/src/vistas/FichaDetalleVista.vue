@@ -1,16 +1,5 @@
 <template>
   <v-container>
-    <transition name="fade">
-      <v-alert
-        v-if="mostrarAlerta"
-        :type="tipoAlerta"
-        dismissible
-        class="alert-container ma-2"
-      >
-        {{ mensajeAlerta }}
-      </v-alert>
-    </transition>
-
     <div v-if="cargando" class="circulo-carga">
       <v-progress-circular
         :size="70"
@@ -65,7 +54,7 @@
         ></v-text-field>
       </div>
 
-      <b>Descripcion: </b> {{ fichaSeleccionada.descripcion }} 
+      <b>Descripcion: </b> {{ fichaSeleccionada.descripcion }}
 
       <FichaComponent :rondas="fichaSeleccionada.rutina" :solo-lectura="true" />
 
@@ -96,10 +85,18 @@
         >
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn aria-label="cancelar" class="rechazo" elevation="1" @click="dialogAprobar = false"
+          <v-btn
+            aria-label="cancelar"
+            class="rechazo"
+            elevation="1"
+            @click="dialogAprobar = false"
             >Cancelar</v-btn
           >
-          <v-btn aria-label="aprobar" class="claro" elevation="1" @click="confirmar(true)"
+          <v-btn
+            aria-label="aprobar"
+            class="claro"
+            elevation="1"
+            @click="confirmar(true)"
             >Confirmar</v-btn
           >
         </v-card-actions>
@@ -114,10 +111,18 @@
         >
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn name="cancelar" class="rechazo" elevation="1" @click="dialogRechazar = false"
+          <v-btn
+            name="cancelar"
+            class="rechazo"
+            elevation="1"
+            @click="dialogRechazar = false"
             >Cancelar</v-btn
           >
-          <v-btn name="rechazar" class="claro" elevation="1" @click="confirmar(false)"
+          <v-btn
+            name="rechazar"
+            class="claro"
+            elevation="1"
+            @click="confirmar(false)"
             >Confirmar</v-btn
           >
         </v-card-actions>
@@ -129,6 +134,7 @@
 <script>
 import FichaComponent from "@/components/FichaComponent.vue";
 import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
+import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useFichasStore } from "../store/fichasStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { mapState, mapActions } from "pinia";
@@ -137,34 +143,32 @@ export default {
   components: {
     FichaComponent,
     FabBotonComponent,
+    MensajeAlertaComponent,
   },
   data() {
     return {
       fichaSeleccionada: null,
       cargando: false,
-      mostrarAlerta: false,
-      mensajeAlerta: "",
-      tipoAlerta: "",
       dialogAprobar: false,
       dialogRechazar: false,
       tiempoEstimado: "",
-      logeado:"false"
+      logeado: "false",
     };
   },
   computed: {
     ...mapState(useFichasStore, ["fichasRegistradas"]),
     ...mapState(useUsuariosStore, ["perfil", "token", "isLogged"]),
     colorRpe() {
-    const rpe = this.fichaSeleccionada?.rpeEstimado || 0;
-    if (rpe <= 5) {
-      return 'suave';
-    } else if (rpe >= 6 && rpe <= 8) {
-      return 'elevado';
-    } else if (rpe >= 9 && rpe <= 10) {
-      return 'muyAlto';
-    }
-    return '';
-  }
+      const rpe = this.fichaSeleccionada?.rpeEstimado || 0;
+      if (rpe <= 5) {
+        return "suave";
+      } else if (rpe >= 6 && rpe <= 8) {
+        return "umbral";
+      } else if (rpe >= 9 && rpe <= 10) {
+        return "muyAlto";
+      }
+      return "";
+    },
   },
   methods: {
     ...mapActions(useFichasStore, [
@@ -182,22 +186,7 @@ export default {
       );
       let response = await this.cargarFichaDetalle(this.$route.params.id);
       this.fichaSeleccionada = response.data;
-      if (aprobado) {
-        this.mostrarAlertaTemporal("Ficha validada", "success");
-      } else {
-        this.mostrarAlertaTemporal("Ficha rechazada", "error");
-      }
       this.$router.push("/fichas");
-    },
-
-    mostrarAlertaTemporal(mensaje, tipo = "success") {
-      this.mensajeAlerta = mensaje;
-      this.tipoAlerta = tipo;
-      this.mostrarAlerta = true;
-
-      setTimeout(() => {
-        this.mostrarAlerta = false;
-      }, 3000);
     },
   },
   async created() {
@@ -208,9 +197,11 @@ export default {
     let response = await this.cargarFichaDetalle(this.$route.params.id);
     this.fichaSeleccionada = response.data;
     this.cargando = false;
-    this.tiempoEstimado = this.fichaSeleccionada.tiempoEstimado + ' minutos'
-    if(this.logeado){
-      this.fichaSeleccionada.autor = await this.getUsuario(this.fichaSeleccionada._links.autor.href)
+    this.tiempoEstimado = this.fichaSeleccionada.tiempoEstimado + " minutos";
+    if (this.logeado) {
+      this.fichaSeleccionada.autor = await this.getUsuario(
+        this.fichaSeleccionada._links.autor.href
+      );
     }
   },
 };
@@ -257,15 +248,15 @@ export default {
   width: 90%;
   max-width: 500px;
 }
-.suave{
+.suave {
   font-weight: 600;
   color: var(--suave);
 }
-.elevado {
+.umbral {
   font-weight: 600;
   color: var(--elevado);
 }
-.muyAlto{
+.muyAlto {
   font-weight: 600;
   color: var(--rechazo);
 }

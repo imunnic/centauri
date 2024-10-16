@@ -1,5 +1,11 @@
 <template>
   <v-container class="contenedor-flex">
+    <MensajeAlertaComponent
+      :mostrar="mostrarAlerta"
+      :mensaje="mensajeAlerta"
+      :tipo="tipoAlerta"
+      @cerrar="mostrarAlerta = false"
+    ></MensajeAlertaComponent>
     <v-card elevation="3" class="carta">
       Registro
       <v-form class="formulario" @keyup.enter="intentarLogin()">
@@ -36,6 +42,7 @@
 </template>
 
 <script>
+import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useFichasStore } from "@/store/fichasStore.js";
 import { useEjerciciosStore } from "@/store/ejerciciosStore.js";
@@ -46,6 +53,9 @@ import { useGruposStore } from "@/store/gruposStore.js"
 
 import { mapState, mapActions } from "pinia";
 export default {
+  components:{
+    MensajeAlertaComponent
+  },
   computed: {
     ...mapState(useUsuariosStore, ["token", "isLogged", "login"]),
   },
@@ -60,6 +70,9 @@ export default {
       },
       mostrar: false,
       intentos: 0,
+      mostrarAlerta: false,
+      mensajeAlerta: "Error en el login, pruebe de nuevo",
+      tipoAlerta: "error",
     };
   },
   methods: {
@@ -82,8 +95,11 @@ export default {
         this.arrancarServicioGrupos(this.token);
         this.$router.push("/usuario")
       } catch (error) {
-        console.error("Error en el login:", error);
+        this.mostrarAlertaTemporal();
       }
+    },
+    mostrarAlertaTemporal() {
+      this.mostrarAlerta = true;
     },
   },
   async created() {},

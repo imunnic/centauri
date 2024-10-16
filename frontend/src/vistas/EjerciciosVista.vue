@@ -1,16 +1,11 @@
 <template>
   <v-container>
-    <!-- https://vuejs.org/guide/built-ins/transition transiciones de componentes -->
-    <transition name="fade">
-      <v-alert
-        v-if="mostrarAlerta"
-        :type="tipoAlerta"
-        dismissible
-        class="alert-container ma-2"
-      >
-        {{ mensajeAlerta }}
-      </v-alert>
-    </transition>
+    <MensajeAlertaComponent
+      :mostrar="mostrarAlerta"
+      :mensaje="mensajeAlerta"
+      :tipo="tipoAlerta"
+      @cerrar="mostrarAlerta = false"
+    ></MensajeAlertaComponent>
 
     <ListaCrudComponent
       :items="ejerciciosRegistrados"
@@ -44,6 +39,7 @@
 import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
 import EjercicioFormComponent from "@/components/EjercicioFormComponent.vue";
 import EjercicioDetalleComponent from "@/components/EjercicioDetalleComponent.vue";
+import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { mapState, mapActions } from "pinia";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useEjerciciosStore } from "@/store/ejerciciosStore.js";
@@ -53,6 +49,7 @@ export default {
     ListaCrudComponent,
     EjercicioFormComponent,
     EjercicioDetalleComponent,
+    MensajeAlertaComponent,
   },
   data() {
     return {
@@ -95,22 +92,18 @@ export default {
       this.ejercicioSeleccionado = {};
       this.modoEdicion = false;
     },
-    mostrarAlertaTemporal(mensaje, tipo = "success") {
+    mostrarAlertaTemporal(mensaje, tipo) {
       this.mensajeAlerta = mensaje;
       this.tipoAlerta = tipo;
       this.mostrarAlerta = true;
-
-      setTimeout(() => {
-        this.mostrarAlerta = false;
-      }, 3000);
     },
     async guardarEjercicio(ejercicio) {
       if (this.modoEdicion) {
         await this.modificarEjercicio(ejercicio);
-        this.mostrarAlertaTemporal("Ejercicio modificado con éxito");
+        this.mostrarAlertaTemporal("Ejercicio modificado con éxito", "success");
       } else {
         await this.agregarEjercicio(ejercicio);
-        this.mostrarAlertaTemporal("Ejercicio creado con éxito");
+        this.mostrarAlertaTemporal("Ejercicio creado con éxito", "success");
       }
       await this.cargarEjercicios();
       this.cerrarForm();

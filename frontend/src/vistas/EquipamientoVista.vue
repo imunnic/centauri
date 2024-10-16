@@ -1,15 +1,11 @@
 <template>
   <v-container>
-    <transition name="fade">
-      <v-alert
-        v-if="mostrarAlerta"
-        :type="tipoAlerta"
-        dismissible
-        class="alert-container ma-2"
-      >
-        {{ mensajeAlerta }}
-      </v-alert>
-    </transition>
+    <MensajeAlertaComponent
+    :mostrar="mostrarAlerta"
+    :mensaje="mensajeAlerta"
+    :tipo="tipoAlerta"
+    @cerrar="mostrarAlerta = false"
+  ></MensajeAlertaComponent>
 
     <ListaCrudComponent
       :items="equipamientosRegistrados"
@@ -47,6 +43,7 @@ import configuracion from "@/configuracion.json";
 import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
 import EquipamientoFormComponent from "@/components/EquipamientoFormComponent.vue";
 import EquipamientoDetalleComponent from "@/components/EquipamientoDetalleComponent.vue";
+import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useEquipamientosStore } from "@/store/equipamientosStore.js";
 import { mapState, mapActions } from "pinia";
@@ -56,6 +53,7 @@ export default {
     ListaCrudComponent,
     EquipamientoFormComponent,
     EquipamientoDetalleComponent,
+    MensajeAlertaComponent
   },
   data() {
     return {
@@ -90,22 +88,18 @@ export default {
       this.equipamientoSeleccionado = {};
       this.modoEdicion = false;
     },
-    mostrarAlertaTemporal(mensaje, tipo = "success") {
+    mostrarAlertaTemporal(mensaje, tipo) {
       this.mensajeAlerta = mensaje;
       this.tipoAlerta = tipo;
       this.mostrarAlerta = true;
-
-      setTimeout(() => {
-        this.mostrarAlerta = false;
-      }, 3000);
     },
     async guardarEquipamiento(equipamiento) {
       if (this.modoEdicion) {
         await this.modificarEquipamiento(equipamiento);
-        this.mostrarAlertaTemporal("Equipamiento modificado con éxito");
+        this.mostrarAlertaTemporal("Equipamiento modificado con éxito", "success");
       } else {
         await this.agregarEquipamiento(equipamiento);
-        this.mostrarAlertaTemporal("Equipamiento creado con éxito");
+        this.mostrarAlertaTemporal("Equipamiento creado con éxito", "success");
       }
       await this.cargarEquipamientos();
       this.cerrarFormulario();

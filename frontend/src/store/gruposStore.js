@@ -30,6 +30,10 @@ export const useGruposStore = defineStore("grupos", {
       let response = await this.grupoService.existsGrupoByNombre(nombre)
       return response.data;
     },
+    async cambiarEncargado(grupoHref, nuevoEncargadoHref){
+      let grupo = {encargado: nuevoEncargadoHref}
+      await this.grupoService.cambiarEncargado(grupoHref, grupo);
+    },
     async getMiembrosGrupo(hrefGrupo){
       let response = await this.grupoService.getMiembrosGrupo(hrefGrupo);
       return response.data._embedded.usuarios;
