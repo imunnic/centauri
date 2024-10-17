@@ -59,6 +59,9 @@
         @click="abrirDialogoDetalle(item)"
         v-on="$attrs"
       >
+        <template v-slot:titulo="{ item }">
+          <slot name="titulo" :item="item"></slot>
+        </template>
         <template v-slot:info-extra="{ item }">
           <slot name="info-extra" :item="item"></slot>
         </template>

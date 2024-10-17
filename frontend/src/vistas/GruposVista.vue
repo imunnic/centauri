@@ -18,19 +18,28 @@
       @rechazar="negarSolicitud"
       class="solicitudes"
     >
+      <template v-slot:titulo="{ item }">
+        Solicitud de
+        <v-chip class="claro">{{ item.nombreUsuario }}</v-chip> para
+        <v-chip class="claro">{{ item.nombreGrupo }}</v-chip>
+      </template>
     </ListaCrudComponent>
     <div class="miembros-grupo">
-      <h1>Miembros:</h1>
+      <h2>Miembros:</h2>
       <div class="contenedor-flex selector">
-        <v-select
+        <v-combobox
           v-model="grupoSeleccionado"
           label="Grupo"
           :items="gruposEncargado"
           item-title="nombre"
           :return-object="true"
+          :filter="filtroGrupos"
+          :rules="[isSeleccionValida]"
           @update:modelValue="cambioGrupoSeleccionado"
           class="selector-grupo"
-        ></v-select>
+          clearable
+          solo
+        ></v-combobox>
       </div>
       <ListaCrudComponent
         :busqueda="false"
@@ -152,11 +161,24 @@ export default {
     ...mapActions(useSesionesRealizadasStore, [
       "getSesionesRealizadasDeUsuarioyGrupo",
     ]),
+
     mostrarAlertaTemporal(mensaje, tipo) {
       this.mensajeAlerta = mensaje;
       this.tipoAlerta = tipo;
       this.mostrarAlerta = true;
     },
+
+    filtroGrupos(item, queryText) {
+      const nombre = item.nombre.toLowerCase();
+      const query = queryText.toLowerCase();
+      return nombre.indexOf(query) > -1;
+    },
+
+    isSeleccionValida(value) {
+      if (!value) return true;
+      return this.gruposEncargado.some(grupo => grupo.nombre === value.nombre);
+    },
+
     async validarSolicitud(solicitud) {
       await this.aceptarSolicitud(solicitud._links.self.href);
       this.cargando = true;
@@ -170,26 +192,31 @@ export default {
         this.miembrosGrupoSeleccionado = [];
       }
     },
+
     async negarSolicitud(solicitud) {
       await this.rechazarSolicitud(solicitud._links.self.href);
       this.cargando = true;
       await this.getSolicitudes();
       this.cargando = false;
     },
+
     async cambioGrupoSeleccionado() {
       let grupoHref = this.grupoSeleccionado._links.self.href;
       this.cargandoMiembros = true;
       this.miembrosGrupoSeleccionado = await this.getMiembrosGrupo(grupoHref);
       this.cargandoMiembros = false;
     },
+
     confirmarCambioEncargado(encargado) {
       this.mostrarConfirmacionCambioEncargado = true;
       this.miembroSeleccionado = encargado;
     },
+
     cancelarCambioEncargado() {
       this.mostrarConfirmacionCambioEncargado = false;
       this.miembroSeleccionado = null;
     },
+
     async aceptarCambioEncargado() {
       let grupo = {
         encargado: this.miembroSeleccionado._links.self.href,
@@ -208,6 +235,7 @@ export default {
       this.mostrarConfirmacionCambioEncargado = false;
       await this.cargarDatos();
     },
+
     async verMiembro(miembro) {
       let miembroId = miembro._links.self.href.split("/").pop();
       this.sesionesRealizadasDeUsuario =
@@ -217,10 +245,12 @@ export default {
         );
       this.mostrarDetalleUsuario = true;
     },
+
     cerrarMiembro() {
       this.mostrarDetalleUsuario = false;
       this.sesionesRealizadasDeUsuario = [];
     },
+
     async cargarDatos() {
       this.cargando = true;
       this.cargandoMiembros = true;
@@ -232,6 +262,7 @@ export default {
       this.cargandoMiembros = false;
     },
   },
+  
   async mounted() {
     this.cargarDatos();
   },

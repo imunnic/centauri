@@ -42,7 +42,11 @@ public class SolicitudAccesoGrupo {
     this.usuario = usuario;
   }
 
-  public String getNombre(){
-    return "Solicitud de " + getUsuario().getNombre() + " al grupo " + getGrupo().getNombre();
+  public String getNombreGrupo(){
+    return getGrupo().getNombre();
+  }
+
+  public String getNombreUsuario(){
+    return getUsuario().getNombre();
   }
 }

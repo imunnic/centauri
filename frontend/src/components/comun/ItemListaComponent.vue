@@ -38,7 +38,11 @@
       </div>
       <div class="contenido">
         <div class="titulo-acciones">
-          <v-card-title class="titulo">{{ item.nombre }}</v-card-title>
+          <v-card-title class="titulo">
+            <slot name="titulo" :item="item">
+              {{ item.nombre }}
+            </slot>
+          </v-card-title>
           <v-card-actions class="acciones" v-if="acciones.length > 0">
             <v-btn 
               v-for="accion in acciones" 
@@ -92,6 +96,9 @@ export default {
       this.$emit(evento, item);
     }
   },
+  created(){
+    console.log(this.item)
+  }
 };
 </script>
 
@@ -144,5 +151,19 @@ export default {
 .acciones {
   display: flex;
   gap: 8px;
+  flex-grow: 1; 
+  justify-content: flex-end; 
+}
+
+@media (max-width: 600px) {
+  .titulo-acciones {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .acciones {
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
 }
 </style>
