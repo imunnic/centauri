@@ -47,4 +47,10 @@ export default class SesionesRealizadasService {
       grupoNombre;
     return await axios.get(href, config);
   }
+
+
+  async getResumenSesionesRealizadasPreviasDeGrupo(nombreGrupo){
+    let href = url + "/resumen?nombreGrupo=" + nombreGrupo
+    return await axios.get(href, config);
+  }
 }

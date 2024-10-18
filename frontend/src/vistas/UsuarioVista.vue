@@ -314,12 +314,18 @@ export default {
     },
 
     getIcono(rpe) {
-      if (rpe < 6) {
-        return "mdi-speedometer-slow";
-      } else if (rpe === 6 || rpe === 7) {
-        return "mdi-speedometer-medium";
-      } else if (rpe >= 8) {
-        return "mdi-speedometer";
+      if (rpe >= 1 && rpe <= 2) {
+        return "mdi-emoticon-cool-outline";
+      } else if (rpe >= 3 && rpe <= 4) {
+        return "mdi-emoticon-happy-outline";
+      } else if (rpe >= 5 && rpe <= 6) {
+        return "mdi-emoticon-neutral-outline";
+      } else if (rpe >= 7 && rpe <= 8) {
+        return "mdi-emoticon-sad-outline";
+      } else if (rpe >= 9 && rpe <= 10) {
+        return "mdi-emoticon-sick-outline";
+      } else {
+        return null;
       }
     },
 

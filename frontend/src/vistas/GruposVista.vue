@@ -37,7 +37,6 @@
           :rules="[isSeleccionValida]"
           @update:modelValue="cambioGrupoSeleccionado"
           class="selector-grupo"
-          clearable
           solo
         ></v-combobox>
       </div>
@@ -51,6 +50,25 @@
         @detalle="verMiembro"
         @cambiar-encargado="confirmarCambioEncargado"
       >
+      </ListaCrudComponent>
+      <ListaCrudComponent
+        :titulo="'Resumen de Sesiones'"
+        :busqueda="false"
+        :items="sesionesRealizadasGrupo"
+        :cargando="cargandoSesionesGrupo"
+        :permisoEdicion="false"
+        :permisoCreacion="false"
+        @detalle="navegarASesion"
+      >
+        <template v-slot:info-extra="{ item }">
+          <div class="resultados">
+            <p class="texto">RPE Medio: {{ item.rpeMedio }}</p>
+            <p class="texto">Tiempo Medio: {{ item.tiempoMedio }}</p>
+          </div>
+          <v-icon :class="iconClass(item.rpeMedio)" class="icono-rpe">
+            {{ getIcono(item.rpeMedio) }}
+          </v-icon>
+        </template>
       </ListaCrudComponent>
       <DetalleUsuarioSesionesComponent
         v-if="mostrarDetalleUsuario"
@@ -132,7 +150,9 @@ export default {
       grupoSeleccionado: null,
       miembrosGrupoSeleccionado: [],
       cargandoMiembros: false,
+      cargandoSesionesGrupo: false,
       sesionesRealizadasDeUsuario: [],
+      sesionesRealizadasGrupo: [],
       mostrarDetalleUsuario: false,
       mostrarConfirmacionCambioEncargado: false,
       miembroSeleccionado: null,
@@ -160,7 +180,34 @@ export default {
     ]),
     ...mapActions(useSesionesRealizadasStore, [
       "getSesionesRealizadasDeUsuarioyGrupo",
+      "getResumenSesionesRealizadasDeGrupo",
     ]),
+
+    getIcono(rpe) {
+      if (rpe >= 1 && rpe <= 2) {
+        return "mdi-emoticon-cool-outline";
+      } else if (rpe >= 3 && rpe <= 4) {
+        return "mdi-emoticon-happy-outline";
+      } else if (rpe >= 5 && rpe <= 6) {
+        return "mdi-emoticon-neutral-outline";
+      } else if (rpe >= 7 && rpe <= 8) {
+        return "mdi-emoticon-sad-outline";
+      } else if (rpe >= 9 && rpe <= 10) {
+        return "mdi-emoticon-sick-outline";
+      } else {
+        return null;
+      }
+    },
+
+    iconClass(rpe) {
+      if (rpe < 6) {
+        return "claro";
+      } else if (rpe === 6 || rpe === 7) {
+        return "elevado";
+      } else if (rpe >= 8) {
+        return "rechazo";
+      }
+    },
 
     mostrarAlertaTemporal(mensaje, tipo) {
       this.mensajeAlerta = mensaje;
@@ -176,7 +223,9 @@ export default {
 
     isSeleccionValida(value) {
       if (!value) return true;
-      return this.gruposEncargado.some(grupo => grupo.nombre === value.nombre);
+      return this.gruposEncargado.some(
+        (grupo) => grupo.nombre === value.nombre
+      );
     },
 
     async validarSolicitud(solicitud) {
@@ -203,8 +252,14 @@ export default {
     async cambioGrupoSeleccionado() {
       let grupoHref = this.grupoSeleccionado._links.self.href;
       this.cargandoMiembros = true;
+      this.cargandoSesionesGrupo = true;
       this.miembrosGrupoSeleccionado = await this.getMiembrosGrupo(grupoHref);
+      this.sesionesRealizadasGrupo =
+        await this.getResumenSesionesRealizadasDeGrupo(
+          this.grupoSeleccionado.nombre
+        );
       this.cargandoMiembros = false;
+      this.cargandoSesionesGrupo = false;
     },
 
     confirmarCambioEncargado(encargado) {
@@ -261,8 +316,12 @@ export default {
       this.cargando = false;
       this.cargandoMiembros = false;
     },
+
+    navegarASesion(sesion){
+      this.$router.push("/sesiones/" + sesion.sesionId);
+    }
   },
-  
+
   async mounted() {
     this.cargarDatos();
   },
@@ -298,24 +357,18 @@ export default {
   margin: 10px;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
+.resultados {
+  margin-left: 20px;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.alert-container {
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 9999;
-  width: 90%;
-  max-width: 500px;
+.icono-rpe {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 36px;
+  padding: 8px;
+  border-radius: 50%;
+  color: white;
 }
 
 @media (max-width: 600px) {

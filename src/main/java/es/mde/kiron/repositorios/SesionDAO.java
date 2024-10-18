@@ -12,4 +12,5 @@ import java.util.List;
 public interface SesionDAO extends MongoRepository<Sesion, String> {
   List<Sesion> findByGrupoIgnoreCase(String grupo);
   List<Sesion> findByFechaAndGrupo(LocalDate fecha, String grupo);
+  List<Sesion> findByFechaBeforeAndGrupo(LocalDate fecha, String grupo);
 }

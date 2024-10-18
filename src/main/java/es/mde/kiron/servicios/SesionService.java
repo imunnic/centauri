@@ -2,13 +2,19 @@ package es.mde.kiron.servicios;
 
 import es.mde.kiron.entidades.Ficha;
 import es.mde.kiron.entidades.Sesion;
+import es.mde.kiron.entidades.SesionRealizada;
+import es.mde.kiron.entidades.Usuario;
 import es.mde.kiron.modelos.ParteSesion;
+import es.mde.kiron.modelos.ResumenSesionesGrupo;
 import es.mde.kiron.repositorios.FichaDAO;
+import es.mde.kiron.repositorios.GrupoDAO;
 import es.mde.kiron.repositorios.SesionDAO;
+import es.mde.kiron.repositorios.SesionRealizadaDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,7 +26,13 @@ public class SesionService {
   private SesionDAO sesionDAO;
 
   @Autowired
+  private SesionRealizadaDAO sesionRealizadaDAO;
+
+  @Autowired
   private FichaDAO fichaDAO;
+
+  @Autowired
+  private GrupoDAO grupoDAO;
 
   /**
    * Método para validar que la sesión de entrenamiento no exceda los parámetros óptimos
@@ -84,5 +96,6 @@ public class SesionService {
 
     return 0;
   }
+
 }
 

@@ -3,6 +3,7 @@ package es.mde.kiron.rest;
 import es.mde.kiron.entidades.Sesion;
 import es.mde.kiron.entidades.SesionRealizada;
 import es.mde.kiron.entidades.Usuario;
+import es.mde.kiron.modelos.ResumenSesionesGrupo;
 import es.mde.kiron.modelos.SesionRealizadaMapper;
 import es.mde.kiron.modelos.SesionRealizadaResponse;
 import es.mde.kiron.repositorios.SesionDAO;
@@ -49,6 +50,12 @@ public class SesionRealizadaController {
     List<SesionRealizada> lista = sesionRealizadaService.findByUsuarioAndSesionGrupo(usuarioId, grupo);
     List<SesionRealizadaResponse> listaRespuesta = SesionRealizadaMapper.convertirLista(lista);
     return new ResponseEntity<>(listaRespuesta, HttpStatus.OK)  ;
+  }
+
+  @GetMapping("/resumen")
+  public ResponseEntity<List<ResumenSesionesGrupo>> obtenerResumenSesionesDeGrupo(@RequestParam String nombreGrupo) {
+    List<ResumenSesionesGrupo> resumenSesiones = sesionRealizadaService.getSesionesPreviasDeGrupo(nombreGrupo);
+    return ResponseEntity.ok(resumenSesiones);
   }
 }
 

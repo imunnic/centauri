@@ -55,5 +55,12 @@ export const useSesionesRealizadasStore = defineStore("sesionesRealizadas", {
         return false;
       }
     },
+    async getResumenSesionesRealizadasDeGrupo(nombreGrupo) {
+      let resumenSesiones =
+        await this.sesionesRealizadasService.getResumenSesionesRealizadasPreviasDeGrupo(
+          nombreGrupo
+        );
+      return resumenSesiones.data;
+    },
   },
 });
