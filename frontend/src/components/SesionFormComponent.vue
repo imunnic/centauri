@@ -212,7 +212,7 @@ export default {
       );
       let nuevaSesion = {
         nombre: this.nombre,
-        grupo: this.grupo.nombre,
+        grupo: this.grupo,
         unidad: this.unidad,
         fecha: this.fechaSesion,
         fichas: [
@@ -307,7 +307,6 @@ export default {
       this.cargarFichasSeleccionadas();
     } else {
       this.fechaSesion = this.formatoFecha(this.fecha);
-      this.grupo = this.grupos[0];
     }
   },
 };

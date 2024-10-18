@@ -51,7 +51,6 @@ export default class EjerciciosService {
   }
 
   async crearEjercicio(ejercicio) {
-    console.log(ejercicio);
     return await axios.post(url, ejercicio, config);
   }
   async getEquipamientoDeEjercicio(href) {

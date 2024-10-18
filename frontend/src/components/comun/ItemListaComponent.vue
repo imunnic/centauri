@@ -95,9 +95,6 @@ export default {
       event.stopPropagation();
       this.$emit(evento, item);
     }
-  },
-  created(){
-    console.log(this.item)
   }
 };
 </script>

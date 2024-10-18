@@ -25,7 +25,8 @@
       :items="fichasRegistradas"
       :key="fichasKey"
       @detalle="verFicha"
-      :permiso-creacion="fichasPropias"
+      :permisoCreacion="permisoCreacion"
+      :permisoEdicion="fichasPropias"
       :cargando="cargando"
       @editar="editarFicha"
       @eliminar="eliminarFicha"
@@ -74,6 +75,9 @@ export default {
   computed: {
     ...mapState(useFichasStore, ["fichasRegistradas"]),
     ...mapState(useUsuariosStore, ["token", "perfil"]),
+    permisoCreacion(){
+      return this.perfil == "ECEF" || this.perfil == "DIPLOMADO";
+    }
   },
   data() {
     return {
@@ -146,7 +150,7 @@ export default {
       });
     },
     async eliminarFicha(ficha) {
-      await this.borrarFicha(ficha._links.self.href);
+      await this.borrarFicha(ficha.id);
       await this.cargarPropias();
     },
   },

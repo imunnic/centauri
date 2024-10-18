@@ -15,7 +15,8 @@
       @crear="crearEjercicio"
       :cargando="cargando"
       @eliminar="borrarEjercicio"
-      :permisoCreacion="permisoCreacion"
+      :permisoCreacion="permisoCreacionEdicion"
+      :permisoEdicion="permisoCreacionEdicion"
     >
     </ListaCrudComponent>
 
@@ -67,7 +68,7 @@ export default {
   computed: {
     ...mapState(useUsuariosStore, ["token", "perfil"]),
     ...mapState(useEjerciciosStore, ["ejerciciosRegistrados"]),
-    permisoCreacion() {
+    permisoCreacionEdicion() {
       return this.perfil == "ECEF";
     },
   },

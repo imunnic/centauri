@@ -11,6 +11,7 @@
           required
           placeholder="Ficha 1.1 - Calentamiento global"
         ></v-text-field>
+
         <v-select
           :items="tiposFicha"
           label="Tipo de ficha"
@@ -18,8 +19,9 @@
           :rules="tipoRules"
           class="input-field placeholder"
           required
-          placeholder="Fuerza"
+          placeholder="Selecciona tipo de ficha"
         ></v-select>
+
         <v-select
           :items="partesSesion"
           label="Parte de la sesión"
@@ -27,9 +29,12 @@
           :rules="parteRules"
           class="input-field placeholder"
           required
-          placeholder="Calentamiento"
+          item-title="nombre"
+          item-value="valor"
+          placeholder="Selecciona parte de la sesión"
         ></v-select>
       </div>
+
       <div class="flex-container">
         <div class="rpe-estimado">
           <v-text-field
@@ -55,6 +60,7 @@
           ></v-text-field>
         </div>
       </div>
+
       <h3>Rutina</h3>
       <FichaComponent
         :rondas="fichaLocal.rutina"
@@ -88,7 +94,7 @@ export default {
       type: Object,
       default: () => ({
         nombre: "",
-        tipoFicha: "",
+        string: "",
         rpeEstimado: 1,
         rutina: [],
         tiempoEstimado: 0,
@@ -101,14 +107,25 @@ export default {
       valid: false,
       fichaLocal: {
         nombre: "",
-        tipoFicha: "",
+        string: "",
         rpeEstimado: 1,
         rutina: [],
         tiempoEstimado: 0,
         descripcion: "",
       },
-      tiposFicha: ["RESISTENCIA", "FUERZA"],
-      partesSesion: ["CALENTAMIENTO", "FUNDAMENTAL", "COORDINACION", "CALMA"],
+      tiposFicha: [
+        "Resistencia",
+        "Fuerza",
+        "Flexibilidad",
+        "Movilidad",
+        "Entrenamiento Total",
+      ],
+      partesSesion: [
+        { nombre: "Calentamiento", valor: "CALENTAMIENTO" },
+        { nombre: "Parte fundamental", valor: "FUNDAMENTAL" },
+        { nombre: "Coordinación Funcional", valor: "COORDINACION" },
+        { nombre: "Vuelta a la Calma", valor: "CALMA" }
+      ],
       nombreRules: [
         (v) => !!v || "El nombre es requerido",
         (v) => v.length <= 50 || "El nombre debe tener menos de 50 caracteres",

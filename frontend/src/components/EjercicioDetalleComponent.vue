@@ -39,7 +39,7 @@
           <b>Tipo de contracción</b>:
           {{ ejercicio.tipoContraccion || "No especificado." }}
         </p>
-        <p><b>Velocidad</b>: {{ ejercicio.velocidad || "No especificado." }}</p>
+        <p><b>Velocidad de ejecución</b>: {{ ejercicio.velocidad || "No especificado." }}</p>
         <p>
           <b>Equipamiento</b>: {{ equipamiento.nombre || "No especificado." }}
         </p>

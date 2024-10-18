@@ -53,8 +53,8 @@ export const useFichasStore = defineStore("fichas", {
       ficha.estado = "PENDIENTE";
       await this.fichaService.editarFicha(ficha, id);
     },
-    async borrarFicha(href) {
-      await this.fichaService.deleteFicha(href);
+    async borrarFicha(fichaId) {
+      await this.fichaService.deleteFicha(fichaId);
     },
   },
 });

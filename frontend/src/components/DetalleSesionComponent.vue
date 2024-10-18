@@ -77,11 +77,7 @@
           :max="10"
           required
         ></v-text-field>
-        <v-tooltip :text="ayudaRpe" class="tooltip" max-width="200px">
-          <template v-slot:activator="{ props }">
-            <v-icon v-bind="props" icon="mdi-information-outline"></v-icon>
-          </template>
-        </v-tooltip>
+        <InformacionComponent :texto="ayudaRpe"></InformacionComponent>
       </div>
 
       <div class="input-con-icono">
@@ -97,11 +93,7 @@
           :min="1"
           required
         ></v-text-field>
-        <v-tooltip :text="ayudaTiempo" class="tooltip" max-width="200px">
-          <template v-slot:activator="{ props }">
-            <v-icon v-bind="props" icon="mdi-information-outline"></v-icon>
-          </template>
-        </v-tooltip>
+        <InformacionComponent :texto="ayudaTiempo"></InformacionComponent>
       </div>
 
       <v-textarea
@@ -125,11 +117,13 @@
 </template>
 
 <script>
-import tooltips from "@/tooltips.json";
+import InformacionComponent from "@/components/comun/InformacionComponent.vue";
 import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { mapState, mapActions } from "pinia";
+import tooltips from "@/tooltips.json";
 export default {
+  components:{InformacionComponent},
   props: {
     sesion: {
       type: Object,
@@ -251,9 +245,7 @@ export default {
 .formulario {
   margin: 15px;
 }
-.tooltip {
-  max-width: 40vw;
-}
+
 .input-con-icono {
   display: flex;
   align-items: center;

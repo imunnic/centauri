@@ -55,7 +55,8 @@ export default class FichaService {
     return await axios.patch(ruta, ficha, config);
   }
 
-  async deleteFicha(href) {
+  async deleteFicha(fichaId) {
+    let href = url + "/" + fichaId;
     return await axios.delete(href, config);
   }
 }

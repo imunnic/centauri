@@ -240,6 +240,7 @@ export default {
     },
 
     async sesionCreada(nuevaSesion) {
+      console.log(nuevaSesion.grupo);
       await this.crearSesion(nuevaSesion);
       this.mostrarFormulario = false;
       await this.mostrarSesiones();
@@ -249,8 +250,9 @@ export default {
       this.mostrarFormulario = false;
     },
 
-    async borrarSesion(href) {
-      await this.eliminarSesion(href);
+    async borrarSesion(sesion) {
+      await this.eliminarSesion(sesion.href);
+      this.$refs.calendario.cerrarTarjeta();
       await this.mostrarSesiones();
     },
 

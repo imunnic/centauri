@@ -23,16 +23,10 @@
           placeholder="10"
           :disabled="soloLectura"
         ></v-text-field>
-        <v-text-field
+        <InputTiempoComponent
           v-if="ronda.tipo === 'TIEMPO'"
-          v-model="formatoTiempo"
-          label="Tiempo"
-          type="time"
-          required
-          class="input-corto placeholder"
-          placeholder="10:00"
-          :disabled="soloLectura"
-        ></v-text-field>
+          @nuevo-valor="actualizarTiempo"
+        ></InputTiempoComponent>
       </div>
       <div v-else class="flex-fila">
         <p class="definicion-ronda" v-if="ronda.tipo == 'REPS'">
@@ -80,7 +74,6 @@
     >
       <template #item="{ element, index }">
         <SerieComponent
-          class="carta"
           :key="element.id"
           :serie="element"
           @quitar-serie="quitarSerie"
@@ -93,6 +86,7 @@
 </template>
 
 <script>
+import InputTiempoComponent from "@/components/comun/InputTiempoComponent.vue";
 import { useEjerciciosStore } from "../store/ejerciciosStore.js";
 import { mapState } from "pinia";
 import { v4 as uuidv4 } from "uuid";
@@ -100,6 +94,7 @@ import SerieComponent from "../components/SerieComponent.vue";
 import draggable from "vuedraggable";
 
 export default {
+  components: { InputTiempoComponent },
   props: {
     ronda: {
       type: Object,
@@ -132,11 +127,7 @@ export default {
           .padStart(2, "0");
         const seconds = (this.ronda.cantidad % 60).toString().padStart(2, "0");
         return `${minutes}:${seconds}`;
-      },
-      set(value) {
-        const [minutes, seconds] = value.split(":").map(Number);
-        this.ronda.cantidad = minutes * 60 + seconds;
-      },
+      }
     },
   },
   methods: {
@@ -176,6 +167,9 @@ export default {
         }
       }
     },
+    actualizarTiempo(nuevoValor){
+      this.ronda.cantidad = nuevoValor;
+    }
   },
   watch: {
     ronda: {
@@ -239,6 +233,7 @@ export default {
 
 .lista-series {
   margin-top: 5px;
+  gap: 10px;
 }
 
 .input-corto {

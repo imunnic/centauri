@@ -58,17 +58,22 @@
         style="position: relative"
       >
         <v-form class="contenedor">
-          <v-select
+          <v-combobox
             v-model="serie.ejercicio"
             label="Ejercicio"
             :items="ejerciciosRegistrados"
             item-title="nombre"
             item-value="_links.self.href"
+            :return-object="false"
+            :filter="filtroEjercicios"
+            :rules="[isSeleccionValida]"
             requiered
             :disabled="soloLectura"
             class="placeholder"
-            placeholder="Seleccione un ejercicio"
-          ></v-select>
+            placeholder="Extensiones"
+            clearable
+            solo
+          ></v-combobox>
           <div class="flex-container">
             <div class="input-medio">
               <v-select
@@ -99,17 +104,11 @@
                 hint="Cantidad"
                 min="1"
               ></v-text-field>
-              <v-text-field
+              <InputTiempoComponent
                 v-if="serie.tipo === 'TIEMPO'"
-                v-model="formatoTiempo"
-                label="Tiempo"
-                type="time"
-                required
-                class="placeholder"
-                placeholder="00:10"
-                :disabled="soloLectura"
-                hint="Tiempo"
-              ></v-text-field>
+                :titulo="'Tiempo'"
+                @nuevo-valor="actualizarTiempo"
+              ></InputTiempoComponent>
               <v-text-field
                 v-if="serie.tipo === 'DIST'"
                 v-model="formatoDuracion"
@@ -152,7 +151,7 @@
       mdi-trash-can
     </v-icon>
   </v-expansion-panels>
-  <v-card v-else class="contenedor" elevation="3">
+  <v-card v-else class="carta" elevation="3">
     <div class="contenedor-flex flex-columna">
       <v-card-title class="titulo-serie"
         >Serie de {{ serie.ejercicio.nombre }}</v-card-title
@@ -177,7 +176,10 @@
         </div>
         <div class="info-serie">
           <div class="flex-item">
-            <div class="input-label">Marca Objetivo</div>
+            <InformacionComponent
+              :texto="ayudaMarca"
+              :etiqueta="'Marca'"
+            ></InformacionComponent>
             <v-text-field
               v-model.number="marcaObjetivo"
               :label="'Marca'"
@@ -209,15 +211,14 @@
         </div>
         <div class="info-serie">
           <div class="flex-item">
-            <div class="input-label">Marca Objetivo</div>
-            <v-text-field
-              v-model="formatoMarca"
-              :label="'Ritmo'"
-              type="text"
-              class="input-corto placeholder"
-              placeholder="04:30"
-              @input="onInput"
-            ></v-text-field>
+            <InformacionComponent
+              :texto="ayudaMarca"
+              :etiqueta="'Marca'"
+            ></InformacionComponent>
+            <InputTiempoComponent
+              :valorInicial="240"
+              @nuevo-valor="actualizarMarca"
+            ></InputTiempoComponent>
           </div>
         </div>
       </div>
@@ -246,7 +247,10 @@
         </div>
         <div class="info-serie">
           <div class="flex-item">
-            <div class="input-label">Marca Objetivo</div>
+            <InformacionComponent
+              :texto="ayudaMarca"
+              :etiqueta="'Marca'"
+            ></InformacionComponent>
             <v-text-field
               v-model.number="marcaObjetivo"
               :label="'Marca'"
@@ -275,10 +279,14 @@
 </template>
 
 <script>
+import InformacionComponent from "@/components/comun/InformacionComponent.vue";
+import InputTiempoComponent from "@/components/comun/InputTiempoComponent.vue";
 import { useEjerciciosStore } from "../store/ejerciciosStore.js";
 import { mapState } from "pinia";
+import tooltips from "@/tooltips.json";
 
 export default {
+  components: { InformacionComponent, InputTiempoComponent },
   props: {
     serie: {
       type: Object,
@@ -298,6 +306,7 @@ export default {
         { valor: "TIEMPO", texto: "Tiempo" },
         { valor: "DIST", texto: "Distancia" },
       ],
+      ayudaMarca: tooltips.ayudaMarca,
     };
   },
   computed: {
@@ -306,19 +315,10 @@ export default {
       return this.serie.cantidad >= 60 ? "minutos" : "segundos";
     },
     ejercicioSeleccionadoNombre() {
-      const ejercicioSeleccionado = this.ejerciciosRegistrados.find(
-        (ejercicio) => ejercicio._links.self.href === this.serie.ejercicio
-      );
+      const ejercicioSeleccionado = this.serie.ejercicio;
       return ejercicioSeleccionado
         ? ejercicioSeleccionado.nombre
         : "Ejercicio no seleccionado";
-    },
-    formatoMarca() {
-      const minutos = Math.floor(this.ritmoObjetivo / 60)
-        .toString()
-        .padStart(2, "0");
-      const seconds = (this.ritmoObjetivo % 60).toString().padStart(2, "0");
-      return `${minutos}:${seconds}`;
     },
 
     formatoTiempo: {
@@ -383,14 +383,34 @@ export default {
   },
 
   methods: {
-    onInput(value) {
-      const [minutos, seconds] = value.split(":").map(Number);
-      if (!isNaN(minutos) && !isNaN(seconds)) {
-        this.marcaObjetivo = minutos * 60 + seconds;
-      }
+    actualizarTiempo(nuevoValor) {
+      this.serie.cantidad = nuevoValor;
     },
+
+    actualizarMarca(nuevoValor) {
+      this.ritmoObjetivo = nuevoValor;
+    },
+
     quitarSerie() {
       this.$emit("quitar-serie", this.serie.id);
+    },
+
+    filtroEjercicios(item, queryText) {
+      const nombre = item.nombre.toLowerCase();
+      const query = queryText.toLowerCase();
+      return nombre.indexOf(query) > -1;
+    },
+
+    isSeleccionValida(valor) {
+      let isValido = false;
+      if (valor) {
+        if (valor.nombre) {
+          isValido = this.ejerciciosRegistrados.some(
+            (ejercicio) => ejercicio.nombre === valor.nombre
+          );
+        }
+      }
+      return isValido ? true : "Ejercicio no valido";
     },
   },
   created() {
@@ -409,15 +429,15 @@ export default {
   margin-bottom: 10px;
 }
 
-.contenedor {
-  margin-bottom: 10px;
-}
-
 .titulo-serie {
   font-size: 20px;
   font-weight: 600;
   text-decoration: underline;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
+
 
 .definicion-serie {
   padding-left: 15px;
@@ -460,6 +480,10 @@ export default {
 @media (max-width: 600px) {
   .contenedor-flex {
     flex-direction: column;
+  }
+
+  .flex-fila{
+    flex-flow: column !important;
   }
 
   .flex-item {

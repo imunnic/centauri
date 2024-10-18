@@ -63,7 +63,7 @@ const routes = [
   {
     path: '/:catchAll(.*)',
     redirect: '/usuario'
-  }
+  },
 ];
 
 const router = createRouter({

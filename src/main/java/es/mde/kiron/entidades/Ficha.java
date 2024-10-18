@@ -18,7 +18,7 @@ public class Ficha {
   private Estado estado;
   private String nombre;
   private ParteSesion parteSesion;
-  private TipoFicha tipoFicha;
+  private String tipoFicha;
   private String descripcion;
   @DBRef
   private Usuario autor;
@@ -101,11 +101,11 @@ public class Ficha {
     this.parteSesion = parteSesion;
   }
 
-  public TipoFicha getTipoFicha() {
+  public String getTipoFicha() {
     return tipoFicha;
   }
 
-  public void setTipoFicha(TipoFicha tipoFicha) {
+  public void setTipoFicha(String tipoFicha) {
     this.tipoFicha = tipoFicha;
   }
 

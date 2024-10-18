@@ -115,6 +115,7 @@ export default {
   mounted() {
     this.comprobarTamanoPantalla(); 
     window.addEventListener("resize", this.comprobarTamanoPantalla);
+    this.agregarRonda();
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.comprobarTamanoPantalla);

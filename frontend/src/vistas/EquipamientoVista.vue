@@ -18,7 +18,8 @@
       :descripcion="false"
       :imagen-predeterminada="imagenNoEncontrada"
       :cargando="cargando"
-      :permisoCreacion="permisoCreacion"
+      :permisoCreacion="permisoCreacionEdicion"
+      :permiso-edicion="permisoCreacionEdicion"
     >
     </ListaCrudComponent>
 
@@ -72,7 +73,7 @@ export default {
   computed: {
     ...mapState(useEquipamientosStore, ["equipamientosRegistrados"]),
     ...mapState(useUsuariosStore, ["token", "perfil"]),
-    permisoCreacion() {
+    permisoCreacionEdicion() {
       return this.perfil == "ECEF";
     },
   },

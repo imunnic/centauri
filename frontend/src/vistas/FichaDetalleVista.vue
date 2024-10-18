@@ -10,26 +10,14 @@
     </div>
 
     <div v-else>
-      <h2>Ver Ficha</h2>
+      <h2>{{fichaSeleccionada.nombre}}</h2>
       <div class="contenedor-flex">
-        <v-text-field
-          label="Nombre de la ficha"
-          v-model="fichaSeleccionada.nombre"
-          readonly
-          class="input-medio"
-        ></v-text-field>
-        <v-text-field
-          label="Tipo de ficha"
-          v-model="fichaSeleccionada.tipoFicha"
-          readonly
-          class="input-medio"
-        ></v-text-field>
-        <v-text-field
-          label="Parte del entrenamiento"
-          v-model="fichaSeleccionada.parteSesion"
-          readonly
-          class="input-medio"
-        ></v-text-field>
+        <v-chip class="claro" outlined>
+          {{ fichaSeleccionada.tipoFicha }}
+        </v-chip>
+        <v-chip class="claro" outlined>
+          {{ parteSesionFormateada }}
+        </v-chip>
       </div>
       <div class="contenedor-flex">
         <v-text-field
@@ -169,6 +157,22 @@ export default {
       }
       return "";
     },
+    parteSesionFormateada(){
+      const tipo = this.fichaSeleccionada.parteSesion;
+
+      switch (tipo) {
+        case "CALENTAMIENTO":
+          return "Calentamiento";
+        case "FUNDAMENTAL":
+          return "Parte Fundamental";
+        case "COORDINACION":
+          return "Coordinación Funcional";
+        case "CALMA":
+          return "Vuelta a la calma";
+        default:
+          return tipo;
+      }
+    }
   },
   methods: {
     ...mapActions(useFichasStore, [

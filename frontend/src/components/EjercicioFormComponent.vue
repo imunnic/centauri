@@ -110,7 +110,7 @@
                 class="placeholder"
                 placeholder="Normal"
                 v-model="ejercicioNuevo.velocidad"
-                label="Velocidad"
+                label="Velocidad de ejecución"
               >
               </v-text-field>
             </div>
