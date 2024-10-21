@@ -2,16 +2,14 @@
   <div class="contador-serie">
     <!-- Por tiempo -->
     <div v-if="tipo == 'TIEMPO'">
-      <div v-if="serie.ajustable" class="claro">
+      <div v-if="serie.ajustable" class="claro temporizador">
         <v-progress-circular
         :model-value="progresoEnTiempo"
         size="250"
         width="10"
         class="progreso-circular claro"
         >
-        <div class="contenido-circular">
           <p class="texto">{{ formatoTiempoRestante }}</p>
-        </div>
       </v-progress-circular>
       <p class="texto nombre-ejercicio">{{ ejercicio.nombre }}</p>
       <p v-if="ejercicio.tipoCarga == 'VAM'" class="texto">
@@ -21,7 +19,7 @@
         Carga: {{ marcaAjustada }} kg
       </p>
     </div>
-    <div v-else>
+    <div v-else class="contador-serie">
       <v-progress-circular
       :model-value="progresoEnTiempo"
       size="200"
@@ -30,9 +28,7 @@
       >
       <p class="texto">{{ formatoTiempoRestante }}</p>
     </v-progress-circular>
-    <div class="contenido-circular">
       <p class="texto nombre-ejercicio">{{ ejercicio.nombre }}</p>
-    </div>
     </div>
     </div>
     <!-- Si no son por tiempo -->
@@ -95,7 +91,7 @@
     </div>
 
     <v-card-actions>
-      <v-btn class="rechazo boton" @click="finalizarSerie">{{ textoBoton }}</v-btn>
+      <v-btn class="rechazo boton" @click="finalizarSerie">Siguiente Serie</v-btn>
     </v-card-actions>
   </div>
 </template>
@@ -111,10 +107,6 @@ export default {
       type: Object,
       required: true,
     },
-    ultimo:{
-      type: Boolean,
-      required:true
-    }
   },
   data() {
     return {
@@ -162,14 +154,6 @@ export default {
     progresoEnTiempo() {
       return (this.tiempoRestante / this.serie.cantidad) * 100;
     },
-
-    textoBoton(){
-      if(this.ultimo){
-        return 'Finalizar';
-      } else {
-        return 'Siguiente';
-      }
-    }
   },
   methods: {
     formatearTiempo(tiempoTotal) {
@@ -218,9 +202,14 @@ export default {
   align-items: center;
   justify-content: center;
   width: fit-content;
-  padding: 20px;
+  padding: 10px;
 }
-
+.temporizador{
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
 .progreso-circular {
   position: relative;
   display: flex;
@@ -266,7 +255,7 @@ export default {
   height: fit-content;
   border-radius: 20px;
   font-size: 30px;
-  margin-top: 50px;
+  margin-top: 20px;
   padding: 10px;
 }
 </style>
