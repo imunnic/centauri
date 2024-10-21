@@ -63,7 +63,7 @@ export default {
         case "COORDINACION":
           this.coordinacion.push(...ficha.rutina);
           break;
-        case "VUELTA CALMA":
+        case "CALMA":
           this.vueltaCalma.push(...ficha.rutina);
           break;
       }
