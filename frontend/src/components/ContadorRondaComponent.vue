@@ -89,6 +89,7 @@ export default {
         
       } else if (this.ronda.tipo === "REPS") {
         this.indiceSerieActual = 0;
+        this.$emit('vuelta-completada');
         this.repeticionesRonda++;
       } else if (this.ronda.tipo === "TIEMPO"){
         if(this.indiceSerieActual < this.ronda.series.length - 1){

@@ -109,8 +109,7 @@ export default {
     return {
       tiposRonda: [
         { valor: "REPS", texto: "Repeticiones" },
-        { valor: "TIEMPO", texto: "Tiempo" },
-        { valor: "DIST", texto: "Distancia" },
+        { valor: "TIEMPO", texto: "Tiempo" }
       ],
     };
   },
