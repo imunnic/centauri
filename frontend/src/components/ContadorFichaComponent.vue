@@ -14,9 +14,6 @@
       <p class="texto">
         {{ textoSesion }}
       </p>
-      <p class="texto nombre">
-        {{ ficha.nombre }}
-      </p>
       <v-divider :thickness="2" color="#ffffff" opacity="0.7"></v-divider>
       <ContadorRondaComponent class="claro" :key="rondaActual" :ronda="ronda" :marcasUsuario="marcas"
         :rondaTotal="rondas.length" @ronda-finalizada="siguienteRonda" @vuelta-completada="sumarRonda"/>
@@ -72,7 +69,6 @@ export default {
   methods: {
     siguienteRonda() {
       this.rondaActual++;
-      console.log(this.rondasActualTotal);
       this.ronda = this.rondas[this.rondaActual];
       if (this.rondaActual >= this.rondas.length) {
         this.$emit('ficha-finalizada');
@@ -112,6 +108,10 @@ export default {
 }
 .contenedor-flex {
   position: relative;
+}
+
+.claro:hover{
+  background-color: initial !important;
 }
 
 .barra-puntos {

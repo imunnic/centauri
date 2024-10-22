@@ -2,7 +2,7 @@
   <div class="contador-serie">
     <!-- Por tiempo -->
     <div v-if="tipo == 'TIEMPO'">
-      <div v-if="serie.ajustable" class="claro temporizador">
+      <div v-if="serie.ajustable" class="claro temporizador minAltura">
         <v-progress-circular
         :model-value="progresoEnTiempo"
         size="250"
@@ -19,7 +19,7 @@
         Carga: {{ marcaAjustada }} kg
       </p>
     </div>
-    <div v-else class="contador-serie">
+    <div v-else class="contador-serie minAltura">
       <v-progress-circular
       :model-value="progresoEnTiempo"
       size="200"
@@ -32,7 +32,7 @@
     </div>
     </div>
     <!-- Si no son por tiempo -->
-    <div v-else class="contenido">
+    <div v-else class="contenido minAltura">
       <p class="texto nombre-ejercicio">{{ ejercicio.nombre }}</p>
       <!-- ajustable -->
       <div v-if="serie.ajustable">
@@ -192,6 +192,9 @@ export default {
 </script>
 
 <style scoped>
+.minAltura{
+  min-height: 300px;
+}
 .texto{
   font-size: 40px;
   text-align: center;
@@ -217,8 +220,8 @@ export default {
   justify-content: center;
 }
 
-.progreso-circular:hover {
-  background-color: var(--claro);
+.contador-serie .progreso-circular {
+    background-color: transparent !important; /* O el color que desees */
 }
 
 .contenido {

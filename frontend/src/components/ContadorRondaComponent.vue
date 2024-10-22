@@ -144,6 +144,9 @@ export default {
   align-items: center;
   justify-content: center;
 }
+.claro:hover{
+  background-color: initial !important;
+}
 .boton {
   margin-top: 20px;
   font-size: 18px;

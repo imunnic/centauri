@@ -23,6 +23,11 @@ export default class SesionesService {
       return await axios.get(href, config);
     }
 
+    async getSesionPorId(id){
+      let href = url + "/" +id;
+      return await axios.get(href, config);
+    }
+
     async getFichasDeSesion(href){
       return await axios.get(href,config);
     }

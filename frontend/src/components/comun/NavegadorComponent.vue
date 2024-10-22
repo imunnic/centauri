@@ -21,7 +21,7 @@
     </v-list>
   </v-navigation-drawer>
   <v-main class="contenidoPrincipal">
-    <v-breadcrumbs :items="migasDePan">
+    <v-breadcrumbs v-if="!esRutaContador" :items="migasDePan">
       <template v-slot:divider>
         <v-icon>mdi-chevron-right</v-icon>
       </template>
@@ -55,6 +55,9 @@ export default {
           disabled: false,
         };
       });
+    },
+    esRutaContador() {
+      return this.$route.path.startsWith("/contador");
     },
   },
   data() {

@@ -61,6 +61,11 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/contador/:id",
+    name: "contador",
+    component: () => import("../vistas/ContadorVista.vue")
+  },
+  {
     path: '/:catchAll(.*)',
     redirect: '/usuario'
   },
