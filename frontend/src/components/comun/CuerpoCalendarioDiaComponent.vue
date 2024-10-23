@@ -54,7 +54,7 @@
         </template>
         <template v-else>
           <v-card class="carta-eventos sin-sesiones" flat>
-            No hay sesiones previstas para esta fecha
+            No hay sesiones previstas para esta fecha. Pulse para crear una sesion.
           </v-card>
         </template>
       </v-container>

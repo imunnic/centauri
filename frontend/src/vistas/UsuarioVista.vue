@@ -7,7 +7,7 @@
   ></MensajeAlertaComponent>
   <div class="contenedor-flex agenda">
     <div class="contenedor grupos izquierda">
-      <v-card elevation="2" v-if="isPantallaGrande" class="grupos">
+      <v-card elevation="2" class="grupos">
         <ListaCrudComponent
           :busqueda="false"
           :titulo="'Grupos: '"
@@ -24,7 +24,7 @@
           @click="abrirFormSolicitud"
         ></FabBotonComponent>
       </v-card>
-      <v-card elevation="2" v-if="isPantallaGrande" class="grupos">
+      <v-card elevation="2" class="grupos">
         <ListaCrudComponent
           :busqueda="false"
           :titulo="'Encargado de:'"
@@ -149,9 +149,6 @@ export default {
     ...mapState(useUsuariosStore, ["username", "href", "id"]),
     ...mapState(useSesionesRealizadasStore, ["sesionesRealizadasRegistradas"]),
     ...mapState(useGruposStore, ["gruposRegistrados", "gruposEncargado"]),
-    isPantallaGrande() {
-      return this.anchoPantalla > 1500;
-    },
     modoInicial() {
       return this.anchoPantalla > 1000 ? "mes" : "dia";
     },
