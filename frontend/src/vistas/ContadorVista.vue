@@ -1,4 +1,22 @@
 <template>
+  <div v-if="!inicio || sesionFin" class="contenedor-flex">
+    <v-btn 
+    v-if="!inicio"
+    aria-label="iniciar-contador" 
+    class="rechazo centrado boton" 
+    :elevation="8"
+    @click="inicio=true">
+      Inicio
+    </v-btn>
+    <v-btn 
+    v-if="sesionFin"
+    aria-label="finalizar-contador" 
+    class="rechazo centrado boton" 
+    :elevation="8"
+    @click="finalizar">
+      Finalizar
+    </v-btn>
+  </div>
   <div v-if="cargando" class="circulo-carga">
     <v-progress-circular
       :size="70"
@@ -7,7 +25,7 @@
       color="primary"
     ></v-progress-circular>
   </div>
-  <div class="claro" v-if="!sesionFin && !cargando && sesion">
+  <div class="claro" v-if="!sesionFin && !cargando && sesion && inicio">
     <ContadorSesionComponent
       :sesion="sesion"
       :marcas="marcas"
@@ -15,16 +33,13 @@
       @sesion-finalizada="sesionFin = true"
     />
   </div>
-  <div class="claro" v-if="!sesionFin && !cargando && ficha">
+  <div class="claro" v-if="!sesionFin && !cargando && ficha && inicio">
     <ContadorFichaComponent
       :ficha="ficha"
       :marcas="marcas"
       class="claro"
       @ficha-finalizada="sesionFin = true"
     />
-  </div>
-  <div class="claro" v-if="sesionFin">
-    <p class="texto">Sesion terminada</p>
   </div>
 </template>
 
@@ -51,6 +66,7 @@ export default {
       },
       sesionFin: false,
       cargando: false,
+      inicio: false
     };
   },
   methods: {
@@ -59,6 +75,13 @@ export default {
       "getSesionPorId",
     ]),
     ...mapActions(useFichasStore, ["cargarFichaDetalle"]),
+    finalizar(){
+      if (this.$route.query.sesion == "true") {
+        this.$router.push("/usuario");
+      }else{
+        this.$router.push("/fichas");
+      }
+    }
   },
   async created() {
     if (this.$route.query.sesion == "true") {
@@ -71,13 +94,24 @@ export default {
       this.cargando = true;
       let response = await this.cargarFichaDetalle(this.$route.params.id)
       this.ficha = response.data;
-      console.log(this.ficha);
       this.cargando = false;
     }
   },
 };
 </script>
 <style scoped>
+.contenedor-flex{
+  height: 90vh;
+}
+.boton{
+  width: 200px;
+  height: 60px;
+  font-size: 30px;
+}
+.centrado{
+  align-self: center;
+  justify-self: center;
+}
 .claro:hover {
   background-color: var(--claro) !important;
 }

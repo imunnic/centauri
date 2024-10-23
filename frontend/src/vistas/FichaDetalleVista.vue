@@ -63,6 +63,7 @@
         @click="dialogRechazar = true"
       >
       </FabBotonComponent>
+      <FabBotonComponent nombre="ejecutar-ficha" v-if="fichaSeleccionada.estado == 'APROBADO'" icon="mdi-play-box-outline" @click="ejecutar"></FabBotonComponent>
     </div>
 
     <v-dialog v-model="dialogAprobar" max-width="500px">
@@ -192,6 +193,9 @@ export default {
       this.fichaSeleccionada = response.data;
       this.$router.push("/fichas");
     },
+    ejecutar(){
+      this.$router.push("/contador/" + this.$route.params.id + "?sesion=false");
+    }
   },
   async created() {
     this.cargando = true;

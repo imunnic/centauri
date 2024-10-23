@@ -91,7 +91,12 @@
     </div>
 
     <v-card-actions>
-      <v-btn class="rechazo boton" @click="finalizarSerie">Siguiente Serie</v-btn>
+      <v-btn 
+      aria-label="iniciar-sesion" 
+      class="rechazo boton" 
+      @click="finalizarSerie">
+        Siguiente Serie
+      </v-btn>
     </v-card-actions>
   </div>
 </template>
@@ -221,7 +226,7 @@ export default {
 }
 
 .contador-serie .progreso-circular {
-    background-color: transparent !important; /* O el color que desees */
+    background-color: transparent !important;
 }
 
 .contenido {

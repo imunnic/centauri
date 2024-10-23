@@ -28,15 +28,17 @@
         :solo-lectura="true"
       ></FichaComponent>
     </div>
+    <FabBotonComponent icon="mdi-play-box-outline" @click="ejecutar"></FabBotonComponent>
   </div>
 </template>
 <script>
 import FichaComponent from "@/components/FichaComponent.vue";
+import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
 import { useSesionesStore } from "@/store/sesionesStore.js";
 import { mapActions } from "pinia";
 
 export default {
-  components: { FichaComponent },
+  components: { FichaComponent, FabBotonComponent },
   data() {
     return {
       fichas: [],
@@ -48,6 +50,9 @@ export default {
   },
   methods: {
     ...mapActions(useSesionesStore, ["getFichasDeSesionConId"]),
+    ejecutar(){
+      this.$router.push("/contador/" + this.$route.params.id + "?sesion=true")
+    }
   },
   async created() {},
   async mounted() {

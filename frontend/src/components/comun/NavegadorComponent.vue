@@ -20,7 +20,7 @@
       ></v-list-item>
     </v-list>
   </v-navigation-drawer>
-  <v-main class="contenidoPrincipal">
+  <v-main class="contenidoPrincipal" :class="claseRelleno">
     <v-breadcrumbs v-if="!esRutaContador" :items="migasDePan">
       <template v-slot:divider>
         <v-icon>mdi-chevron-right</v-icon>
@@ -59,6 +59,9 @@ export default {
     esRutaContador() {
       return this.$route.path.startsWith("/contador");
     },
+    claseRelleno() {
+      return this.$route.path.startsWith("/contador") ? "completo" : "";
+    },
   },
   data() {
     return {
@@ -86,9 +89,13 @@ export default {
 }
 .contenidoPrincipal {
   padding-top: 0px;
+  min-height: 100%;
 }
-.migas-pan{
-  cursor:pointer;
-  color: #4f4e4e
+.migas-pan {
+  cursor: pointer;
+  color: #4f4e4e;
+}
+.completo {
+  background-color: var(--claro) !important;
 }
 </style>
