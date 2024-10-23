@@ -60,26 +60,14 @@
       @submit.prevent=""
       class="formulario"
     >
-      <p>Notas de la sesión</p>
-
+      <h3>Notas de la sesión</h3>
+      <b>RPE:</b>
       <div class="input-con-icono">
-        <v-text-field
-          class="placeholder input-corto"
-          placeholder="5"
-          v-model="rpe"
-          label="RPE"
-          type="number"
-          :rules="[
-            (v) => !!v || 'El RPE es necesario',
-            (v) => (v >= 1 && v <= 10) || 'El RPE debe estar entre 1 y 10',
-          ]"
-          :min="1"
-          :max="10"
-          required
-        ></v-text-field>
+        <ValoracionComponent
+        @valor-seleccionado="ajustarRpe"></ValoracionComponent>
         <InformacionComponent :texto="ayudaRpe"></InformacionComponent>
       </div>
-
+      <b>Tiempo:</b>
       <div class="input-con-icono">
         <v-text-field
           class="placeholder input-corto"
@@ -95,7 +83,7 @@
         ></v-text-field>
         <InformacionComponent :texto="ayudaTiempo"></InformacionComponent>
       </div>
-
+      <b>Comentarios:</b>
       <v-textarea
         class="placeholder"
         placeholder="En esta sesión realicé 3 repeticiones del circuito"
@@ -118,12 +106,13 @@
 
 <script>
 import InformacionComponent from "@/components/comun/InformacionComponent.vue";
+import ValoracionComponent from "./comun/ValoracionComponent.vue";
 import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { mapState, mapActions } from "pinia";
 import tooltips from "@/tooltips.json";
 export default {
-  components:{InformacionComponent},
+  components:{InformacionComponent, ValoracionComponent},
   props: {
     sesion: {
       type: Object,
@@ -160,7 +149,7 @@ export default {
       comentarios: "",
       ayudaRpe: tooltips.ayudaRPE,
       ayudaTiempo: tooltips.ayudaTiempo,
-      realizada: false,
+      realizada: true,
     };
   },
   methods: {
@@ -189,6 +178,9 @@ export default {
         this.$emit("hecha", sesionRealizada);
       }
     },
+    ajustarRpe(valor){
+      this.rpe = valor*2;
+    }
   },
   async created() {
     this.realizada = await this.comprobarSesionRealizada(
