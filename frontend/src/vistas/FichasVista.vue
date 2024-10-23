@@ -158,6 +158,9 @@ export default {
 </script>
 
 <style scoped>
+.contenedor-flex{
+  overflow: visible;
+}
 .flex-columna {
   align-items: start;
 }
@@ -166,6 +169,8 @@ export default {
   padding-left: 15px;
 }
 .interruptor {
+  margin: 5px;
+  padding: 5px;
   max-height: 40px;
 }
 </style>
