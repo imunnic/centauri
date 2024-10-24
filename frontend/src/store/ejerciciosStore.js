@@ -49,7 +49,6 @@ export const useEjerciciosStore = defineStore("ejercicios", {
         equipamiento = 
         await this.ejerciciosService.getEquipamientoDeEjercicio(ejercicio._links.equipamiento.href);
       } catch(error) {
-        console.log('Este equipo no tiene equipamiento');
       }
       return equipamiento;
     }

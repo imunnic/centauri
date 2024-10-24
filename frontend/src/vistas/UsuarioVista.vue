@@ -81,6 +81,7 @@
           <DetalleSesionComponent
             :sesion="sesionSeleccionada"
             :gruposConPermiso="gruposEncargado"
+            @cerrarTarjeta="cerrarDetalleCalendario"
             @editarSesion="editarSesion"
             @borrarSesion="borrarSesion"
             @detalle="navegarADetalleSesion"
@@ -266,14 +267,18 @@ export default {
       await this.mostrarSesiones();
     },
 
+    cerrarDetalleCalendario(){
+      this.$refs.calendario.mostrarTarjeta =
+        !this.$refs.calendario.mostrarTarjeta;
+    },
+
     async sesionRealizada(sesion) {
       sesion.sesion = {
         id: sesion.sesion.split("/").pop(),
       };
       sesion.usuario = { id: this.id };
       await this.crearSesionRealizada(sesion);
-      this.$refs.calendario.mostrarTarjeta =
-        !this.$refs.calendario.mostrarTarjeta;
+      this.cerrarDetalleCalendario();
       await this.mostrarSesionesRealizadas();
     },
 

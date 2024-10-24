@@ -154,7 +154,13 @@
   <v-card v-else class="carta" elevation="3">
     <div class="contenedor-flex flex-columna">
       <v-card-title class="titulo-serie"
-        >Serie de {{ serie.ejercicio.nombre }}</v-card-title
+        >Serie de 
+        <v-chip
+        class="enlace claro" 
+        @click="detalle=true">
+        {{ serie.ejercicio.nombre }}
+    </v-chip>
+        </v-card-title
       >
       <div
         v-if="serie.ajustable && serie.ejercicio.tipoCarga == 'REPS'"
@@ -276,17 +282,24 @@
       </div>
     </div>
   </v-card>
+  <EjercicioDetalleComponent
+      v-if="detalle"
+      :ejercicio="this.serie.ejercicio"
+      @cerrar="detalle = false"
+    />
 </template>
 
 <script>
 import InformacionComponent from "@/components/comun/InformacionComponent.vue";
 import InputTiempoComponent from "@/components/comun/InputTiempoComponent.vue";
+import EjercicioDetalleComponent from "./EjercicioDetalleComponent.vue";
 import { useEjerciciosStore } from "../store/ejerciciosStore.js";
 import { mapState } from "pinia";
 import tooltips from "@/tooltips.json";
 
 export default {
-  components: { InformacionComponent, InputTiempoComponent },
+  inheritAttrs: false,
+  components: { InformacionComponent, InputTiempoComponent, EjercicioDetalleComponent },
   props: {
     serie: {
       type: Object,
@@ -307,6 +320,7 @@ export default {
         { valor: "DIST", texto: "Distancia" },
       ],
       ayudaMarca: tooltips.ayudaMarca,
+      detalle:false,
     };
   },
   computed: {
@@ -430,12 +444,20 @@ export default {
 }
 
 .titulo-serie {
+  display: flex;
+  align-items: center;
   font-size: 20px;
   font-weight: 600;
-  text-decoration: underline;
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
+}
+
+.enlace{
+  margin-left: 10px;
+}
+.enlace:hover{
+  cursor: pointer;
 }
 
 

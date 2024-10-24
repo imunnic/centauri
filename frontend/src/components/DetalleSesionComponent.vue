@@ -37,7 +37,8 @@
     <v-divider v-if="puedeRealizar && !realizada" />
     <SesionRealizadaComponent 
     v-if="puedeRealizar && !realizada" 
-    @sesion-realizada="hecha">
+    @sesion-realizada="hecha"
+    @salir="cerrarTarjeta">
   </SesionRealizadaComponent>
   </v-card>
 </template>
