@@ -1,22 +1,44 @@
 <template>
-  <div v-if="!inicio || sesionFin" class="contenedor-flex">
-    <v-btn 
+  <div v-if="!inicio || sesionFin" class="contenedor-flex padding">
+    <v-btn
       v-if="!inicio"
-      aria-label="iniciar-contador" 
-      class="rechazo centrado boton" 
+      aria-label="iniciar-contador"
+      class="rechazo centrado boton"
       :elevation="8"
-      @click="iniciarContador">
+      @click="iniciarContador"
+    >
       Inicio
     </v-btn>
-    <v-btn 
+    <v-btn
       v-if="sesionFin"
-      aria-label="finalizar-contador" 
-      class="rechazo centrado boton fin" 
+      aria-label="finalizar-contador"
+      class="rechazo centrado boton fin"
       :elevation="8"
-      @click="finalizarContador">
+      @click="finSesion"
+    >
       Finalizar
     </v-btn>
   </div>
+  <v-dialog v-model="formFinalizarSesion" persistent max-width="600px">
+    <v-card>
+      <v-card-title class="d-flex justify-space-between align-center">
+        <span>Valorar Sesión</span>
+        <v-btn
+          aria-label="cerrar"
+          icon
+          @click="formFinalizarSesion = false"
+          flat
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-card-title>
+      <SesionRealizadaComponent
+        :tiempoFinal="minutosTotales"
+        @sesion-realizada="realizarSesion"
+        @salir="finalizarContador"
+      ></SesionRealizadaComponent>
+    </v-card>
+  </v-dialog>
 
   <div v-if="inicio" class="contador-tiempo-overlay">
     <span>{{ tiempoFormateado }}</span>
@@ -53,12 +75,19 @@
 <script>
 import ContadorSesionComponent from "@/components/ContadorSesionComponent.vue";
 import ContadorFichaComponent from "@/components/ContadorFichaComponent.vue";
+import SesionRealizadaComponent from "@/components/SesionRealizadaComponent.vue";
 import { useSesionesStore } from "@/store/sesionesStore.js";
+import { useUsuariosStore } from "@/store/usuariosStore.js";
+import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
 import { useFichasStore } from "@/store/fichasStore";
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 
 export default {
-  components: { ContadorSesionComponent, ContadorFichaComponent },
+  components: {
+    ContadorSesionComponent,
+    ContadorFichaComponent,
+    SesionRealizadaComponent,
+  },
   data() {
     return {
       sesion: null,
@@ -69,21 +98,28 @@ export default {
         burpees: 50,
         "pull-ups": 30,
         "push-ups": 70,
-        lunges: 100
+        lunges: 100,
       },
       sesionFin: false,
       cargando: false,
       inicio: false,
       tiempoSesion: 0,
       intervalo: null,
+      formFinalizarSesion: false,
     };
   },
   computed: {
+    ...mapState(useUsuariosStore,['id']),
     tiempoFormateado() {
-      const minutos = Math.floor(this.tiempoSesion / 60).toString().padStart(2, '0');
-      const segundos = (this.tiempoSesion % 60).toString().padStart(2, '0');
+      const minutos = Math.floor(this.tiempoSesion / 60)
+        .toString()
+        .padStart(2, "0");
+      const segundos = (this.tiempoSesion % 60).toString().padStart(2, "0");
       return `${minutos}:${segundos}`;
-    }
+    },
+    minutosTotales() {
+      return Math.floor(this.tiempoSesion / 60);
+    },
   },
   methods: {
     ...mapActions(useSesionesStore, [
@@ -91,7 +127,9 @@ export default {
       "getSesionPorId",
     ]),
     ...mapActions(useFichasStore, ["cargarFichaDetalle"]),
-    
+    ...mapActions(useSesionesRealizadasStore, [
+      "crearSesionRealizada",
+    ]),
     iniciarContador() {
       this.inicio = true;
       this.tiempoSesion = 0;
@@ -99,7 +137,24 @@ export default {
         this.tiempoSesion++;
       }, 1000);
     },
-    
+
+    finSesion(){
+      if (this.$route.query.sesion == "true"){
+        this.formFinalizarSesion = true;
+      } else {
+        this.finalizarContador();
+      }
+    },
+
+    async realizarSesion(sesionRealizada) {
+      sesionRealizada.sesion = {
+        id: this.$route.params.id,
+      };
+      sesionRealizada.usuario = { id: this.id };
+      await this.crearSesionRealizada(sesionRealizada);
+      this.finalizarContador();
+    },
+
     finalizarContador() {
       clearInterval(this.intervalo);
       this.finalizar();
@@ -111,30 +166,38 @@ export default {
       } else {
         this.$router.push("/fichas");
       }
-    }
+    },
   },
   async created() {
     if (this.$route.query.sesion == "true") {
       this.cargando = true;
-      this.sesion = await this.getSesionPorId(this.$route.params.id);
+      try {
+        this.sesion = await this.getSesionPorId(this.$route.params.id);
+      } catch (error) {
+        this.finalizar();
+      }
       let fichas = await this.getFichasDeSesionConId(this.$route.params.id);
       this.sesion.fichas = fichas;
       this.cargando = false;
     } else {
       this.cargando = true;
-      let response = await this.cargarFichaDetalle(this.$route.params.id);
-      this.ficha = response.data;
+      try {
+        let response = await this.cargarFichaDetalle(this.$route.params.id);
+        this.ficha = response.data;
+      } catch (error) {
+        this.finalizar();
+      }
       this.cargando = false;
     }
   },
   beforeDestroy() {
     clearInterval(this.intervalo);
-  }
+  },
 };
 </script>
 
 <style scoped>
-.contenedor-flex {
+.padding {
   padding: 100px;
 }
 .boton {
@@ -157,5 +220,4 @@ export default {
   color: var(--texto);
   z-index: 1000;
 }
-
 </style>

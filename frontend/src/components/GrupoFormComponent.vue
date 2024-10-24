@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="600px">
     <v-card>
-      <v-card-title class="flex-fila justify-space-between">
+      <v-card-title class="flex-fila justify-space-between align-center">
         <span v-if="edicion">Editar Grupo</span>
         <span v-else>Crear Nuevo Grupo</span>
 

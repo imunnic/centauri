@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="600px">
     <v-card>
-      <v-card-title class="d-flex justify-space-between">
+      <v-card-title class="d-flex justify-space-between align-center">
         <span>{{ equipamiento.nombre }}</span>
         <v-btn aria-label="cerrar" icon @click="cerrar" flat>
           <v-icon>mdi-close</v-icon>

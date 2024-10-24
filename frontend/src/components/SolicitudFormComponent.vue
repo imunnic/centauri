@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog" persistent max-width="600px" width="fit-content">
       <v-card>
-        <v-card-title class="flex-fila justify-space-between">
+        <v-card-title class="flex-fila justify-space-between align-center">
           <span>Solicitar Acceso</span>
   
           <v-btn aria-label="cerrar" icon @click="cerrar" flat>
