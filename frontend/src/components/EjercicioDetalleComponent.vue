@@ -98,7 +98,7 @@ export default {
   methods: {
     ...mapActions(useEjerciciosStore, ["getEquipamientoDeEjercicio"]),
     videoId(url) {
-      return url.split('=').pop();
+      return url.split('=').pop().split("/").pop();
     },
     cerrar() {
       this.dialog = false;
