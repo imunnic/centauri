@@ -9,8 +9,8 @@
         :class="{ activo: index <= rondasActualTotal }"
       ></div>
     </div>
-
     <div class="contenido">
+      <v-divider :thickness="2" color="#ffffff" opacity="0.7"></v-divider>
       <p class="texto">
         {{ textoSesion }}
       </p>
@@ -116,8 +116,8 @@ export default {
 
 .barra-puntos {
   position: absolute;
-  left: 20px;
-  top: 100px;
+  left: 10px;
+  top: 7%;
   bottom: 0;
   width: fit-content;
   display: flex;

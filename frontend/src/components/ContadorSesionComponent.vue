@@ -3,7 +3,11 @@
     <p class="texto">
       {{ sesion.nombre }}
     </p>
-    <ContadorFichaComponent :key="fichaActual" :ficha="ficha" :marcas="marcas" @ficha-finalizada="siguienteFicha" />
+    <ContadorFichaComponent 
+    :key="fichaActual" 
+    :ficha="ficha" 
+    :marcas="marcas" 
+    @ficha-finalizada="siguienteFicha" />
   </div>
 </template>
 
@@ -36,8 +40,6 @@ export default {
         console.log('sesion finalizada')
         this.$emit('sesion-finalizada');
       }
-      // this.fichaFin = true;
-      // console.log('Ficha completada')
     }
   },
   created() {
@@ -52,6 +54,7 @@ export default {
 }
 .claro{
   min-height: 86vh;
+  align-items: start;
 }
 .claro:hover{
   background-color: initial !important;
