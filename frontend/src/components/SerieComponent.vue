@@ -154,12 +154,13 @@
   <v-card v-else class="carta" elevation="3">
     <div class="contenedor-flex flex-columna">
       <v-card-title class="titulo-serie"
-        >Serie de 
+        >
+        <p>Serie de</p> 
         <v-chip
         class="enlace claro" 
         @click="detalle=true">
         {{ serie.ejercicio.nombre }}
-    </v-chip>
+        </v-chip>
         </v-card-title
       >
       <div
@@ -455,6 +456,10 @@ export default {
 
 .enlace{
   margin-left: 10px;
+  height: fit-content;
+  word-wrap:normal;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 .enlace:hover{
   cursor: pointer;
@@ -511,5 +516,10 @@ export default {
   .flex-item {
     min-width: unset;
   }
+
+  .titulo-serie {
+  flex-flow: column;
+  align-items: start;
+}
 }
 </style>

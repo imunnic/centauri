@@ -102,6 +102,7 @@
       />
 
       <GrupoFormComponent
+        class="desbordamiento"
         v-if="mostrarFormularioGrupo"
         @crear-grupo="nuevoGrupo"
         @cerrar="cerrarGrupo"

@@ -14,7 +14,7 @@
         :cargando="cargando"
       >
       <template v-slot:info-extra="{ item }">
-          <div>
+          <div class="resultados">
             <p><b>{{ item.fecha[2] }}/{{ item.fecha[1] }}/{{ item.fecha[0] }}</b></p>
             <p><b>RPE:</b> {{ item.rpe }}</p>
             <p><b>Duración:</b> {{ item.duracion }}</p>
@@ -58,4 +58,8 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.resultados{
+  margin-left: 20px;
+}
+</style>
