@@ -11,6 +11,7 @@
         >
           <p class="texto">{{ formatoTiempoRestante }}</p>
       </v-progress-circular>
+      
       <p class="texto nombre-ejercicio">{{ ejercicio.nombre }}</p>
       <p v-if="ejercicio.tipoCarga == 'VAM'" class="texto">
         Ritmo: {{ formatoVam }}
@@ -28,6 +29,7 @@
       >
       <p class="texto">{{ formatoTiempoRestante }}</p>
     </v-progress-circular>
+
       <p class="texto nombre-ejercicio">{{ ejercicio.nombre }}</p>
     </div>
     </div>
@@ -162,8 +164,8 @@ export default {
   },
   methods: {
     formatearTiempo(tiempoTotal) {
-      const minutos = Math.floor(tiempoTotal / 60);
-      const segundos = tiempoTotal % 60;
+      let minutos = Math.floor(tiempoTotal / 60);
+      let segundos = tiempoTotal % 60;
       return `${minutos.toString().padStart(2, "0")}:${segundos
         .toString()
         .padStart(2, "0")}`;
@@ -183,11 +185,36 @@ export default {
 
     finalizarSerie() {
       clearInterval(this.intervalId);
+      window.speechSynthesis.cancel()
       this.$emit("serie-finalizada");
+    },
+
+    leerEnVozAlta(texto) {
+      const utterance = new SpeechSynthesisUtterance(texto);
+
+      utterance.lang = 'es-ES';
+      utterance.rate =0.8;
+      utterance.pitch = 0.8;
+      utterance.volume = 1.2;
+
+      const voices = window.speechSynthesis.getVoices();
+      utterance.voice = voices.filter(voice => voice.name.includes('Spanish'))[42];
+
+      window.speechSynthesis.speak(utterance);
     },
   },
   mounted() {
     this.empezarTemporizador();
+    this.leerEnVozAlta(this.ejercicio.nombre);
+    if(this.tipo == 'TIEMPO'){
+      let minutos = Math.floor(this.serie.cantidad / 60);
+      let segundos = this.serie.cantidad % 60;
+      this.leerEnVozAlta(minutos + ' minutos, ' + segundos + ' segundos');
+    } else if(this.tipo == 'REPS'){
+      this.leerEnVozAlta(this.serie.cantidad + ' repeticiones')
+    } else {
+      this.leerEnVozAlta(this.serie.cantidad + ' metros')
+    }
   },
 
   beforeDestroy() {
