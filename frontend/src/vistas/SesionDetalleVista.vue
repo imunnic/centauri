@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="elementoSesion">
     <div v-if="calentamiento.length > 0" class="contenedor">
       <b>Calentamiento:</b>
       <FichaComponent
@@ -29,12 +29,14 @@
       ></FichaComponent>
     </div>
     <FabBotonComponent icon="mdi-play-box-outline" @click="ejecutar"></FabBotonComponent>
+    <FabBotonComponent class="imprimir" nombre="imprimir-sesion" icon="mdi-printer-outline" @click="imprimirSesion"></FabBotonComponent>
   </div>
 </template>
 <script>
 import FichaComponent from "@/components/FichaComponent.vue";
 import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
 import { useSesionesStore } from "@/store/sesionesStore.js";
+import { useImpresionStore } from "@/store/impresionStore";
 import { mapActions } from "pinia";
 
 export default {
@@ -50,8 +52,13 @@ export default {
   },
   methods: {
     ...mapActions(useSesionesStore, ["getFichasDeSesionConId"]),
+    ...mapActions(useImpresionStore, ["imprimir"]),
+
     ejecutar(){
       this.$router.push("/contador/" + this.$route.params.id + "?sesion=true")
+    },
+    imprimirSesion(){
+      this.imprimir("elementoSesion");
     }
   },
   async created() {},
@@ -76,4 +83,8 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.imprimir{
+  right: 100px;
+}
+</style>

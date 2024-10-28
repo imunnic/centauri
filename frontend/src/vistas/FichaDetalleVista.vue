@@ -9,8 +9,8 @@
       ></v-progress-circular>
     </div>
 
-    <div v-else>
-      <h2>{{fichaSeleccionada.nombre}}</h2>
+    <div v-else id="elementoFicha">
+      <h2>{{ fichaSeleccionada.nombre }}</h2>
       <div class="contenedor-flex">
         <v-chip class="claro" outlined>
           {{ fichaSeleccionada.tipoFicha }}
@@ -63,7 +63,19 @@
         @click="dialogRechazar = true"
       >
       </FabBotonComponent>
-      <FabBotonComponent nombre="ejecutar-ficha" v-if="fichaSeleccionada.estado == 'APROBADO'" icon="mdi-play-box-outline" @click="ejecutar"></FabBotonComponent>
+      <FabBotonComponent
+        nombre="ejecutar-ficha"
+        v-if="fichaSeleccionada.estado == 'APROBADO'"
+        icon="mdi-play-box-outline"
+        @click="ejecutar"
+      ></FabBotonComponent>
+      <FabBotonComponent
+        class="imprimir"
+        nombre="imprimir-ficha"
+        v-if="fichaSeleccionada.estado == 'APROBADO'"
+        icon="mdi-printer-outline"
+        @click="imprimirFicha"
+      ></FabBotonComponent>
     </div>
 
     <v-dialog v-model="dialogAprobar" max-width="500px">
@@ -126,6 +138,7 @@ import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
 import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useFichasStore } from "../store/fichasStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
+import { useImpresionStore } from "@/store/impresionStore";
 import { mapState, mapActions } from "pinia";
 
 export default {
@@ -158,7 +171,7 @@ export default {
       }
       return "";
     },
-    parteSesionFormateada(){
+    parteSesionFormateada() {
       const tipo = this.fichaSeleccionada.parteSesion;
 
       switch (tipo) {
@@ -173,7 +186,7 @@ export default {
         default:
           return tipo;
       }
-    }
+    },
   },
   methods: {
     ...mapActions(useFichasStore, [
@@ -182,6 +195,7 @@ export default {
       "cambiarEstado",
     ]),
     ...mapActions(useUsuariosStore, ["peticionLogin", "getUsuario"]),
+    ...mapActions(useImpresionStore, ["imprimir"]),
 
     async confirmar(aprobado) {
       this.dialogAprobar = false;
@@ -193,9 +207,12 @@ export default {
       this.fichaSeleccionada = response.data;
       this.$router.push("/fichas");
     },
-    ejecutar(){
+    ejecutar() {
       this.$router.push("/contador/" + this.$route.params.id + "?sesion=false");
-    }
+    },
+    imprimirFicha() {
+      this.imprimir("elementoFicha");
+    },
   },
   async created() {
     this.cargando = true;
@@ -267,5 +284,9 @@ export default {
 .muyAlto {
   font-weight: 600;
   color: var(--rechazo);
+}
+
+.imprimir{
+  right: 100px;
 }
 </style>
