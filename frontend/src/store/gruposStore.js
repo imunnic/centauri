@@ -30,6 +30,9 @@ export const useGruposStore = defineStore("grupos", {
       let response = await this.grupoService.existsGrupoByNombre(nombre)
       return response.data;
     },
+    async eliminarGrupo(href){
+      await this.grupoService.eliminarGrupo(href);
+    },
     async cambiarEncargado(grupoHref, nuevoEncargadoHref){
       let grupo = {encargado: nuevoEncargadoHref}
       await this.grupoService.cambiarEncargado(grupoHref, grupo);

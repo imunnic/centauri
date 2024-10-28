@@ -39,6 +39,13 @@
           class="selector-grupo"
           solo
         ></v-combobox>
+        <v-btn
+          v-if="grupoSeleccionado"
+          aria-label="eliminar-grupo"
+          class="rechazo"
+          @click="borradoDeGrupo"
+          >Eliminar grupo</v-btn
+        >
       </div>
       <ListaCrudComponent
         :busqueda="false"
@@ -109,6 +116,36 @@
         </v-card>
       </v-dialog>
     </div>
+    <v-dialog v-model="confirmarBorrado" max-width="600px">
+      <v-card>
+          <v-card-title class="flex-fila justify-space-between align-center">
+            <span>Confirmar eliminar grupo</span>
+            <v-btn
+              aria-label="cancelar-cambio-encargado"
+              icon
+              @click="cancelarBorrarGrupo"
+              flat
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text>
+            ¿Está seguro de que desea eliminar el grupo? Se eliminarán todas las solicitudes y las sesiones futuras del grupo.
+          </v-card-text>
+          <v-btn
+              aria-label="confirmar-eliminar-grupo"
+              class="claro boton"
+              @click="borrarGrupo"
+              >Confirmar</v-btn
+            >
+            <v-btn
+              aria-label="cancelar-eliminar-grupo"
+              class="rechazo boton"
+              @click="cancelarBorrarGrupo"
+              >Cancelar</v-btn
+            >
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script>
@@ -159,6 +196,7 @@ export default {
       mostrarAlerta: false,
       mensajeAlerta: "",
       tipoAlerta: "error",
+      confirmarBorrado: false
     };
   },
   computed: {
@@ -177,6 +215,7 @@ export default {
       "rechazarSolicitud",
       "getMiembrosGrupo",
       "cambiarEncargado",
+      "eliminarGrupo"
     ]),
     ...mapActions(useSesionesRealizadasStore, [
       "getSesionesRealizadasDeUsuarioyGrupo",
@@ -317,8 +356,20 @@ export default {
       this.cargandoMiembros = false;
     },
 
-    navegarASesion(sesion){
+    navegarASesion(sesion) {
       this.$router.push("/sesiones/" + sesion.sesionId);
+    },
+
+    borradoDeGrupo() {
+      this.confirmarBorrado = true;
+    },
+    cancelarBorrarGrupo(){
+      this.confirmarBorrado = false;
+    },
+    async borrarGrupo(){
+      await this.eliminarGrupo(this.grupoSeleccionado._links.self.href);
+      await this.cargarDatos();
+      this.confirmarBorrado= false;
     }
   },
 

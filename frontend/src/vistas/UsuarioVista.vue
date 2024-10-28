@@ -133,7 +133,6 @@ import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useGruposStore } from "@/store/gruposStore.js";
 import { mapActions, mapState } from "pinia";
-import grupos from "@/assets/grupos.json";
 import configuracion from "@/configuracion.json";
 
 export default {

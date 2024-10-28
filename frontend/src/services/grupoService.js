@@ -48,6 +48,10 @@ export default class GrupoService {
     return await axios.get(urlExists, config);
   }
 
+  async eliminarGrupo(href){
+    return await axios.delete(href, config);
+  }
+
   async getMiembrosGrupo(hrefGrupo){
     let href = hrefGrupo + "/miembros";
     return await axios.get(href, config);
