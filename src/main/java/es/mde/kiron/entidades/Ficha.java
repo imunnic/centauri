@@ -25,6 +25,7 @@ public class Ficha {
   private List<Ronda> rutina = new ArrayList<>();
   private int rpeEstimado;
   private int tiempoEstimado;
+  private String url;
 
   public Ficha() {
   }
@@ -109,4 +110,11 @@ public class Ficha {
     this.tipoFicha = tipoFicha;
   }
 
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
 }

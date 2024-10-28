@@ -75,6 +75,11 @@
         rows="4"
         outlined
       ></v-textarea>
+      <v-text-field
+          label="Enlace de la ficha"
+          v-model="url"
+          class="input-field placeholder"
+          placeholder="http://www.documentooficial.com/1213hgfg32h1g23jf"></v-text-field>
       <v-btn aria-label="guardar" class="guardar-btn claro" type="submit">Guardar</v-btn>
     </v-form>
   </v-container>
@@ -135,6 +140,7 @@ export default {
       rpeRules: [
         (v) => (v > 0 && v <= 10) || "El valor del rpe debe estar entre 1 y 10",
       ],
+      url: null,
     };
   },
   watch: {
@@ -151,6 +157,9 @@ export default {
       this.fichaLocal.rutina = rondas;
     },
     async guardarFicha() {
+      if (this.url){
+        this.fichaLocal.url = this.url
+      }
       let isValido = await this.$refs.formulario.validate();
       if (this.$route.query.edicion == "true") {
         await this.editarFicha(this.fichaLocal, this.$route.params.id);

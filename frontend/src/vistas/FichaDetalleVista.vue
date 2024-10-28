@@ -43,6 +43,9 @@
       </div>
 
       <b>Descripcion: </b> {{ fichaSeleccionada.descripcion }}
+      <div v-if="fichaSeleccionada.url">
+        <b>Enlace:</b> <a :href="fichaSeleccionada.url">aquí</a>
+      </div>
 
       <FichaComponent :rondas="fichaSeleccionada.rutina" :solo-lectura="true" />
 
