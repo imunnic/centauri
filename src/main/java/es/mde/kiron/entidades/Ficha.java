@@ -18,13 +18,14 @@ public class Ficha {
   private Estado estado;
   private String nombre;
   private ParteSesion parteSesion;
-  private TipoFicha tipoFicha;
+  private String tipoFicha;
   private String descripcion;
   @DBRef
   private Usuario autor;
   private List<Ronda> rutina = new ArrayList<>();
   private int rpeEstimado;
   private int tiempoEstimado;
+  private String url;
 
   public Ficha() {
   }
@@ -101,12 +102,19 @@ public class Ficha {
     this.parteSesion = parteSesion;
   }
 
-  public TipoFicha getTipoFicha() {
+  public String getTipoFicha() {
     return tipoFicha;
   }
 
-  public void setTipoFicha(TipoFicha tipoFicha) {
+  public void setTipoFicha(String tipoFicha) {
     this.tipoFicha = tipoFicha;
   }
 
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
 }

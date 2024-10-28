@@ -9,7 +9,5 @@ import java.util.Optional;
     collectionResourceRel = "usuarios")
 public interface UsuarioDAO extends MongoRepository<Usuario, String> {
   Optional<Usuario> findByNombre(String username);
-
-
 }
 
