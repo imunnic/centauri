@@ -12,7 +12,7 @@
           <p class="texto">{{ formatoTiempoRestante }}</p>
       </v-progress-circular>
       
-      <p class="texto nombre-ejercicio">{{ ejercicio.nombre }}</p>
+      <a class="texto nombre-ejercicio" @click="mostrarEjercicio">{{ ejercicio.nombre }}</a>
       <p v-if="ejercicio.tipoCarga == 'VAM'" class="texto">
         Ritmo: {{ formatoVam }}
       </p>
@@ -30,12 +30,12 @@
       <p class="texto">{{ formatoTiempoRestante }}</p>
     </v-progress-circular>
 
-      <p class="texto nombre-ejercicio">{{ ejercicio.nombre }}</p>
+      <a class="texto nombre-ejercicio" @click="mostrarEjercicio">{{ ejercicio.nombre }}</a>
     </div>
     </div>
     <!-- Si no son por tiempo -->
     <div v-else class="contenido minAltura">
-      <p class="texto nombre-ejercicio">{{ ejercicio.nombre }}</p>
+      <a class="texto nombre-ejercicio" @click="mostrarEjercicio">{{ ejercicio.nombre }}</a>
       <!-- ajustable -->
       <div v-if="serie.ajustable">
         <!-- serie de repeticiones -->
@@ -202,6 +202,10 @@ export default {
 
       window.speechSynthesis.speak(utterance);
     },
+
+    mostrarEjercicio(){
+      this.$emit("mostrar-ejercicio", this.serie.ejercicio);
+    }
   },
   mounted() {
     this.empezarTemporizador();
@@ -292,5 +296,9 @@ export default {
   font-size: 30px;
   margin-top: 20px;
   padding: 10px;
+}
+
+a:hover{
+  cursor: pointer;
 }
 </style>

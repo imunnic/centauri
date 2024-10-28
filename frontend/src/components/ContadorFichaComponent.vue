@@ -15,12 +15,19 @@
         {{ textoSesion }}
       </p>
       <v-divider :thickness="2" color="#ffffff" opacity="0.7"></v-divider>
-      <ContadorRondaComponent class="claro" :key="rondaActual" :ronda="ronda" :marcasUsuario="marcas"
-        :rondaTotal="rondas.length" @ronda-finalizada="siguienteRonda" @vuelta-completada="sumarRonda"/>
+      <ContadorRondaComponent
+        class="claro"
+        :key="rondaActual"
+        :ronda="ronda"
+        :marcasUsuario="marcas"
+        :rondaTotal="rondas.length"
+        @ronda-finalizada="siguienteRonda"
+        @vuelta-completada="sumarRonda"
+        @mostrar-ejercicio="mostrarEjercicio"
+      />
     </div>
   </div>
 </template>
-
 
 <script>
 import ContadorRondaComponent from "@/components/ContadorRondaComponent.vue";
@@ -28,14 +35,14 @@ export default {
   props: {
     ficha: {
       type: Object,
-      required: true
+      required: true,
     },
     marcas: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  emits: ['ficha-finalizada'],
+  emits: ["ficha-finalizada"],
   components: { ContadorRondaComponent },
   computed: {
     textoSesion() {
@@ -55,7 +62,7 @@ export default {
           break;
       }
       return texto;
-    }
+    },
   },
   data() {
     return {
@@ -63,7 +70,7 @@ export default {
       ronda: {},
       rondaActual: 0,
       puntos: [],
-      rondasActualTotal:0
+      rondasActualTotal: 0,
     };
   },
   methods: {
@@ -71,46 +78,49 @@ export default {
       this.rondaActual++;
       this.ronda = this.rondas[this.rondaActual];
       if (this.rondaActual >= this.rondas.length) {
-        this.$emit('ficha-finalizada');
+        this.$emit("ficha-finalizada");
       }
     },
-    sumarRonda(){
+    sumarRonda() {
       this.rondasActualTotal++;
     },
     calcularPuntos() {
       this.puntos = [];
-      this.rondas.forEach(ronda => {
-        if (ronda.tipo === 'REPS') {
+      this.rondas.forEach((ronda) => {
+        if (ronda.tipo === "REPS") {
           for (let i = 0; i < ronda.cantidad; i++) {
             this.puntos.push({});
           }
-        } else if (ronda.tipo === 'TIEMPO') {
+        } else if (ronda.tipo === "TIEMPO") {
           this.puntos.push({});
         }
       });
+    },
+    mostrarEjercicio(ejercicio){
+      this.$emit("mostrar-ejercicio", ejercicio);
     }
   },
   created() {
     this.rondas = this.ficha.rutina;
     this.ronda = this.rondas[0];
     this.calcularPuntos();
-  }
+  },
 };
 </script>
 
 <style scoped>
-.texto{
+.texto {
   text-align: center;
   font-size: x-large;
 }
-.nombre{
+.nombre {
   font-size: large;
 }
 .contenedor-flex {
   position: relative;
 }
 
-.claro:hover{
+.claro:hover {
   background-color: initial !important;
 }
 

@@ -10,6 +10,7 @@
         :marcasUsuario="marcas"
         :key="serieKey"
         @serie-finalizada="finalizarSerie"
+        @mostrar-ejercicio="mostrarEjercicio"
       />
       <div
         v-if="ronda.tipo === 'TIEMPO' && tiempoRestante > 0"
@@ -121,6 +122,10 @@ export default {
       clearInterval(this.intervalId);
       this.$emit("ronda-finalizada");
     },
+
+    mostrarEjercicio(ejercicio){
+      this.$emit("mostrar-ejercicio",ejercicio);
+    }
   },
   mounted() {
     if (this.ronda.tipo === "TIEMPO") {

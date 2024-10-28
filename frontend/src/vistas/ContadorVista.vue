@@ -59,6 +59,7 @@
       :marcas="marcas"
       class="claro"
       @sesion-finalizada="sesionFin = true"
+      @mostrar-ejercicio="mostrarEjercicio"
     />
   </div>
 
@@ -68,14 +69,22 @@
       :marcas="marcas"
       class="claro"
       @ficha-finalizada="sesionFin = true"
+      @mostrar-ejercicio="mostrarEjercicio"
     />
   </div>
+
+  <EjercicioDetalleComponent
+      v-if="detalleEjercicio"
+      :ejercicio="ejercicio"
+      @cerrar="cerrarDialogoDetalle"
+    />
 </template>
 
 <script>
 import ContadorSesionComponent from "@/components/ContadorSesionComponent.vue";
 import ContadorFichaComponent from "@/components/ContadorFichaComponent.vue";
 import SesionRealizadaComponent from "@/components/SesionRealizadaComponent.vue";
+import EjercicioDetalleComponent from "@/components/EjercicioDetalleComponent.vue";
 import { useSesionesStore } from "@/store/sesionesStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
@@ -87,6 +96,7 @@ export default {
     ContadorSesionComponent,
     ContadorFichaComponent,
     SesionRealizadaComponent,
+    EjercicioDetalleComponent
   },
   data() {
     return {
@@ -106,6 +116,8 @@ export default {
       tiempoSesion: 0,
       intervalo: null,
       formFinalizarSesion: false,
+      detalleEjercicio: false,
+      ejercicio: null
     };
   },
   computed: {
@@ -167,6 +179,16 @@ export default {
         this.$router.push("/fichas");
       }
     },
+
+    mostrarEjercicio(ejercicio){
+      this.ejercicio = ejercicio;
+      this.detalleEjercicio = true;
+    },
+
+    cerrarDialogoDetalle(){
+      this.ejercicio = null;
+      this.detalleEjercicio = false;
+    }
   },
   async created() {
     if (this.$route.query.sesion == "true") {

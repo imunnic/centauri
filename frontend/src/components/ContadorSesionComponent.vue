@@ -7,7 +7,8 @@
     :key="fichaActual" 
     :ficha="ficha" 
     :marcas="marcas" 
-    @ficha-finalizada="siguienteFicha" />
+    @ficha-finalizada="siguienteFicha" 
+    @mostrar-ejercicio="mostrarEjercicio"/>
   </div>
 </template>
 
@@ -40,6 +41,9 @@ export default {
         console.log('sesion finalizada')
         this.$emit('sesion-finalizada');
       }
+    },
+    mostrarEjercicio(ejercicio){
+      this.$emit('mostrar-ejercicio', ejercicio);
     }
   },
   created() {
