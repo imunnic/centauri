@@ -9,7 +9,6 @@ let config = {
 };
 
 export default class GrupoService {
-  constructor() {}
 
   actualizarCabecera(token) {
     config.headers.Authorization = "Bearer " + token;

@@ -8,7 +8,6 @@ let config = {
 };
 
 export default class FichaService {
-  constructor() {}
 
   actualizarCabecera(token) {
     config.headers.Authorization = "Bearer " + token;

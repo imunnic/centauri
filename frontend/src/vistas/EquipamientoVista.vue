@@ -72,12 +72,13 @@ export default {
   },
   computed: {
     ...mapState(useEquipamientosStore, ["equipamientosRegistrados"]),
-    ...mapState(useUsuariosStore, ["token", "perfil"]),
+    ...mapState(useUsuariosStore, ["token", "perfil", "isLogged"]),
     permisoCreacionEdicion() {
       return this.perfil == "ECEF";
     },
   },
   methods: {
+    ...mapActions(useUsuariosStore, ['renovarToken']),
     ...mapActions(useEquipamientosStore, [
       "cargarEquipamientos",
       "resetEquipamiento",
@@ -98,9 +99,11 @@ export default {
       if (this.modoEdicion) {
         await this.modificarEquipamiento(equipamiento);
         this.mostrarAlertaTemporal("Equipamiento modificado con éxito", "success");
+        await this.renovarCredenciales();
       } else {
         await this.agregarEquipamiento(equipamiento);
         this.mostrarAlertaTemporal("Equipamiento creado con éxito", "success");
+        await this.renovarCredenciales();
       }
       await this.cargarEquipamientos();
       this.cerrarFormulario();
@@ -127,12 +130,18 @@ export default {
       await this.eliminarEquipamiento(equipamiento);
       this.cargarEquipamientos();
       this.equipamientosKey += 1;
-      this.mostrarAlertaTemporal("Equipamiento eliminado con éxito");
+      this.mostrarAlertaTemporal("Equipamiento eliminado con éxito", "success");
+      await this.renovarCredenciales();
     },
     cerrarFormulario() {
       this.mostrarCrearForm = false;
       this.resetFormulario();
     },
+    async renovarCredenciales(){
+      if(this.isLogged){
+        this.renovarToken();
+      }
+    }
   },
   async created() {
     this.cargando = true;

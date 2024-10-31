@@ -8,10 +8,9 @@ let config = {
 };
 
 export default class EquipamientosService {
-  constructor() {}
 
   actualizarCabecera(token) {
-    config.headers.Authorization = config.headers.Authorization + token;
+    config.headers.Authorization = "Bearer " + token;
   }
 
   async getAll() {

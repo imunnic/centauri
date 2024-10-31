@@ -66,7 +66,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useUsuariosStore, ["token", "perfil"]),
+    ...mapState(useUsuariosStore, ["token", "perfil", 'isLogged']),
     ...mapState(useEjerciciosStore, ["ejerciciosRegistrados"]),
     permisoCreacionEdicion() {
       return this.perfil == "ECEF";
@@ -81,6 +81,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(useUsuariosStore,['renovarToken']),
     ...mapActions(useEjerciciosStore, [
       "arrancarServicioEjercicios",
       "cargarEjercicios",
@@ -106,6 +107,7 @@ export default {
         await this.agregarEjercicio(ejercicio);
         this.mostrarAlertaTemporal("Ejercicio creado con éxito", "success");
       }
+      this.renovarCredenciales();
       await this.cargarEjercicios();
       this.cerrarForm();
       this.ejerciciosKey += 1;
@@ -137,9 +139,15 @@ export default {
       this.cargando = true;
       await this.cargarEjercicios();
       this.cargando = false;
-      this.mostrarAlertaTemporal("Ejercicio eliminado con éxito");
+      this.mostrarAlertaTemporal("Ejercicio eliminado con éxito", "success");
+      this.renovarCredenciales();
       this.ejerciciosKey += 1;
     },
+    async renovarCredenciales(){
+      if(this.isLogged){
+        this.renovarToken();
+      }
+    }
   },
   async created() {
     this.cargando = true;

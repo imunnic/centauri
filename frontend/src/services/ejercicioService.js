@@ -7,7 +7,6 @@ let config = {
   },
 };
 export default class EjerciciosService {
-  constructor() {}
 
   actualizarCabecera(token) {
     config.headers.Authorization = "Bearer " + token;

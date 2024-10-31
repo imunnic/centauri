@@ -44,12 +44,6 @@
 <script>
 import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
-import { useFichasStore } from "@/store/fichasStore.js";
-import { useEjerciciosStore } from "@/store/ejerciciosStore.js";
-import { useEquipamientosStore } from "@/store/equipamientosStore.js";
-import { useSesionesStore } from "@/store/sesionesStore.js";
-import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
-import { useGruposStore } from "@/store/gruposStore.js"
 
 import { mapState, mapActions } from "pinia";
 export default {
@@ -77,22 +71,9 @@ export default {
   },
   methods: {
     ...mapActions(useUsuariosStore, ["peticionLogin"]),
-    ...mapActions(useFichasStore, ["arrancarServicioFicha"]),
-    ...mapActions(useEjerciciosStore, ["arrancarServicioEjercicios"]),
-    ...mapActions(useEquipamientosStore, ["arrancarServicioEquipamientos"]),
-    ...mapActions(useSesionesStore, ["arrancarServicioSesion"]),
-    ...mapActions(useSesionesRealizadasStore, ["arrancarServicioSesionRealizada"]),
-    ...mapActions(useGruposStore, ["arrancarServicioGrupos"]),
-
     async intentarLogin() {
       try {
         await this.peticionLogin(this.logeo);
-        this.arrancarServicioFicha(this.token);
-        this.arrancarServicioEjercicios(this.token);
-        this.arrancarServicioEquipamientos(this.token);
-        this.arrancarServicioSesion(this.token);
-        this.arrancarServicioSesionRealizada(this.token);
-        this.arrancarServicioGrupos(this.token);
         this.$router.push("/usuario")
       } catch (error) {
         this.mostrarAlertaTemporal();

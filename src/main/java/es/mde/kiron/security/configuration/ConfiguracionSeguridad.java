@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /**
  * @author JOSE LUIS PUENTES ALAMOS
+ * Adaptada por IGNACIO OVIDIO MUÑOZ NICOLÁS
  */
 @Configuration
 @EnableWebSecurity
@@ -29,20 +30,16 @@ public class ConfiguracionSeguridad {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authRequest -> authRequest
-            // Permitir el acceso público a los endpoints de autenticación y al de /aprobado
-            .requestMatchers("/api/autenticacion/**", "/api/fichas/aprobado").permitAll()
+            .requestMatchers("/api/autenticacion/login", "/api/autenticacion/registro").permitAll()
+            .requestMatchers("/api/fichas/aprobado").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/fichas/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/ejercicios").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/ejercicios/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/equipamientos").permitAll()
-            // Requerir autenticación para cualquier otro endpoint
             .anyRequest().authenticated())
-        // Política de sesiones sin estado (stateless) para JWT o tokens Bearer
         .sessionManagement(sessionManager ->
             sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        // Proveedor de autenticación (usando tu autenticador personalizado)
         .authenticationProvider(this.PROVIDER)
-        // Filtro personalizado (antes del UsernamePasswordAuthenticationFilter)
         .addFilterBefore(this.FILTER, UsernamePasswordAuthenticationFilter.class)
         .build();
   }

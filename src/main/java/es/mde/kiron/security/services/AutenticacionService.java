@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author JOSE LUIS PUENTES ALAMOS
+ * Añadido el método renovarToken por IGNACIO OVIDIO MUÑOZ NICOLÁS
  */
 @Service
 public class AutenticacionService {
@@ -37,8 +38,7 @@ public class AutenticacionService {
     this.MANAGER.authenticate(
         new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
     UsuarioExterno usuarioExterno = this.USUARIOEXTERNODAO.findByUsername(request.getUsername()).orElseThrow();
-    Usuario usuario = this.USUARIODAO.findByNombre(request.getUsername()).orElseThrow(); //TODO contemplar que el usuario no exista
-//    UserDetails user = usuarioExterno;
+    Usuario usuario = this.USUARIODAO.findByNombre(request.getUsername()).orElseThrow();
     Rol rol = usuarioExterno.getRol();
     String token = this.JWTSERVICE.getToken(usuarioExterno);
     return new AutenticacionResponse(token, request.getUsername(), usuarioExterno.getRol(), usuario);
@@ -57,6 +57,14 @@ public class AutenticacionService {
     return new AutenticacionResponse(this.JWTSERVICE.getToken(usuarioExterno), usuarioExterno.getUsername(),
         usuarioExterno.getRol());
 
+  }
+
+  public AutenticacionResponse renovarToken(String token) {
+    String username = JWTSERVICE.getUsernameFromToken(token);
+    UsuarioExterno usuarioExterno = USUARIOEXTERNODAO.findByUsername(username)
+        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    String nuevoToken = JWTSERVICE.renovarToken(token, usuarioExterno);
+    return new AutenticacionResponse(nuevoToken, usuarioExterno.getUsername(), usuarioExterno.getRol());
   }
 }
 

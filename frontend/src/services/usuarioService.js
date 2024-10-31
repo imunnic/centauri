@@ -4,6 +4,7 @@ import configuracion from "@/configuracion.json";
 let url = configuracion.urlBase + "autenticacion/";
 let login = "login";
 let registro = "registro";
+let renovacion = "renovacion";
 let config = {
   headers: {
     Authorization: configuracion.headersDefecto.Authorization,
@@ -11,7 +12,10 @@ let config = {
 };
 
 export default class UsuariosService {
-  constructor() {}
+
+  actualizarCabecera(token) {
+    config.headers.Authorization = "Bearer " + token;
+  }
 
   async login(usuario) {
     const credenciales = {
@@ -43,5 +47,9 @@ export default class UsuariosService {
 
   async getUsuario(href){
     return await axios.get(href,config);
+  }
+
+  async renovarToken(){
+    return await axios.post(url + renovacion, null, config);
   }
 }

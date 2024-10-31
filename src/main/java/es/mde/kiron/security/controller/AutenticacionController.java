@@ -28,4 +28,13 @@ public class AutenticacionController {
     return ResponseEntity.ok(AUTHSERVICE.registro(request));
   }
 
+  @PostMapping("/renovacion")
+  @ResponseBody
+  public ResponseEntity<AutenticacionResponse> renovarToken(@RequestHeader("Authorization") String token) {
+    if (token.startsWith("Bearer ")) {
+      token = token.substring(7);
+    }
+    return ResponseEntity.ok(AUTHSERVICE.renovarToken(token));
+  }
+
 }

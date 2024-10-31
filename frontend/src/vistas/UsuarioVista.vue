@@ -181,6 +181,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useUsuariosStore,['renovarToken']),
     ...mapActions(useSesionesStore, [
       "crearSesion",
       "cargarSesiones",
@@ -242,6 +243,7 @@ export default {
       await this.crearSesion(nuevaSesion);
       this.mostrarFormulario = false;
       await this.mostrarSesiones();
+      await this.renovarToken();
     },
 
     cerrarFormularioSesion() {
@@ -252,6 +254,7 @@ export default {
       await this.eliminarSesion(sesion.href);
       this.$refs.calendario.cerrarTarjeta();
       await this.mostrarSesiones();
+      await this.renovarToken();
     },
 
     editarSesion(sesion) {
@@ -265,6 +268,7 @@ export default {
       await this.modificarSesion(sesion);
       this.edicion = false;
       await this.mostrarSesiones();
+      await this.renovarToken();
     },
 
     cerrarDetalleCalendario(){
@@ -280,6 +284,7 @@ export default {
       await this.crearSesionRealizada(sesion);
       this.cerrarDetalleCalendario();
       await this.mostrarSesionesRealizadas();
+      await this.renovarToken();
     },
 
     seleccionarSesion(sesion) {
@@ -356,12 +361,13 @@ export default {
       grupo.miembros = [this.href];
       try {
         await this.crearGrupo(grupo);
-        this.mostrarAlertaTemporal("Solicitud realizada con éxito", "success");
+        this.mostrarAlertaTemporal("Grupo creado con éxito", "success");
         await this.mostrarGruposEncargado();
         await this.mostrarGrupos();
+        await this.renovarToken();
       } catch (error) {
         this.mostrarAlertaTemporal(
-          "No se ha podido realizar la solicitud",
+          "No se ha podido crear grupo",
           "error"
         );
       }
@@ -383,6 +389,7 @@ export default {
       try {
         await this.realizarSolicitud(solicitud);
         this.mostrarAlertaTemporal("Solicitud realizada con éxito", "success");
+        await this.renovarToken();
       } catch (error) {
         this.mostrarAlertaTemporal(
           "No se ha podido realizar la solicitud",
@@ -395,6 +402,7 @@ export default {
       await this.abandonarGrupo(idGrupo, this.id);
       await this.mostrarGrupos();
       await this.mostrarSesiones();
+      await this.renovarToken();
     },
     eliminarGrupo(grupo) {
       console.log(grupo);

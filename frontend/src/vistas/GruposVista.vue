@@ -208,6 +208,7 @@ export default {
     ...mapState(useUsuariosStore, ["href"]),
   },
   methods: {
+    ...mapActions(useUsuariosStore,['renovarToken']),
     ...mapActions(useGruposStore, [
       "getGruposEncargado",
       "getSolicitudes",
@@ -319,6 +320,7 @@ export default {
       try {
         await this.cambiarEncargado(grupoHref, grupo);
         this.mostrarAlertaTemporal("Encargado cambiado con éxito", "success");
+        await this.renovarToken();
       } catch {
         this.mostrarAlertaTemporal(
           "No se ha podido cambiar el encargado",
@@ -369,6 +371,7 @@ export default {
     async borrarGrupo(){
       await this.eliminarGrupo(this.grupoSeleccionado._links.self.href);
       await this.cargarDatos();
+      await this.renovarToken();
       this.confirmarBorrado= false;
     }
   },
