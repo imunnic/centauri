@@ -8,6 +8,8 @@ import es.mde.kiron.security.models.LoginRequest;
 import es.mde.kiron.security.models.RegistroResponse;
 import es.mde.kiron.security.models.Rol;
 import es.mde.kiron.security.repositories.UsuarioExternoDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,7 @@ public class AutenticacionService {
   private final JwtService JWTSERVICE;
   private final PasswordEncoder ENCODER;
   private final AuthenticationManager MANAGER;
+  private static final Logger logger = LoggerFactory.getLogger(Usuario.class);
 
   public AutenticacionService(UsuarioExternoDAO usuarioExternoDAO, UsuarioDAO usuarioDAO, JwtService JWTSERVICE, PasswordEncoder ENCODER,
       AuthenticationManager MANAGER) {
@@ -41,6 +44,7 @@ public class AutenticacionService {
     Usuario usuario = this.USUARIODAO.findByNombre(request.getUsername()).orElseThrow();
     Rol rol = usuarioExterno.getRol();
     String token = this.JWTSERVICE.getToken(usuarioExterno);
+    logger.info("Login del usuario con ID: " + usuario.getId());
     return new AutenticacionResponse(token, request.getUsername(), usuarioExterno.getRol(), usuario);
   }
 
@@ -53,7 +57,7 @@ public class AutenticacionService {
     Usuario usuario = new Usuario(usuarioExterno.getUsername(), usuarioExterno.getRol());
     this.USUARIOEXTERNODAO.save(usuarioExterno);
     this.USUARIODAO.save(usuario);
-
+    logger.info("Registro del usuario con ID: " + usuario.getId());
     return new AutenticacionResponse(this.JWTSERVICE.getToken(usuarioExterno), usuarioExterno.getUsername(),
         usuarioExterno.getRol());
 
@@ -63,8 +67,14 @@ public class AutenticacionService {
     String username = JWTSERVICE.getUsernameFromToken(token);
     UsuarioExterno usuarioExterno = USUARIOEXTERNODAO.findByUsername(username)
         .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    Usuario usuario = this.USUARIODAO.findByNombre(usuarioExterno.getUsername())
+        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     String nuevoToken = JWTSERVICE.renovarToken(token, usuarioExterno);
-    return new AutenticacionResponse(nuevoToken, usuarioExterno.getUsername(), usuarioExterno.getRol());
+    logger.info("Renovacion del login del usuario con ID: " + usuario.getId());
+    return new AutenticacionResponse(nuevoToken,
+                                     usuarioExterno.getUsername(),
+                                     usuarioExterno.getRol(),
+                                     usuario);
   }
 }
 

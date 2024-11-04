@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FichaListener extends AbstractMongoEventListener<Ficha> {
 
-  private static final Logger logger = LoggerFactory.getLogger(GruposListener.class);
+  private static final Logger logger = LoggerFactory.getLogger(FichaListener.class);
 
 
   @Override

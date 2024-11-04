@@ -3,12 +3,7 @@ import { useUsuariosStore } from "@/store/usuariosStore.js";
 const routes = [
   {
     path: "/",
-    redirect: "/login",
-  },
-  {
-    path: "/login",
-    name: "login",
-    component: () => import("../vistas/LoginVista.vue"),
+    redirect: "/fichas",
   },
   {
     path: "/usuario",
@@ -81,7 +76,7 @@ router.beforeEach((to, from, next) => {
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!usuariosStore.isLogged) {
-      return next({ name: 'login' });
+      return next({ name: 'fichas' });
     }
 
     if (to.meta.requiresRole && !to.meta.requiresRole.includes(usuariosStore.perfil)) {
