@@ -1,11 +1,5 @@
 <template>
   <v-container class="contenedor-flex">
-    <MensajeAlertaComponent
-      :mostrar="mostrarAlerta"
-      :mensaje="mensajeAlerta"
-      :tipo="tipoAlerta"
-      @cerrar="mostrarAlerta = false"
-    ></MensajeAlertaComponent>
     <v-card elevation="3" class="carta">
       Registro
       <v-form class="formulario" @keyup.enter="intentarLogin()">
@@ -42,13 +36,12 @@
 </template>
 
 <script>
-import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
-
+import { useAlertasStore } from "@/store/alertasStore.js";
 import { mapState, mapActions } from "pinia";
+
 export default {
   components:{
-    MensajeAlertaComponent
   },
   computed: {
     ...mapState(useUsuariosStore, ["token", "isLogged", "login"]),
@@ -71,16 +64,14 @@ export default {
   },
   methods: {
     ...mapActions(useUsuariosStore, ["peticionLogin"]),
+    ...mapActions(useAlertasStore,['mostrarAlerta']),
     async intentarLogin() {
       try {
         await this.peticionLogin(this.logeo);
         this.$router.push("/usuario")
       } catch (error) {
-        this.mostrarAlertaTemporal();
+        this.mostrarAlerta(this.mensajeAlerta, this.tipoAlerta);
       }
-    },
-    mostrarAlertaTemporal() {
-      this.mostrarAlerta = true;
     },
   },
   async created() {},

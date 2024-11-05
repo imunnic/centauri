@@ -46,7 +46,15 @@ export default {
   computed: {
     migasDePan() {
       const rutas = this.$route.path.split("/").filter(Boolean);
-
+      if (rutas.length > 1 && this.esParametro(rutas[1])) {
+      return [
+        {
+          title: this.primeraAMayuscula(rutas[0]),
+          href: `/${rutas[0]}`,
+          disabled: false,
+        },
+      ];
+    }
       return rutas.map((parteRuta, index) => {
         const href = "/" + rutas.slice(0, index + 1).join("/");
         return {
@@ -78,6 +86,9 @@ export default {
     navegarARuta(ruta) {
       this.$router.push(ruta);
     },
+    esParametro(parteRuta) {
+    return Object.values(this.$route.params).includes(parteRuta);
+  },
   },
 };
 </script>

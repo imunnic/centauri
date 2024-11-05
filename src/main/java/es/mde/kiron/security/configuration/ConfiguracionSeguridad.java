@@ -31,6 +31,8 @@ public class ConfiguracionSeguridad {
     return http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authRequest -> authRequest
             .requestMatchers("/api/autenticacion/login", "/api/autenticacion/registro/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/invitaciones").authenticated()
+            .requestMatchers(HttpMethod.GET,"/api/invitaciones/**").permitAll()
             .requestMatchers("/api/fichas/aprobado").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/fichas/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/ejercicios").permitAll()

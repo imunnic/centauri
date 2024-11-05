@@ -52,4 +52,13 @@ export default class UsuariosService {
   async renovarToken(){
     return await axios.post(url + renovacion, null, config);
   }
+
+  async registroUsuario(usuario){
+    let user = {
+      username: usuario.nombre,
+      password: usuario.password,
+      email: usuario.correo
+    }
+    return await axios.post(url + registro + "/" + usuario.invitacion, user, config);
+  }
 }

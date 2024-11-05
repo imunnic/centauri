@@ -17,6 +17,7 @@ public class InvitacionRegistro {
   private Date createdAt;
 
   public InvitacionRegistro() {
+    this.createdAt = new Date();
   }
 
   public String getId() {

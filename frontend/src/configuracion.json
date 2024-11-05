@@ -1,6 +1,6 @@
 {
   "urlBase": "http://localhost:8080/api/",
-  "urlBaseApp":"http://localhost:3000/#/registro/",
+  "urlInvitaciones":"http://localhost:3000/#/registro/",
   "headersDefecto": {
     "Authorization": "Bearer "
   },

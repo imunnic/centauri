@@ -61,6 +61,11 @@ const routes = [
     component: () => import("../vistas/ContadorVista.vue")
   },
   {
+    path: "/registro/:id",
+    name: "registro",
+    component: () => import("../vistas/RegistroVista.vue")
+  },
+  {
     path: '/:catchAll(.*)',
     redirect: '/usuario'
   },

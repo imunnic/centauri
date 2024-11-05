@@ -1,10 +1,4 @@
 <template>
-  <MensajeAlertaComponent
-    :mostrar="mostrarAlerta"
-    :mensaje="mensajeAlerta"
-    :tipo="tipoAlerta"
-    @cerrar="mostrarAlerta = false"
-  ></MensajeAlertaComponent>
   <div class="contenedor-flex agenda">
     <div class="contenedor grupos izquierda">
       <v-card elevation="2" class="grupos">
@@ -17,6 +11,7 @@
           :accionesPersonalizadas="accionesGrupos"
           @abandonar="solicitarAbandonarGrupo"
           :cargando="cargandoGrupos"
+          class="cursor-normal"
         ></ListaCrudComponent>
         <FabBotonComponent
           class="boton"
@@ -32,6 +27,7 @@
           :permiso-edicion="false"
           :permiso-creacion="false"
           :cargando="cargandoEncargado"
+          class="cursor-normal"
         ></ListaCrudComponent>
         <FabBotonComponent
           class="boton"
@@ -127,11 +123,11 @@ import SesionFormComponent from "@/components/SesionFormComponent.vue";
 import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
 import GrupoFormComponent from "@/components/GrupoFormComponent.vue";
 import SolicitudFormComponent from "@/components/SolicitudFormComponent.vue";
-import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useSesionesStore } from "@/store/sesionesStore.js";
 import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useGruposStore } from "@/store/gruposStore.js";
+import { useAlertasStore } from "@/store/alertasStore.js";
 import { mapActions, mapState } from "pinia";
 import configuracion from "@/configuracion.json";
 
@@ -144,7 +140,6 @@ export default {
     FabBotonComponent,
     GrupoFormComponent,
     SolicitudFormComponent,
-    MensajeAlertaComponent,
   },
   computed: {
     ...mapState(useUsuariosStore, ["username", "href", "id"]),
@@ -165,9 +160,6 @@ export default {
       mostrarFormularioSolicitud: false,
       edicion: false,
       sesionSeleccionada: null,
-      mostrarAlerta: false,
-      mensajeAlerta: "",
-      tipoAlerta: "error",
       accionesGrupos: [
         {
           icon: "mdi-trash-can",
@@ -200,11 +192,7 @@ export default {
       "getGruposEncargado",
       "abandonarGrupo"
     ]),
-    mostrarAlertaTemporal(mensaje, tipo) {
-      this.mensajeAlerta = mensaje;
-      this.tipoAlerta = tipo;
-      this.mostrarAlerta = true;
-    },
+    ...mapActions(useAlertasStore, ['mostrarAlerta']),
 
     nuevaSesion(fecha) {
       if (this.gruposEncargado.length >= 1) {
@@ -361,12 +349,12 @@ export default {
       grupo.miembros = [this.href];
       try {
         await this.crearGrupo(grupo);
-        this.mostrarAlertaTemporal("Grupo creado con éxito", "success");
+        this.mostrarAlerta("Grupo creado con éxito", "success");
         await this.mostrarGruposEncargado();
         await this.mostrarGrupos();
         await this.renovarToken();
       } catch (error) {
-        this.mostrarAlertaTemporal(
+        this.mostrarAlerta(
           "No se ha podido crear grupo",
           "error"
         );
@@ -388,10 +376,10 @@ export default {
       };
       try {
         await this.realizarSolicitud(solicitud);
-        this.mostrarAlertaTemporal("Solicitud realizada con éxito", "success");
+        this.mostrarAlerta("Solicitud realizada con éxito", "success");
         await this.renovarToken();
       } catch (error) {
-        this.mostrarAlertaTemporal(
+        this.mostrarAlerta(
           "No se ha podido realizar la solicitud",
           "error"
         );

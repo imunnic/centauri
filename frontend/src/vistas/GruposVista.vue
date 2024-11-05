@@ -1,10 +1,4 @@
 <template>
-  <MensajeAlertaComponent
-    :mostrar="mostrarAlerta"
-    :mensaje="mensajeAlerta"
-    :tipo="tipoAlerta"
-    @cerrar="mostrarAlerta = false"
-  ></MensajeAlertaComponent>
   <v-container class="contenedor-flex">
     <ListaCrudComponent
       :busqueda="false"
@@ -151,16 +145,15 @@
 <script>
 import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
 import DetalleUsuarioSesionesComponent from "@/components/DetalleUsuarioSesionesComponent.vue";
-import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useGruposStore } from "@/store/gruposStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
+import { useAlertasStore } from "@/store/alertasStore.js";
 import { mapState, mapActions } from "pinia";
 export default {
   components: {
     ListaCrudComponent,
     DetalleUsuarioSesionesComponent,
-    MensajeAlertaComponent,
   },
   data() {
     return {
@@ -222,6 +215,7 @@ export default {
       "getSesionesRealizadasDeUsuarioyGrupo",
       "getResumenSesionesRealizadasDeGrupo",
     ]),
+    ...mapActions(useAlertasStore,['mostrarAlerta']),
 
     getIcono(rpe) {
       if (rpe >= 1 && rpe <= 2) {
@@ -247,12 +241,6 @@ export default {
       } else if (rpe >= 8) {
         return "rechazo";
       }
-    },
-
-    mostrarAlertaTemporal(mensaje, tipo) {
-      this.mensajeAlerta = mensaje;
-      this.tipoAlerta = tipo;
-      this.mostrarAlerta = true;
     },
 
     filtroGrupos(item, queryText) {
@@ -319,10 +307,10 @@ export default {
       let grupoHref = this.grupoSeleccionado._links.self.href;
       try {
         await this.cambiarEncargado(grupoHref, grupo);
-        this.mostrarAlertaTemporal("Encargado cambiado con éxito", "success");
+        this.mostrarAlerta("Encargado cambiado con éxito", "success");
         await this.renovarToken();
       } catch {
-        this.mostrarAlertaTemporal(
+        this.mostrarAlerta(
           "No se ha podido cambiar el encargado",
           "error"
         );

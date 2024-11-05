@@ -87,7 +87,8 @@
 
 <script>
 import FichaComponent from "./FichaComponent.vue";
-import { useFichasStore } from "@/store/fichasStore";
+import { useFichasStore } from "@/store/fichasStore.js";
+import { useAlertasStore } from "@/store/alertasStore.js"
 import { mapActions } from "pinia";
 
 export default {
@@ -153,6 +154,7 @@ export default {
   },
   methods: {
     ...mapActions(useFichasStore, ["grabarFicha", "editarFicha"]),
+    ...mapActions(useAlertasStore,['mostrarAlerta']),
     actualizarRutina(rondas) {
       this.fichaLocal.rutina = rondas;
     },
@@ -163,10 +165,12 @@ export default {
       let isValido = await this.$refs.formulario.validate();
       if (this.$route.query.edicion == "true") {
         await this.editarFicha(this.fichaLocal, this.$route.params.id);
+        this.mostrarAlerta("Ficha creada con éxito", "success")
         this.$router.push({ path: "/fichas" });
       } else {
         if (isValido.valid) {
           await this.grabarFicha(this.fichaLocal);
+          this.mostrarAlerta("Ficha creada con éxito", "success")
           this.$router.push({ path: "/fichas" });
         }
       }

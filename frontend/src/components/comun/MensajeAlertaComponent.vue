@@ -28,47 +28,16 @@
   </template>
   
   <script>
+  import { useAlertasStore } from "@/store/alertasStore.js";
+  import {mapState, mapActions} from 'pinia';
   export default {
     name: "FadeAlert",
-    props: {
-      mostrar: {
-        type: Boolean,
-        required: true,
-      },
-      mensaje: {
-        type: String,
-        required: true,
-      },
-      tipo: {
-        type: String,
-        default: "success",
-      },
-      temporal: {
-        type: Boolean,
-        default: true,
-      },
-      tiempo: {
-        type: Number,
-        default: 3000,
-      },
-    },
-    watch: {
-      mostrar(val) {
-        if (val && this.temporal) {
-          this.cerrarAutomaticamente();
-        }
-      },
-    },
     methods: {
-      cerrarAlerta() {
-        this.$emit("cerrar");
-      },
-      cerrarAutomaticamente() {
-        setTimeout(() => {
-          this.cerrarAlerta();
-        }, this.tiempo);
-      },
+      ...mapActions(useAlertasStore,['cerrarAlerta'])
     },
+    computed:{
+      ...mapState(useAlertasStore, ['mensaje', 'mostrar', 'tipo'])
+    }
   };
   </script>
   

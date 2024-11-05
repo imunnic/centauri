@@ -1,23 +1,25 @@
 <!--
-  Este componente es la cabecera de una aplicación. Está apoyado en la librería de Vuetify (https://vuetifyjs.com/). 
-  Contiene un icono de menú para abrir el navegador, el nombre de la aplicación y un icono 
-  para mostrar.
-  
+  Este componente representa la cabecera de una aplicación, utilizando la librería Vuetify (https://vuetifyjs.com/). 
+  Incluye un botón de menú para abrir el navegador, el nombre de la aplicación y un ícono de usuario.
+
   Props:
-  - aplicacion: Objeto que contiene el nombre y la ruta del icono de la aplicación desde la 
-  carpeta raíz. Ej: {nombre:'mi nombre', icono:'/src/assets/favicon.png'}
+  - aplicacion: Objeto que contiene el nombre y la ruta del ícono de la aplicación desde la carpeta raíz. 
+    Ejemplo: {nombre: 'mi nombre', icono: '/src/assets/favicon.png'}
+  - loggeado: Booleano que indica si el usuario está autenticado.
+  - usuarioNombre: Nombre del usuario autenticado. Por defecto, es una cadena vacía.
 
   Eventos:
-  - navegacion: Se emite cuando el usuario clicka sobre el botón.
-  
-  Para controlar el navegador se puede utilizar este código en el componente padre al 
-  emitir el evento navegación:
+  - navegacion: Se emite cuando el usuario hace clic en el botón del menú.
+  - intentoLogin: Se emite con los datos de inicio de sesión cuando el usuario intenta acceder.
+  - cerrarSesion: Se emite cuando el usuario cierra sesión.
+
+  Para controlar el navegador desde el componente padre al emitir el evento 'navegacion', puedes usar el siguiente código:
 
   mostrarNavegador() {
       this.$refs.navegadorComponent.mostrarNavegador();
-    }
-  
-  refiriendo de esta forma al componente con el que se navegue
+  }
+
+  Asegúrate de referenciar correctamente el componente de navegación al que deseas acceder.
 -->
 
 <template>

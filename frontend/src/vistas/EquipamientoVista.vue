@@ -1,11 +1,5 @@
 <template>
   <v-container>
-    <MensajeAlertaComponent
-    :mostrar="mostrarAlerta"
-    :mensaje="mensajeAlerta"
-    :tipo="tipoAlerta"
-    @cerrar="mostrarAlerta = false"
-  ></MensajeAlertaComponent>
 
     <ListaCrudComponent
       :items="equipamientosRegistrados"
@@ -44,9 +38,9 @@ import configuracion from "@/configuracion.json";
 import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
 import EquipamientoFormComponent from "@/components/EquipamientoFormComponent.vue";
 import EquipamientoDetalleComponent from "@/components/EquipamientoDetalleComponent.vue";
-import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useEquipamientosStore } from "@/store/equipamientosStore.js";
+import { useAlertasStore } from "@/store/alertasStore.js";
 import { mapState, mapActions } from "pinia";
 
 export default {
@@ -54,7 +48,6 @@ export default {
     ListaCrudComponent,
     EquipamientoFormComponent,
     EquipamientoDetalleComponent,
-    MensajeAlertaComponent
   },
   data() {
     return {
@@ -86,23 +79,19 @@ export default {
       "modificarEquipamiento",
       "eliminarEquipamiento",
     ]),
+    ...mapActions(useAlertasStore,['mostrarAlerta']),
     resetFormulario() {
       this.equipamientoSeleccionado = {};
       this.modoEdicion = false;
     },
-    mostrarAlertaTemporal(mensaje, tipo) {
-      this.mensajeAlerta = mensaje;
-      this.tipoAlerta = tipo;
-      this.mostrarAlerta = true;
-    },
     async guardarEquipamiento(equipamiento) {
       if (this.modoEdicion) {
         await this.modificarEquipamiento(equipamiento);
-        this.mostrarAlertaTemporal("Equipamiento modificado con éxito", "success");
+        this.mostrarAlerta("Equipamiento modificado con éxito", "success");
         await this.renovarCredenciales();
       } else {
         await this.agregarEquipamiento(equipamiento);
-        this.mostrarAlertaTemporal("Equipamiento creado con éxito", "success");
+        this.mostrarAlerta("Equipamiento creado con éxito", "success");
         await this.renovarCredenciales();
       }
       await this.cargarEquipamientos();
@@ -130,7 +119,7 @@ export default {
       await this.eliminarEquipamiento(equipamiento);
       this.cargarEquipamientos();
       this.equipamientosKey += 1;
-      this.mostrarAlertaTemporal("Equipamiento eliminado con éxito", "success");
+      this.mostrarAlerta("Equipamiento eliminado con éxito", "success");
       await this.renovarCredenciales();
     },
     cerrarFormulario() {

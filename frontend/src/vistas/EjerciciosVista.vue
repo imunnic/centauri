@@ -1,12 +1,5 @@
 <template>
   <v-container>
-    <MensajeAlertaComponent
-      :mostrar="mostrarAlerta"
-      :mensaje="mensajeAlerta"
-      :tipo="tipoAlerta"
-      @cerrar="mostrarAlerta = false"
-    ></MensajeAlertaComponent>
-
     <ListaCrudComponent
       :items="ejerciciosRegistrados"
       :key="ejerciciosKey"
@@ -40,17 +33,16 @@
 import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
 import EjercicioFormComponent from "@/components/EjercicioFormComponent.vue";
 import EjercicioDetalleComponent from "@/components/EjercicioDetalleComponent.vue";
-import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { mapState, mapActions } from "pinia";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useEjerciciosStore } from "@/store/ejerciciosStore.js";
+import { useAlertasStore } from "@/store/alertasStore.js";
 
 export default {
   components: {
     ListaCrudComponent,
     EjercicioFormComponent,
     EjercicioDetalleComponent,
-    MensajeAlertaComponent,
   },
   data() {
     return {
@@ -59,9 +51,6 @@ export default {
       modoEdicion: false,
       detalle: false,
       ejerciciosKey: 0, //forzar renderizado https://michaelnthiessen.com/force-re-render/
-      mostrarAlerta: false,
-      mensajeAlerta: "",
-      tipoAlerta: "success",
       cargando: false,
     };
   },
@@ -90,22 +79,18 @@ export default {
       "eliminarEjercicio",
       "agregarEjercicio",
     ]),
+    ...mapActions(useAlertasStore,['mostrarAlerta']),
     resetFormulario() {
       this.ejercicioSeleccionado = {};
       this.modoEdicion = false;
     },
-    mostrarAlertaTemporal(mensaje, tipo) {
-      this.mensajeAlerta = mensaje;
-      this.tipoAlerta = tipo;
-      this.mostrarAlerta = true;
-    },
     async guardarEjercicio(ejercicio) {
       if (this.modoEdicion) {
         await this.modificarEjercicio(ejercicio);
-        this.mostrarAlertaTemporal("Ejercicio modificado con éxito", "success");
+        this.mostrarAlerta("Ejercicio modificado con éxito", "success");
       } else {
         await this.agregarEjercicio(ejercicio);
-        this.mostrarAlertaTemporal("Ejercicio creado con éxito", "success");
+        this.mostrarAlerta("Ejercicio creado con éxito", "success");
       }
       this.renovarCredenciales();
       await this.cargarEjercicios();
@@ -139,7 +124,7 @@ export default {
       this.cargando = true;
       await this.cargarEjercicios();
       this.cargando = false;
-      this.mostrarAlertaTemporal("Ejercicio eliminado con éxito", "success");
+      this.mostrarAlerta("Ejercicio eliminado con éxito", "success");
       this.renovarCredenciales();
       this.ejerciciosKey += 1;
     },

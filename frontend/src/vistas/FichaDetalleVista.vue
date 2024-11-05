@@ -138,7 +138,6 @@
 <script>
 import FichaComponent from "@/components/FichaComponent.vue";
 import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
-import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useFichasStore } from "../store/fichasStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useImpresionStore } from "@/store/impresionStore";
@@ -148,7 +147,6 @@ export default {
   components: {
     FichaComponent,
     FabBotonComponent,
-    MensajeAlertaComponent,
   },
   data() {
     return {

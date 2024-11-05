@@ -2,10 +2,6 @@
   <v-app>
     <v-main>
       <MensajeAlertaComponent
-      :mostrar="mostrarAlerta"
-      :mensaje="mensajeAlerta"
-      :tipo="tipoAlerta"
-      @cerrar="mostrarAlerta = false"
     ></MensajeAlertaComponent>
       <HeaderComponent
         @navegacion="mostrarNavegador"
@@ -51,6 +47,7 @@ import HeaderComponent from "./components/comun/HeaderComponent.vue";
 import NavegadorComponent from "./components/comun/NavegadorComponent.vue";
 import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useUsuariosStore } from "./store/usuariosStore.js";
+import { useAlertasStore } from "@/store/alertasStore.js"
 import { mapActions, mapState } from "pinia";
 import InvitacionesService from "@/services/invitacionService.js";
 import config from "@/configuracion.json";
@@ -78,9 +75,6 @@ export default {
       },
       intentosLogin:0,
       enlace:"",
-      mostrarAlerta:false,
-      mensajeAlerta:'',
-      tipoAlerta:'success'
     };
   },
   computed: {
@@ -103,6 +97,7 @@ export default {
   },
   methods: {
     ...mapActions(useUsuariosStore, ["peticionLogin"]),
+    ...mapActions(useAlertasStore, ["mostrarAlerta"]),
     mostrarNavegador() {
       this.$refs.navegadorComponent.mostrarNavegador();
     },
@@ -120,17 +115,12 @@ export default {
       servicioInvitaciones.actualizarCabecera(this.token);
       let respuesta = await servicioInvitaciones.crearInvitacion();
       respuesta = respuesta.data._links.self.href.split('/').pop();
-      respuesta = config.urlBaseApp + respuesta;
+      respuesta = config.urlInvitaciones + respuesta;
       this.enlace = respuesta;
     },
     async copiarPortapapeles(){
       await navigator.clipboard.writeText(this.enlace);
-      this.mostrarAlertaTemporal('Texto copiado en el portapapeles','success');
-    },
-    mostrarAlertaTemporal(mensaje, tipo) {
-      this.mensajeAlerta = mensaje;
-      this.tipoAlerta = tipo;
-      this.mostrarAlerta = true;
+      this.mostrarAlerta('Texto copiado en el portapapeles','success');
     },
     cerrarSesion(){
       location.reload();
