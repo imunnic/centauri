@@ -15,6 +15,7 @@ public interface UsuarioExternoDAO extends MongoRepository<UsuarioExterno, Strin
   boolean existsByUsername(String username);
   boolean existsByEmail(String email);
   Optional<UsuarioExterno> findByUsername(String username);
+  Optional<UsuarioExterno> findByEmail(String email);
   Optional<UsuarioExterno> findByUsernameOrEmail(String username, String email);
 
   @RestResource(exported = false)

@@ -30,7 +30,10 @@ public class ConfiguracionSeguridad {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authRequest -> authRequest
-            .requestMatchers("/api/autenticacion/login", "/api/autenticacion/registro/**").permitAll()
+            .requestMatchers("/api/autenticacion/cambioPassword").authenticated()
+            .requestMatchers("/api/autenticacion/login",
+                "/api/autenticacion/registro/**",
+                "/api/autenticacion/reset-password").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/invitaciones").authenticated()
             .requestMatchers(HttpMethod.GET,"/api/invitaciones/**").permitAll()
             .requestMatchers("/api/fichas/aprobado").permitAll()

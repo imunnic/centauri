@@ -41,10 +41,27 @@ export const useUsuariosStore = defineStore("usuarios", {
       return response.data.nombre;
     },
 
+    async existeUsuario(nombreUsuario){
+      let respone = await this.usuarioService.existeUsuario(nombreUsuario);
+      return respone.data;
+    },
+
     async renovarToken(){
       let renovacion = await this.usuarioService.renovarToken();
       this.token = renovacion.data.token;
       this.arrancarServicios();
+    },
+
+    async cambiarNombre(nombre){
+      await this.usuarioService.cambiarNombreUsuario(nombre);
+    },
+
+    async cambiarPassword(passwords){
+      await this.usuarioService.cambiarPassword(passwords);
+    },
+
+    async resetPassword(correo){
+      await this.usuarioService.recuperarPassword(correo);
     },
 
     arrancarServicios(){

@@ -5,8 +5,9 @@
     ></MensajeAlertaComponent>
       <HeaderComponent
         @navegacion="mostrarNavegador"
-        @intentoLogin="intentarLogin"
-        @cerrarSesion="cerrarSesion"
+        @intento-login="intentarLogin"
+        @cerrar-sesion="cerrarSesion"
+        @recuperar-password="recuperarPassword"
         :loggeado="isLogged"
         :usuarioNombre="username"
         :aplicacion="aplicacion"
@@ -24,6 +25,7 @@
           <v-card-text>
             <v-text-field 
             class="enlace"
+            label="Enlace"
             append-icon="mdi-content-copy"
             @click:append="copiarPortapapeles"
             v-model="enlace"
@@ -66,8 +68,7 @@ export default {
           title: "Equipamiento",
           prependIcon: "mdi-dumbbell",
           ruta: "/equipamientos",
-        },
-        { title: "Usuario", prependIcon: "mdi-account", ruta: "/usuario" },
+        }
       ],
       aplicacion: {
         nombre: "Centauri",
@@ -81,22 +82,27 @@ export default {
     ...mapState(useUsuariosStore, ["token", "isLogged", "username"]),
     menuItems() {
       if (this.isLogged) {
-        let menuLogeado = this.menu.push({
+        this.menu.push({
           title: "Grupos",
           prependIcon: "mdi-account-group",
           ruta: "/grupos",
         })
-        return this.menu;
-      } else {
-        let menuSinRegistro = this.menu.filter(
-          (item) => item.title !== "Usuario"
-        );
-        return menuSinRegistro;
+        this.menu.push({
+          title: "Planificación", 
+          prependIcon: "mdi-calendar-outline", 
+          ruta: "/planificacion"
+        })
+        this.menu.push({
+          title: "Usuario", 
+          prependIcon: "mdi-account", 
+          ruta: "/usuario"
+        })
       }
+      return this.menu;
     },
   },
   methods: {
-    ...mapActions(useUsuariosStore, ["peticionLogin"]),
+    ...mapActions(useUsuariosStore, ["peticionLogin", "resetPassword"]),
     ...mapActions(useAlertasStore, ["mostrarAlerta"]),
     mostrarNavegador() {
       this.$refs.navegadorComponent.mostrarNavegador();
@@ -105,7 +111,7 @@ export default {
       logeo.username = logeo.usuario;
       try {
         await this.peticionLogin(logeo);
-        this.$router.push("/usuario")
+        this.$router.push("/planificacion")
       } catch (error) {
       }
       this.intentosLogin++;
@@ -124,6 +130,14 @@ export default {
     },
     cerrarSesion(){
       location.reload();
+    },
+    async recuperarPassword(correo){
+      try {
+        await this.resetPassword(correo);
+        this.mostrarAlerta("Contraseña actualizada","success")
+      } catch (error) {
+        this.mostrarAlerta("No se ha podido actualizar la contraseña","error")
+      }
     }
   },
   async created() {},

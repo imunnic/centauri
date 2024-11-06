@@ -6,6 +6,12 @@ const routes = [
     redirect: "/fichas",
   },
   {
+    path: "/planificacion",
+    name: "planificacion",
+    component: () => import("../vistas/PlanificacionVista.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
     path: "/usuario",
     name: "usuario",
     component: () => import("../vistas/UsuarioVista.vue"),

@@ -21,7 +21,6 @@
 
   Asegúrate de referenciar correctamente el componente de navegación al que deseas acceder.
 -->
-
 <template>
   <div>
     <v-app-bar :elevation="2" class="fondo d-flex align-center">
@@ -33,43 +32,22 @@
         {{ aplicacion.nombre }}
       </v-app-bar-title>
 
-      <v-menu offset-y :close-on-content-click="false">
+      <v-menu v-model="mostrarMenu" offset-y :close-on-content-click="false">
         <template v-slot:activator="{ props }">
           <v-btn class="mr-2 rechazo" v-bind="props">
             {{ loggeado ? 'Usuario' : 'Acceso' }}
           </v-btn>
         </template>
 
-        <v-card>
-          <v-card-title>{{loggeado ? 'Usuario': 'Registro'}}</v-card-title>
-          <v-card-text>
-            <div v-if="loggeado" class="user-info">
-              <h2>{{ usuarioNombre }}</h2>
-              <slot></slot>
-            </div>
-            <v-form ref="form" v-model="valid" v-else>
-              <v-text-field
-                v-model="logeo.usuario"
-                label="Nombre de usuario"
-                :rules="[rules.required]"
-                required
-              ></v-text-field>
-              <v-text-field
-                v-model="logeo.password"
-                label="Contraseña"
-                :rules="[rules.required]"
-                type="password"
-                required
-              ></v-text-field>
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn class="claro" @click="loggeado ? cerrarSesion() : inicioSesion()">
-              {{ loggeado ? 'Cerrar Sesión' : 'ACCEDER' }}
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+        <LoginComponent
+          :loggeado="loggeado"
+          :usuarioNombre="usuarioNombre"
+          @intentoLogin="intentoLogin"
+          @cerrarSesion="cerrarSesion"
+          @recuperar-password="recuperarPassword"
+        >
+        <slot></slot>
+      </LoginComponent>
       </v-menu>
       
       <v-avatar size="60" class="ml-auto icono">
@@ -80,12 +58,16 @@
         />
       </v-avatar>
     </v-app-bar>
-
   </div>
 </template>
 
 <script>
+import LoginComponent from './LoginComponent.vue';
+
 export default {
+  components: {
+    LoginComponent,
+  },
   props: {
     aplicacion: {
       type: Object,
@@ -97,30 +79,28 @@ export default {
     },
     usuarioNombre: {
       type: String,
-      default:''
+      default: ''
     },
   },
   data() {
     return {
-      logeo: {
-        usuario: '',
-        password:''
-      },
-      valid: false,
-      rules: {
-        required: value => !!value || 'Requerido.',
-      },
-    };
+      mostrarMenu:false
+    }
   },
   methods: {
-    inicioSesion() {
-      if (this.$refs.form.validate()) {
-        this.$emit('intentoLogin', this.logeo)
-      }
+    intentoLogin(datosLogin) {
+      this.$emit('intento-login', datosLogin);
     },
     cerrarSesion() {
-      this.$emit('cerrarSesion');
-    }
+      this.$emit('cerrar-sesion');
+    },
+    recuperarPassword(correo) {
+      this.$emit('recuperar-password', correo);
+      this.cerrarMenu();
+    },
+    cerrarMenu() {
+      this.mostrarMenu = false;
+    },
   },
 };
 </script>
@@ -138,10 +118,6 @@ export default {
 
 .icono {
   margin-right: 10px;
-}
-
-.user-info {
-  padding: 16px;
 }
 
 .v-card {

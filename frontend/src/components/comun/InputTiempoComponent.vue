@@ -1,3 +1,21 @@
+<!--
+  Este componente `CronometroComponent` permite al usuario ingresar y actualizar un tiempo en minutos y segundos, proporcionando un control de entrada de tiempo interactivo. 
+  Está construido con Vuetify (https://vuetifyjs.com/), usando el componente `v-text-field` para entradas de número y generando una interfaz intuitiva.
+
+  Props:
+  - `valorInicial`: Un valor numérico que representa el tiempo inicial en segundos. 
+      - Tipo: `Number`
+      - Opcional, por defecto: `0`
+  - `titulo`: Una cadena de texto que se mostrará como título del componente.
+      - Tipo: `String`
+      - Opcional, sin valor predeterminado.
+
+  Emits:
+  - `nuevo-valor`: Este evento emite el tiempo total en segundos (calculado en `actualizarTiempo`)
+    cada vez que el usuario actualiza los campos de minutos o segundos.
+
+-->
+
 <template>
   {{ titulo }}
   <div class="input-tiempo">

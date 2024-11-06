@@ -53,6 +53,7 @@
 <script>
 import UsuarioService from "@/services/usuarioService.js";
 import {useAlertasStore} from "@/store/alertasStore.js";
+import {useUsuariosStore} from "@/store/usuariosStore.js";
 import {mapActions} from 'pinia';
 import axios from 'axios';
 import config from '@/configuracion.json';
@@ -70,6 +71,7 @@ export default {
       mostrarPassword: false,
       reglasNombre: [
         (v) => !!v || "El nombre de usuario es requerido",
+        (v) => v => this.validarNombreUsuario(v) || "El nombre de usuario ya existe",
       ],
       reglasCorreo: [
         (v) => !!v || "El correo electrónico es requerido",
@@ -88,6 +90,20 @@ export default {
   },
   methods: {
     ...mapActions(useAlertasStore,['mostrarAlerta']),
+    ...mapActions(useUsuariosStore,['existeUsuario']),
+    async validarNombreUsuario(nombreUsuario) {
+      if (!nombreUsuario) return true;
+      if (nombreUsuario == this.username) return true;
+      try {
+        const existe = await this.existeUsuario(nombreUsuario);
+        this.nombreUsuarioError = existe ? "El nombre de usuario ya está en uso" : "";
+        return !existe || this.nombreUsuarioError;
+      } catch (error) {
+        console.error("Error al verificar nombre de usuario:", error);
+        this.nombreUsuarioError = "Error al verificar nombre de usuario";
+        return false;
+      }
+    },
     async enviarFormulario() {
       if (this.$refs.formulario.validate()) {
         let servicioUsuario = new UsuarioService();

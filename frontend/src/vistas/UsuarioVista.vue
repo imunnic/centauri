@@ -1,515 +1,202 @@
 <template>
-  <div class="contenedor-flex agenda">
-    <div class="contenedor grupos izquierda">
-      <v-card elevation="2" class="grupos">
-        <ListaCrudComponent
-          :busqueda="false"
-          :titulo="'Grupos: '"
-          :items="gruposRegistrados"
-          :permiso-edicion="true"
-          :permiso-creacion="false"
-          :accionesPersonalizadas="accionesGrupos"
-          @abandonar="solicitarAbandonarGrupo"
-          :cargando="cargandoGrupos"
-          class="cursor-normal"
-        ></ListaCrudComponent>
-        <FabBotonComponent
-          class="boton"
-          :texto="'Nueva Solicitud'"
-          @click="abrirFormSolicitud"
-        ></FabBotonComponent>
-      </v-card>
-      <v-card elevation="2" class="grupos">
-        <ListaCrudComponent
-          :busqueda="false"
-          :titulo="'Encargado de:'"
-          :items="gruposEncargado"
-          :permiso-edicion="false"
-          :permiso-creacion="false"
-          :cargando="cargandoEncargado"
-          class="cursor-normal"
-        ></ListaCrudComponent>
-        <FabBotonComponent
-          class="boton"
-          :texto="'Nuevo grupo'"
-          @click="abrirFormGrupo"
-        ></FabBotonComponent>
-      </v-card>
-      <v-card elevation="2">
-        <ListaCrudComponent
-          :busqueda="false"
-          :titulo="'Ultimas sesiones:'"
-          :items="sesionesRealizadasRegistradas"
-          :permiso-edicion="false"
-          :permiso-creacion="false"
-          @detalle="navegarADetalleSesionConSesion"
-          :cargando="cargandoSesionesRealizadas"
+  <v-container>
+    <v-card>
+      <v-card-title class="headline">Gestión de Usuario</v-card-title>
+      <v-card-text>
+        <v-form
+          ref="formularioNombreUsuario"
+          v-model="formularioNombreUsuarioValido"
+          lazy-validation
         >
-          <template v-slot:info-extra="{ item }">
-            <div class="contenedor-flex resultados">
-              <b class="texto">
-                {{ formatoFechaConBarra(item.fechaSesion) }}
-              </b>
-              <p class="texto">RPE: {{ item.rpe }}</p>
-              <p class="texto">Tiempo: {{ item.tiempo }}</p>
-              <p class="texto">Comentarios: {{ item.comentarios }}</p>
-            </div>
-            <v-icon :class="iconClass(item.rpe)" class="icono-rpe">
-              {{ getIcono(item.rpe) }}
-            </v-icon>
-          </template>
-        </ListaCrudComponent>
+          <v-text-field
+            v-model="nombreUsuario"
+            label="Nombre de Usuario"
+            :rules="reglasNombreUsuario"
+            required
+          ></v-text-field>
+          <v-btn
+            :disabled="!formularioNombreUsuarioValido"
+            class="claro"
+            @click="confirmarAccion('nombreUsuario')"
+          >
+            Cambiar Nombre de Usuario
+          </v-btn>
+        </v-form>
+
+        <v-form
+          ref="formularioPassword"
+          v-model="formularioPasswordValido"
+          lazy-validation
+        >
+          <v-text-field
+            v-model="passwordActual"
+            label="Password Actual"
+            type="password"
+            :rules="reglasPassword"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="nuevaPassword"
+            label="Nueva Password"
+            type="password"
+            :rules="reglasPassword"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="confirmarNuevaPassword"
+            label="Confirmar Nueva Password"
+            type="password"
+            :rules="reglasConfirmarPassword"
+            required
+          ></v-text-field>
+          <v-btn
+            :disabled="!formularioPasswordValido"
+            class="claro"
+            @click="confirmarAccion('password')"
+          >
+            Cambiar Password
+          </v-btn>
+        </v-form>
+      </v-card-text>
+    </v-card>
+
+    <v-dialog v-model="dialogoConfirmacion" max-width="400">
+      <v-card>
+        <v-card-title class="headline">Confirmación</v-card-title>
+        <v-card-text>
+          ¿Estás seguro de que deseas cambiar tu
+          {{
+            accionAConfirmar === "nombreUsuario"
+              ? "nombre de usuario"
+              : "password"
+          }}?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn class="rechazo" text @click="cancelarAccion">Cancelar</v-btn>
+          <v-btn class="claro" text @click="ejecutarAccion">Confirmar</v-btn>
+        </v-card-actions>
       </v-card>
-    </div>
-    <div class="derecha">
-      <CalendarioComponent
-        ref="calendario"
-        @fecha-seleccionada="nuevaSesion"
-        @sesion-seleccionada="seleccionarSesion"
-        @borrarSesion="borrarSesion"
-        @editarSesion="editarSesion"
-        :modoInicial="modoInicial"
-        :sesiones="sesiones"
-        :gruposConPermiso="gruposEncargado"
-        class="calendario"
-      >
-        <template v-slot:detalle-sesion>
-          <DetalleSesionComponent
-            :sesion="sesionSeleccionada"
-            :gruposConPermiso="gruposEncargado"
-            @cerrarTarjeta="cerrarDetalleCalendario"
-            @editarSesion="editarSesion"
-            @borrarSesion="borrarSesion"
-            @detalle="navegarADetalleSesion"
-            @hecha="sesionRealizada"
-          />
-        </template>
-      </CalendarioComponent>
-
-      <SesionFormComponent
-        v-if="mostrarFormulario"
-        :fecha="fechaSeleccionada"
-        :grupos="gruposEncargado"
-        :sesion="sesionSeleccionada"
-        :edicion="edicion"
-        @sesionEditada="sesionEditada"
-        @sesionCreada="sesionCreada"
-        @cerrar="cerrarFormularioSesion"
-      />
-
-      <GrupoFormComponent
-        class="desbordamiento"
-        v-if="mostrarFormularioGrupo"
-        @crear-grupo="nuevoGrupo"
-        @cerrar="cerrarGrupo"
-      >
-      </GrupoFormComponent>
-
-      <SolicitudFormComponent
-        v-if="mostrarFormularioSolicitud"
-        :grupos="gruposSinUsuario"
-        @solicitar-acceso="nuevaSolicitud"
-        @cerrar="cerrarFormSolicitud"
-      ></SolicitudFormComponent>
-    </div>
-  </div>
+    </v-dialog>
+  </v-container>
 </template>
 
 <script>
-import DetalleSesionComponent from "@/components/DetalleSesionComponent.vue";
-import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
-import CalendarioComponent from "@/components/comun/CalendarioComponent.vue";
-import SesionFormComponent from "@/components/SesionFormComponent.vue";
-import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
-import GrupoFormComponent from "@/components/GrupoFormComponent.vue";
-import SolicitudFormComponent from "@/components/SolicitudFormComponent.vue";
-import { useSesionesStore } from "@/store/sesionesStore.js";
-import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
-import { useUsuariosStore } from "@/store/usuariosStore.js";
-import { useGruposStore } from "@/store/gruposStore.js";
 import { useAlertasStore } from "@/store/alertasStore.js";
+import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { mapActions, mapState } from "pinia";
-import configuracion from "@/configuracion.json";
-
 export default {
-  components: {
-    ListaCrudComponent,
-    CalendarioComponent,
-    SesionFormComponent,
-    DetalleSesionComponent,
-    FabBotonComponent,
-    GrupoFormComponent,
-    SolicitudFormComponent,
-  },
   computed: {
-    ...mapState(useUsuariosStore, ["username", "href", "id"]),
-    ...mapState(useSesionesRealizadasStore, ["sesionesRealizadasRegistradas"]),
-    ...mapState(useGruposStore, ["gruposRegistrados", "gruposEncargado"]),
-    modoInicial() {
-      return this.anchoPantalla > 1000 ? "mes" : "dia";
-    },
+    ...mapState(useUsuariosStore, ["username", "href"]),
   },
   data() {
     return {
-      anchoPantalla: window.innerWidth,
-      gruposSinUsuario: [],
-      fechaSeleccionada: null,
-      sesiones: [],
-      mostrarFormulario: false,
-      mostrarFormularioGrupo: false,
-      mostrarFormularioSolicitud: false,
-      edicion: false,
-      sesionSeleccionada: null,
-      accionesGrupos: [
-        {
-          icon: "mdi-trash-can",
-          color: "var(--rechazo)",
-          evento: "abandonar",
-        },
+      nombreUsuario: "",
+      passwordActual: "",
+      nuevaPassword: "",
+      confirmarNuevaPassword: "",
+      formularioNombreUsuarioValido: false,
+      formularioPasswordValido: false,
+      dialogoConfirmacion: false,
+      accionAConfirmar: null,
+      reglasNombreUsuario: [
+        (v) => !!v || "El nombre de usuario es obligatorio",
+        (v) => v.length >= 3 || "Debe tener al menos 3 caracteres",
+        (v) => this.validarNombreUsuario(v),
       ],
-      cargandoGrupos:false,
-      cargandoSesionesRealizadas:false,
-      cargandoEncargado:false
+      reglasPassword: [
+        (v) => !!v || "El password es obligatorio",
+        (v) => v.length >= 6 || "Debe tener al menos 6 caracteres",
+      ],
+      reglasConfirmarPassword: [
+        (v) => !!v || "La confirmación de password es obligatoria",
+        (v) => v === this.nuevaPassword || "Los passwords deben coincidir",
+      ],
     };
   },
   methods: {
-    ...mapActions(useUsuariosStore,['renovarToken']),
-    ...mapActions(useSesionesStore, [
-      "crearSesion",
-      "cargarSesiones",
-      "eliminarSesion",
-      "modificarSesion",
+    ...mapActions(useUsuariosStore, [
+      "existeUsuario",
+      "cambiarNombre",
+      "cambiarPassword",
     ]),
-    ...mapActions(useSesionesRealizadasStore, [
-      "crearSesionRealizada",
-      "cargarSesionesRealizadas",
-    ]),
-    ...mapActions(useGruposStore, [
-      "crearGrupo",
-      "getGruposSinUsuario",
-      "realizarSolicitud",
-      "getGruposUsuario",
-      "getGruposEncargado",
-      "abandonarGrupo"
-    ]),
-    ...mapActions(useAlertasStore, ['mostrarAlerta']),
-
-    nuevaSesion(fecha) {
-      if (this.gruposEncargado.length >= 1) {
-        this.sesionSeleccionada = {};
-        this.fechaSeleccionada = fecha;
-        this.mostrarFormulario = true;
-        this.edicion = false;
-      }
-    },
-
-    async mostrarSesiones(){
-      let sesiones = await this.cargarSesiones(this.gruposRegistrados);
-      this.sesiones = sesiones;
-    },
-
-    async mostrarGruposEncargado(){
-      this.cargandoEncargado = true;
-      await this.getGruposEncargado(this.href);
-      this.cargandoEncargado = false;
-    },
-    
-    async mostrarGrupos(){
-      this.cargandoGrupos = true;
-      await this.getGruposUsuario(this.href);
-      this.cargandoGrupos = false;
-    },
-
-    async mostrarSesionesRealizadas(){
-      this.cargandoSesionesRealizadas = true;
-      await this.cargarSesionesRealizadas(this.href);
-      this.cargandoSesionesRealizadas = false;
-    },
-
-    async sesionCreada(nuevaSesion) {
-      console.log(nuevaSesion.grupo);
-      await this.crearSesion(nuevaSesion);
-      this.mostrarFormulario = false;
-      await this.mostrarSesiones();
-      await this.renovarToken();
-    },
-
-    cerrarFormularioSesion() {
-      this.mostrarFormulario = false;
-    },
-
-    async borrarSesion(sesion) {
-      await this.eliminarSesion(sesion.href);
-      this.$refs.calendario.cerrarTarjeta();
-      await this.mostrarSesiones();
-      await this.renovarToken();
-    },
-
-    editarSesion(sesion) {
-      this.edicion = true;
-      this.fechaSeleccionada = this.formatoFechaEdicion(sesion.fecha);
-      this.sesionSeleccionada = sesion;
-      this.mostrarFormulario = true;
-    },
-
-    async sesionEditada(sesion) {
-      await this.modificarSesion(sesion);
-      this.edicion = false;
-      await this.mostrarSesiones();
-      await this.renovarToken();
-    },
-
-    cerrarDetalleCalendario(){
-      this.$refs.calendario.mostrarTarjeta =
-        !this.$refs.calendario.mostrarTarjeta;
-    },
-
-    async sesionRealizada(sesion) {
-      sesion.sesion = {
-        id: sesion.sesion.split("/").pop(),
-      };
-      sesion.usuario = { id: this.id };
-      await this.crearSesionRealizada(sesion);
-      this.cerrarDetalleCalendario();
-      await this.mostrarSesionesRealizadas();
-      await this.renovarToken();
-    },
-
-    seleccionarSesion(sesion) {
-      this.sesionSeleccionada = sesion;
-    },
-
-    navegarADetalleSesion(sesionHref) {
-      let id = sesionHref.split("/").pop();
-      this.$router.push("/sesiones/" + id);
-    },
-    navegarADetalleSesionConSesion(sesion) {
-      let id = sesion.sesionId;
-      this.$router.push("/sesiones/" + id);
-    },
-
-    filtrarPorEncargado(encargado) {
-      let filtro = grupos.filter((grupo) => grupo.encargado === encargado);
-      return filtro;
-    },
-
-    formatoFechaEdicion(fecha) {
-      const partes = fecha.split("/");
-      const dia = parseInt(partes[0], 10);
-      const mes = parseInt(partes[1], 10) - 1;
-      const ano = parseInt(partes[2], 10);
-      return new Date(ano, mes, dia);
-    },
-
-    formatoFechaConBarra(fecha) {
-      let partesFecha = fecha.split("-");
-      let nuevaFecha =
-        partesFecha[2] + "/" + partesFecha[1] + "/" + partesFecha[0];
-      return nuevaFecha;
-    },
-
-    getIcono(rpe) {
-      if (rpe >= 1 && rpe <= 2) {
-        return "mdi-emoticon-cool-outline";
-      } else if (rpe >= 3 && rpe <= 4) {
-        return "mdi-emoticon-happy-outline";
-      } else if (rpe >= 5 && rpe <= 6) {
-        return "mdi-emoticon-neutral-outline";
-      } else if (rpe >= 7 && rpe <= 8) {
-        return "mdi-emoticon-sad-outline";
-      } else if (rpe >= 9 && rpe <= 10) {
-        return "mdi-emoticon-sick-outline";
-      } else {
-        return null;
-      }
-    },
-
-    iconClass(rpe) {
-      if (rpe < 6) {
-        return "claro";
-      } else if (rpe === 6 || rpe === 7) {
-        return "elevado";
-      } else if (rpe >= 8) {
-        return "rechazo";
-      }
-    },
-
-    manejarCambioTamano() {
-      this.anchoPantalla = window.innerWidth;
-    },
-
-    abrirFormGrupo() {
-      this.mostrarFormularioGrupo = true;
-    },
-    cerrarGrupo() {
-      this.mostrarFormularioGrupo = false;
-    },
-    async nuevoGrupo(grupo) {
-      grupo.encargado = this.href;
-      grupo.miembros = [this.href];
+    ...mapActions(useAlertasStore, ["mostrarAlerta"]),
+    async validarNombreUsuario(nombreUsuario) {
+      if (!nombreUsuario) return true;
+      if (nombreUsuario == this.username) return true;
       try {
-        await this.crearGrupo(grupo);
-        this.mostrarAlerta("Grupo creado con éxito", "success");
-        await this.mostrarGruposEncargado();
-        await this.mostrarGrupos();
-        await this.renovarToken();
+        const existe = await this.existeUsuario(nombreUsuario);
+        this.nombreUsuarioError = existe
+          ? "El nombre de usuario ya está en uso"
+          : "";
+        return !existe || this.nombreUsuarioError;
       } catch (error) {
-        this.mostrarAlerta(
-          "No se ha podido crear grupo",
-          "error"
-        );
+        console.error("Error al verificar nombre de usuario:", error);
+        this.nombreUsuarioError = "Error al verificar nombre de usuario";
+        return false;
       }
     },
-    async abrirFormSolicitud() {
-      let response = await this.getGruposSinUsuario(this.id);
-      this.gruposSinUsuario = response.data;
-      this.mostrarFormularioSolicitud = true;
+    confirmarAccion(accion) {
+      this.accionAConfirmar = accion;
+      this.dialogoConfirmacion = true;
     },
-    cerrarFormSolicitud() {
-      this.mostrarFormularioSolicitud = false;
-      this.gruposSinUsuario = [];
+    cancelarAccion() {
+      this.dialogoConfirmacion = false;
+      this.accionAConfirmar = null;
     },
-    async nuevaSolicitud(grupoId) {
-      let solicitud = {
-        grupo: configuracion.urlBase + "grupos/" + grupoId,
-        usuario: this.href,
-      };
+    async ejecutarAccion() {
+      this.dialogoConfirmacion = false;
+      if (this.accionAConfirmar === "nombreUsuario") {
+        await this.actualizarNombreUsuario();
+      } else if (this.accionAConfirmar === "password") {
+        await this.actualizarPassword();
+      }
+      this.accionAConfirmar = null;
+    },
+    async actualizarNombreUsuario() {
       try {
-        await this.realizarSolicitud(solicitud);
-        this.mostrarAlerta("Solicitud realizada con éxito", "success");
-        await this.renovarToken();
+        await this.cambiarNombre(this.nombreUsuario);
+        this.mostrarAlerta("Nombre cambiado con éxito", "success");
       } catch (error) {
-        this.mostrarAlerta(
-          "No se ha podido realizar la solicitud",
-          "error"
-        );
+        this.mostrarAlerta("No se ha podido cambiar el nombre", "error");
       }
     },
-    async solicitarAbandonarGrupo(grupo) {
-      let idGrupo = grupo._links.self.href.split('/').pop();
-      await this.abandonarGrupo(idGrupo, this.id);
-      await this.mostrarGrupos();
-      await this.mostrarSesiones();
-      await this.renovarToken();
+    async actualizarPassword() {
+      if (this.nuevaPassword !== this.confirmarNuevaPassword) {
+        return;
+      }
+      try {
+        let passwords = {
+          username: this.username,
+          passwordAntigua: this.passwordActual,
+          passwordNueva: this.nuevaPassword,
+        };
+        await this.cambiarPassword(passwords);
+        this.passwordActual = "";
+        this.nuevaPassword = "";
+        this.confirmarNuevaPassword = "";
+        this.mostrarAlerta("El password se ha cambiado con éxito", "success");
+      } catch (error) {
+        console.log(error);
+        this.mostrarAlerta("El password no se ha podido cambiar", "error");
+      }
     },
-    eliminarGrupo(grupo) {
-      console.log(grupo);
-    },
   },
-  async created() {
-    await this.mostrarGrupos();
-    await this.mostrarGruposEncargado(this.href);
-    const [sesiones] = await Promise.all([
-      this.cargarSesiones(this.gruposRegistrados),
-      this.cargarSesionesRealizadas(this.href),
-    ]);
-    this.sesiones = sesiones;
-  },
-  async mounted() {
-    window.addEventListener("resize", this.manejarCambioTamano);
-  },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.manejarCambioTamano);
+  mounted() {
+    this.nombreUsuario = this.username;
   },
 };
 </script>
 
 <style scoped>
-
-.texto {
-  padding-top: 10px;
-  padding-left: 10px;
+.v-card {
+  max-width: 500px;
+  margin: auto;
 }
-
-.contenedor-flex {
-  align-items: start;
-  justify-content: space-between;
-  padding: 10px;
+.v-btn {
+  margin-top: 20px;
 }
-
-.resultados {
-  flex-flow: column;
-  justify-content: start;
-  padding-top: 0;
-  padding-bottom: 5px;
-}
-
-.flex-fila {
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.izquierda {
-  width: 100%;
-}
-
-.derecha {
-  display: flex;
-  justify-content: flex-start;
-  width: 100%;
-  min-width: 50%;
-  padding-left: 20px;
-}
-
-.grupo {
-  margin-bottom: 5px !important;
-}
-
-.grupos {
-  max-width: 20vw;
-  display: flex;
-  flex-flow: column;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.carta::before {
-  width: 5px;
-  background-color: var(--bg-color);
-}
-
-.icono-rpe {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  font-size: 36px;
-  padding: 8px;
-  border-radius: 50%;
-  color: white;
-}
-
-.carta.ultimas-sesiones::before {
-  background-color: var(--claro);
-}
-
-.boton {
-  margin-top: 15px;
-  position: relative !important;
-  align-self: flex-end;
-  width: fit-content;
-  border-radius: 10px;
-  padding: 5px 5px;
-  height: fit-content;
-}
-
-@media (max-width: 1500px) {
-  .agenda {
-    flex-flow: column-reverse;
-    align-items: center;
-  }
-
-  .grupos {
-    max-width: 1200px;
-    padding: 16px;
-  }
-
-  .izquierda {
-    width: 100% !important;
-  }
-
-  .derecha {
-    width: 100%;
-    padding-left: 0;
-  }
+.v-form {
+  margin: 10px;
 }
 </style>
