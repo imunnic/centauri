@@ -30,21 +30,21 @@
         >
           <v-text-field
             v-model="passwordActual"
-            label="Password Actual"
+            label="Contraseña Actual"
             type="password"
             :rules="reglasPassword"
             required
           ></v-text-field>
           <v-text-field
             v-model="nuevaPassword"
-            label="Nueva Password"
+            label="Nueva Contraseña"
             type="password"
             :rules="reglasPassword"
             required
           ></v-text-field>
           <v-text-field
             v-model="confirmarNuevaPassword"
-            label="Confirmar Nueva Password"
+            label="Confirmar Nueva Contraseña"
             type="password"
             :rules="reglasConfirmarPassword"
             required
@@ -54,7 +54,7 @@
             class="claro"
             @click="confirmarAccion('password')"
           >
-            Cambiar Password
+            Cambiar Contraseña
           </v-btn>
         </v-form>
       </v-card-text>
