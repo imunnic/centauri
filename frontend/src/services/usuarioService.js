@@ -49,6 +49,12 @@ export default class UsuariosService {
     return await axios.get(href,config);
   }
 
+  async actualizarMarcas(marcasUsuario){
+    console.log(marcasUsuario);
+    let href = marcasUsuario.href;
+    return await axios.patch(href,marcasUsuario,config);
+  }
+
   async existeUsuario(nombreUsuario){
     let href = configuracion.urlBase + "usuarios/search/existsByNombre?nombre=" + nombreUsuario;
     return await axios.get(href,config);
@@ -68,12 +74,12 @@ export default class UsuariosService {
   }
 
   async cambiarNombreUsuario(usuario){
-    let href = configuracion.urlBase + "autenticacion/cambiar-nombre-usuario?nombre=" + usuario;
-    return await axios.post(href, config);
+    let href = url + "cambiar-nombre-usuario?nombre=" + usuario;
+    return await axios.post(href,null, config);
   }
 
   async cambiarPassword(passwords){
-    let href = configuracion.urlBase + "autenticacion/cambiar-password";
+    let href = url + "cambiar-password";
     return await axios.post(href, passwords, config);
   }
 
@@ -81,7 +87,7 @@ export default class UsuariosService {
     let usuario = {
       email:correo
     }
-    let href = configuracion.urlBase + "autenticacion/reset-password";
+    let href = url + "reset-password";
     return await axios.post(href,usuario,config);
   }
 }

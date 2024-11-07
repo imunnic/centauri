@@ -9,8 +9,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import java.util.List;
 import java.util.Optional;
 
-@RepositoryRestResource(path = "users", itemResourceRel = "user",
-    collectionResourceRel = "users")
+@RepositoryRestResource(exported = false)
 public interface UsuarioExternoDAO extends MongoRepository<UsuarioExterno, String> {
   boolean existsByUsername(String username);
   boolean existsByEmail(String email);

@@ -102,14 +102,6 @@ export default {
     return {
       sesion: null,
       ficha: null,
-      marcas: {
-        "push press": 70,
-        vam: 240,
-        burpees: 50,
-        "pull-ups": 30,
-        "push-ups": 70,
-        lunges: 100,
-      },
       sesionFin: false,
       cargando: false,
       inicio: false,
@@ -117,11 +109,11 @@ export default {
       intervalo: null,
       formFinalizarSesion: false,
       detalleEjercicio: false,
-      ejercicio: null
+      ejercicio: null,
     };
   },
   computed: {
-    ...mapState(useUsuariosStore,['id']),
+    ...mapState(useUsuariosStore,['id','marcas']),
     tiempoFormateado() {
       const minutos = Math.floor(this.tiempoSesion / 60)
         .toString()

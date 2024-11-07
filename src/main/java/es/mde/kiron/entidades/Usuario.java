@@ -4,17 +4,20 @@ import es.mde.kiron.security.models.Rol;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Document(collection = "usuarios")
 public class Usuario {
 
   @Id
   private String id;
   private String nombre;
-  private String email;
-  private String password;
+  private Map<String, Integer> marcas;
   Rol rol;
 
-  public Usuario() {
+  public Usuario(){
+    this.marcas=new HashMap<>();
   }
 
   public Usuario(String nombre, Rol rol) {
@@ -45,5 +48,13 @@ public class Usuario {
 
   public void setRol(Rol rol) {
     this.rol = rol;
+  }
+
+  public Map<String, Integer> getMarcas() {
+    return marcas;
+  }
+
+  public void setMarcas(Map<String, Integer> marcas) {
+    this.marcas = marcas;
   }
 }

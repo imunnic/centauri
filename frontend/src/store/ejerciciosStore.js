@@ -37,6 +37,10 @@ export const useEjerciciosStore = defineStore("ejercicios", {
       ejercicio.url = "";
       ejercicio.tipoCarga = ""
     },
+    tipoCargaEjercicio(nombreEjercicio){
+      let ejercicio = this.ejerciciosRegistrados.filter(e => e.nombre == nombreEjercicio)[0];
+      return ejercicio.tipoCarga;
+    },
     async modificarEjercicio(ejercicio) {
       await this.ejerciciosService.modificarEjercicio(ejercicio);
     },

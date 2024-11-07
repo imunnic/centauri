@@ -12,6 +12,7 @@ import { useGruposStore } from "@/store/gruposStore.js";
 export const useUsuariosStore = defineStore("usuarios", {
   state: () => ({
     username: "",
+    marcas:"",
     token: "",
     perfil: "",
     id: "",
@@ -25,11 +26,12 @@ export const useUsuariosStore = defineStore("usuarios", {
   actions: {
     async peticionLogin(logeo){
       this.login = logeo
-      let usuario = await this.usuarioService.login(this.login);
-      this.username = usuario.usuario.nombre;
-      this.id = usuario.usuario.id;
-      this.token = usuario.token;
-      this.perfil = usuario.usuario.rol;
+      let response = await this.usuarioService.login(this.login);
+      this.username = response.usuario.nombre;
+      this.id = response.usuario.id;
+      this.token = response.token;
+      this.perfil = response.usuario.rol;
+      this.marcas = response.usuario.marcas;
       this.href = configuracion.urlBase + "usuarios/" + this.id;
       this.isLogged = true;
 
@@ -54,6 +56,29 @@ export const useUsuariosStore = defineStore("usuarios", {
 
     async cambiarNombre(nombre){
       await this.usuarioService.cambiarNombreUsuario(nombre);
+    },
+
+    async actualizarMarcas(nuevaMarca){
+      if (typeof nuevaMarca === 'object') {
+        for (let key in nuevaMarca) {
+          if (typeof nuevaMarca[key] === 'string') {
+            nuevaMarca[key] = parseInt(nuevaMarca[key], 10);
+          }
+        }
+      }
+      this.marcas = {
+        ...this.marcas,
+        ...nuevaMarca
+      };
+      let marcasUsuario = {
+        href: this.href,
+        marcas: {...nuevaMarca}
+      }
+      await this.usuarioService.actualizarMarcas(marcasUsuario);
+    },
+
+    encontrarMarca(nombreEjercicio){
+      return this.marcas[nombreEjercicio] !== undefined ? this.marcas[nombreEjercicio] : 0;
     },
 
     async cambiarPassword(passwords){

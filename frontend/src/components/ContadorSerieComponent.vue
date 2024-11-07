@@ -131,10 +131,14 @@ export default {
     },
 
     marcaAjustada() {
-      let marcaUsuario =
-        this.ejercicio.tipoCarga !== "VAM"
-          ? this.marcasUsuario[this.ejercicio.nombre.toLowerCase()]
-          : this.marcasUsuario.vam;
+      if(!this.marcasUsuario){
+        if(this.ejercicio.tipoCarga == 'VAM'){
+          return 280;
+        } else {
+          return 10;
+        }
+      }
+      let marcaUsuario = this.marcasUsuario[this.ejercicio.nombre];
       if (this.serie.ajustable && this.ejercicio.tipoCarga !== 'VAM') {
         if (marcaUsuario) {
           const porcentaje = (this.serie.carga / 100) * marcaUsuario;
@@ -211,13 +215,13 @@ export default {
     this.empezarTemporizador();
     this.leerEnVozAlta(this.ejercicio.nombre);
     if(this.tipo == 'TIEMPO'){
-      let minutos = Math.floor(this.serie.cantidad / 60);
-      let segundos = this.serie.cantidad % 60;
+      let minutos = Math.floor(this.marcaAjustada / 60);
+      let segundos = this.marcaAjustada % 60;
       this.leerEnVozAlta(minutos + ' minutos, ' + segundos + ' segundos');
     } else if(this.tipo == 'REPS'){
-      this.leerEnVozAlta(this.serie.cantidad + ' repeticiones')
+      this.leerEnVozAlta(this.marcaAjustada + ' repeticiones')
     } else {
-      this.leerEnVozAlta(this.serie.cantidad + ' metros')
+      this.leerEnVozAlta(this.marcaAjustada + ' metros')
     }
   },
 
