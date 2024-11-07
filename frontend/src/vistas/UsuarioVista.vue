@@ -14,7 +14,8 @@
 import DatosLoginUsuarioComponent from "@/components/DatosLoginUsuarioComponent.vue"
 import DatosMarcasUsuarioComponent from "@/components/DatosMarcasUsuarioComponent.vue";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
-import { mapState } from "pinia";
+import { useEjerciciosStore } from "@/store/ejerciciosStore";
+import { mapState, mapActions } from "pinia";
 
 export default {
   components: {
@@ -25,6 +26,7 @@ export default {
     ...mapState(useUsuariosStore, ["marcas"]),
   },
   methods: {
+    ...mapActions(useEjerciciosStore,['cargarEjercicios']),
     actualizarMarcasArray() {
       this.marcasArray = Object.entries(this.marcas).map(([key, value]) => ({
         nombre: key,
@@ -37,8 +39,9 @@ export default {
       marcasArray: [],
     };
   },
-  created() {
+  async created() {
     this.actualizarMarcasArray();
+    await this.cargarEjercicios();
   },
 };
 </script>
