@@ -186,9 +186,6 @@ export default {
       mostrarDetalleUsuario: false,
       mostrarConfirmacionCambioEncargado: false,
       miembroSeleccionado: null,
-      mostrarAlerta: false,
-      mensajeAlerta: "",
-      tipoAlerta: "error",
       confirmarBorrado: false
     };
   },
