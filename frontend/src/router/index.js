@@ -3,12 +3,13 @@ import { useUsuariosStore } from "@/store/usuariosStore.js";
 const routes = [
   {
     path: "/",
-    redirect: "/login",
+    redirect: "/fichas",
   },
   {
-    path: "/login",
-    name: "login",
-    component: () => import("../vistas/LoginVista.vue"),
+    path: "/planificacion",
+    name: "planificacion",
+    component: () => import("../vistas/PlanificacionVista.vue"),
+    meta: { requiresAuth: true },
   },
   {
     path: "/usuario",
@@ -55,6 +56,25 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+<<<<<<< HEAD
+=======
+    path: "/grupos",
+    name: "grupos",
+    component: () => import("../vistas/GruposVista.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/contador/:id",
+    name: "contador",
+    component: () => import("../vistas/ContadorVista.vue")
+  },
+  {
+    path: "/registro/:id",
+    name: "registro",
+    component: () => import("../vistas/RegistroVista.vue")
+  },
+  {
+>>>>>>> main
     path: '/:catchAll(.*)',
     redirect: '/usuario'
   }
@@ -70,7 +90,7 @@ router.beforeEach((to, from, next) => {
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!usuariosStore.isLogged) {
-      return next({ name: 'login' });
+      return next({ name: 'fichas' });
     }
 
     if (to.meta.requiresRole && !to.meta.requiresRole.includes(usuariosStore.perfil)) {

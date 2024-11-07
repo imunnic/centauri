@@ -98,6 +98,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+<<<<<<< HEAD
+=======
+  overflow-y: auto;
+>>>>>>> main
 }
 
 .info {
@@ -119,6 +123,14 @@
 
 .texto{
   font-size: 17px;
+}
+
+.cursor-normal > .v-card{
+  --v-hover-opacity: 0; 
+}
+.cursor-normal > .v-card:hover{
+  cursor: default;
+  opacity: 1;
 }
 
 .placeholder input::placeholder {

@@ -1,5 +1,6 @@
 <template>
   <v-container>
+<<<<<<< HEAD
     <!-- https://vuejs.org/guide/built-ins/transition transiciones de componentes -->
     <transition name="fade">
       <v-alert
@@ -12,6 +13,8 @@
       </v-alert>
     </transition>
 
+=======
+>>>>>>> main
     <ListaCrudComponent
       :items="ejerciciosRegistrados"
       :key="ejerciciosKey"
@@ -47,6 +50,7 @@ import EjercicioDetalleComponent from "@/components/EjercicioDetalleComponent.vu
 import { mapState, mapActions } from "pinia";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useEjerciciosStore } from "@/store/ejerciciosStore.js";
+import { useAlertasStore } from "@/store/alertasStore.js";
 
 export default {
   components: {
@@ -61,14 +65,11 @@ export default {
       modoEdicion: false,
       detalle: false,
       ejerciciosKey: 0, //forzar renderizado https://michaelnthiessen.com/force-re-render/
-      mostrarAlerta: false,
-      mensajeAlerta: "",
-      tipoAlerta: "success",
       cargando: false,
     };
   },
   computed: {
-    ...mapState(useUsuariosStore, ["token", "perfil"]),
+    ...mapState(useUsuariosStore, ["token", "perfil", 'isLogged']),
     ...mapState(useEjerciciosStore, ["ejerciciosRegistrados"]),
     permisoCreacion() {
       return this.perfil == "ECEF";
@@ -83,6 +84,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(useUsuariosStore,['renovarToken']),
     ...mapActions(useEjerciciosStore, [
       "arrancarServicioEjercicios",
       "cargarEjercicios",
@@ -91,10 +93,12 @@ export default {
       "eliminarEjercicio",
       "agregarEjercicio",
     ]),
+    ...mapActions(useAlertasStore,['mostrarAlerta']),
     resetFormulario() {
       this.ejercicioSeleccionado = {};
       this.modoEdicion = false;
     },
+<<<<<<< HEAD
     mostrarAlertaTemporal(mensaje, tipo = "success") {
       this.mensajeAlerta = mensaje;
       this.tipoAlerta = tipo;
@@ -111,7 +115,17 @@ export default {
       } else {
         await this.agregarEjercicio(ejercicio);
         this.mostrarAlertaTemporal("Ejercicio creado con éxito");
+=======
+    async guardarEjercicio(ejercicio) {
+      if (this.modoEdicion) {
+        await this.modificarEjercicio(ejercicio);
+        this.mostrarAlerta("Ejercicio modificado con éxito", "success");
+      } else {
+        await this.agregarEjercicio(ejercicio);
+        this.mostrarAlerta("Ejercicio creado con éxito", "success");
+>>>>>>> main
       }
+      this.renovarCredenciales();
       await this.cargarEjercicios();
       this.cerrarForm();
       this.ejerciciosKey += 1;
@@ -143,9 +157,15 @@ export default {
       this.cargando = true;
       await this.cargarEjercicios();
       this.cargando = false;
-      this.mostrarAlertaTemporal("Ejercicio eliminado con éxito");
+      this.mostrarAlerta("Ejercicio eliminado con éxito", "success");
+      this.renovarCredenciales();
       this.ejerciciosKey += 1;
     },
+    async renovarCredenciales(){
+      if(this.isLogged){
+        this.renovarToken();
+      }
+    }
   },
   async created() {
     this.cargando = true;

@@ -209,6 +209,7 @@
         </div>
         <div class="info-serie">
           <div class="flex-item">
+<<<<<<< HEAD
             <div class="input-label">Marca Objetivo</div>
             <v-text-field
               v-model="formatoMarca"
@@ -218,6 +219,16 @@
               placeholder="04:30"
               @input="onInput"
             ></v-text-field>
+=======
+            <InformacionComponent
+              :texto="ayudaMarca"
+              :etiqueta="'Marca'"
+            ></InformacionComponent>
+            <InputTiempoComponent
+              :valor-inicial="ritmoObjetivo"
+              @nuevo-valor="actualizarMarca"
+            ></InputTiempoComponent>
+>>>>>>> main
           </div>
         </div>
       </div>
@@ -275,8 +286,18 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import { useEjerciciosStore } from "../store/ejerciciosStore.js";
 import { mapState } from "pinia";
+=======
+import InformacionComponent from "@/components/comun/InformacionComponent.vue";
+import InputTiempoComponent from "@/components/comun/InputTiempoComponent.vue";
+import EjercicioDetalleComponent from "./EjercicioDetalleComponent.vue";
+import { useEjerciciosStore } from "@/store/ejerciciosStore.js";
+import { useUsuariosStore } from "@/store/usuariosStore.js"
+import { mapState, mapActions } from "pinia";
+import tooltips from "@/tooltips.json";
+>>>>>>> main
 
 export default {
   props: {
@@ -286,12 +307,12 @@ export default {
     soloLectura: {
       type: Boolean,
       default: false,
-    },
+    }
   },
   data() {
     return {
       marcaObjetivo: 10,
-      ritmoObjetivo: 240,
+      ritmoObjetivo: 280,
       expansionPanelOpen: [0],
       tiposSerie: [
         { valor: "REPS", texto: "Repeticiones" },
@@ -383,11 +404,17 @@ export default {
   },
 
   methods: {
+<<<<<<< HEAD
     onInput(value) {
       const [minutos, seconds] = value.split(":").map(Number);
       if (!isNaN(minutos) && !isNaN(seconds)) {
         this.marcaObjetivo = minutos * 60 + seconds;
       }
+=======
+    ...mapActions(useUsuariosStore,['encontrarMarca']),
+    actualizarTiempo(nuevoValor) {
+      this.serie.cantidad = nuevoValor;
+>>>>>>> main
     },
     quitarSerie() {
       this.$emit("quitar-serie", this.serie.id);
@@ -401,6 +428,14 @@ export default {
       this.serie.ajustable = false;
     }
   },
+  mounted(){
+    if(this.serie.ejercicio){
+      if(this.encontrarMarca(this.serie.ejercicio.nombre)){
+        this.marcaObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
+        this.ritmoObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
+      }
+    }
+  }
 };
 </script>
 

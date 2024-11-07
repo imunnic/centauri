@@ -1,5 +1,6 @@
 <template>
   <v-container>
+<<<<<<< HEAD
     <transition name="fade">
       <v-alert
         v-if="mostrarAlerta"
@@ -10,6 +11,8 @@
         {{ mensajeAlerta }}
       </v-alert>
     </transition>
+=======
+>>>>>>> main
 
     <ListaCrudComponent
       :items="equipamientosRegistrados"
@@ -49,6 +52,7 @@ import EquipamientoFormComponent from "@/components/EquipamientoFormComponent.vu
 import EquipamientoDetalleComponent from "@/components/EquipamientoDetalleComponent.vue";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useEquipamientosStore } from "@/store/equipamientosStore.js";
+import { useAlertasStore } from "@/store/alertasStore.js";
 import { mapState, mapActions } from "pinia";
 
 export default {
@@ -73,12 +77,18 @@ export default {
   },
   computed: {
     ...mapState(useEquipamientosStore, ["equipamientosRegistrados"]),
+<<<<<<< HEAD
     ...mapState(useUsuariosStore, ["token", "perfil"]),
     permisoCreacion() {
+=======
+    ...mapState(useUsuariosStore, ["token", "perfil", "isLogged"]),
+    permisoCreacionEdicion() {
+>>>>>>> main
       return this.perfil == "ECEF";
     },
   },
   methods: {
+    ...mapActions(useUsuariosStore, ['renovarToken']),
     ...mapActions(useEquipamientosStore, [
       "cargarEquipamientos",
       "resetEquipamiento",
@@ -86,10 +96,12 @@ export default {
       "modificarEquipamiento",
       "eliminarEquipamiento",
     ]),
+    ...mapActions(useAlertasStore,['mostrarAlerta']),
     resetFormulario() {
       this.equipamientoSeleccionado = {};
       this.modoEdicion = false;
     },
+<<<<<<< HEAD
     mostrarAlertaTemporal(mensaje, tipo = "success") {
       this.mensajeAlerta = mensaje;
       this.tipoAlerta = tipo;
@@ -106,6 +118,17 @@ export default {
       } else {
         await this.agregarEquipamiento(equipamiento);
         this.mostrarAlertaTemporal("Equipamiento creado con éxito");
+=======
+    async guardarEquipamiento(equipamiento) {
+      if (this.modoEdicion) {
+        await this.modificarEquipamiento(equipamiento);
+        this.mostrarAlerta("Equipamiento modificado con éxito", "success");
+        await this.renovarCredenciales();
+      } else {
+        await this.agregarEquipamiento(equipamiento);
+        this.mostrarAlerta("Equipamiento creado con éxito", "success");
+        await this.renovarCredenciales();
+>>>>>>> main
       }
       await this.cargarEquipamientos();
       this.cerrarFormulario();
@@ -132,12 +155,18 @@ export default {
       await this.eliminarEquipamiento(equipamiento);
       this.cargarEquipamientos();
       this.equipamientosKey += 1;
-      this.mostrarAlertaTemporal("Equipamiento eliminado con éxito");
+      this.mostrarAlerta("Equipamiento eliminado con éxito", "success");
+      await this.renovarCredenciales();
     },
     cerrarFormulario() {
       this.mostrarCrearForm = false;
       this.resetFormulario();
     },
+    async renovarCredenciales(){
+      if(this.isLogged){
+        this.renovarToken();
+      }
+    }
   },
   async created() {
     this.cargando = true;

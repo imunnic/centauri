@@ -57,8 +57,15 @@ Este proyecto se inció el 2 de septiembre de 2024 y se encuentra en **proceso d
 
  ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) Documentación API:
  
- [![Netlify Status](https://api.netlify.com/api/v1/badges/319f274a-2f89-422c-bc12-4865e70526fb/deploy-status)](https://app.netlify.com/sites/gatel/deploys)
- Despliegue de la API en Internet: 
+![Netlify Status](https://api.netlify.com/api/v1/badges/319f274a-2f89-422c-bc12-4865e70526fb/deploy-status) Despliegue de la API en Internet: [centauri-app.netlify.app](https://centauri-app.netlify.app)  
+
+Usuario de pruebas (perfil ECEF): ecef  
+Usuario de pruebas (perfil Diplomado): diplomado  
+Usuario de pruebas (perfil Deportista): deportista  
+
+La contraseña de pruebas es la misma que el usuario  
+
+
 
 
 

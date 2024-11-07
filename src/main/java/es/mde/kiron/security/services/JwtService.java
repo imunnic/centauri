@@ -17,6 +17,7 @@ import java.util.function.Function;
 
 /**
  * @author JOSE LUIS PUENTES ALAMOS
+ * Añadidos los métodos renovarToken e isTokenRecientementeExpirado por IGNACIO OVIDIO MUÑOZ NICOLÁS
  */
 @Service
 public class JwtService {
@@ -32,7 +33,7 @@ public class JwtService {
         .claims(extraClaims)
         .subject(usuario.getUsername())
         .issuedAt(new Date(System.currentTimeMillis()))
-        .expiration(new Date(System.currentTimeMillis() + 1000*60*24))
+        .expiration(new Date(System.currentTimeMillis() + 1000*60*60))
         .signWith(getKey())
         .compact();
   }
@@ -78,6 +79,20 @@ public class JwtService {
     byte[] secretKeyBytes = new byte[32];
     secureRandom.nextBytes(secretKeyBytes);
     return Base64.getEncoder().encodeToString(secretKeyBytes);
+  }
+
+  public String renovarToken(String token, UserDetails usuario) {
+    if (isTokenValido(token, usuario) || isTokenRecientementeExpirado(token)) {
+      return getToken(usuario);
+    }
+    throw new RuntimeException("Token no válido para renovación");
+  }
+
+  private boolean isTokenRecientementeExpirado(String token) {
+    final Date fechaExpiracion = getFechaExpiracion(token);
+    final Date ahora = new Date();
+    final long cincoMinutos = 1000 * 60 * 5;
+    return fechaExpiracion.before(ahora) && (ahora.getTime() - fechaExpiracion.getTime()) < cincoMinutos;
   }
 
 }

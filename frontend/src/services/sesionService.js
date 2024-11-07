@@ -7,8 +7,12 @@ let config = {
   },
 };
 
+<<<<<<< HEAD
 export default class sesionesService {
     constructor() {}
+=======
+export default class SesionesService {
+>>>>>>> main
   
     actualizarCabecera(token) {
       config.headers.Authorization = "Bearer " + token;

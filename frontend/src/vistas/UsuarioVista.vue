@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div class="contenedor flex-fila">
     <div v-if="isLargeScreen" class="contenedor grupos izquierda">
       <b>Grupos:</b>
@@ -71,10 +72,44 @@ export default {
     },
     modoInicial() {
       return this.isLargeScreen ? "mes" : "dia";
+=======
+  <v-container class="contenedor-flex columna">
+    <DatosLoginUsuarioComponent />
+
+    <DatosMarcasUsuarioComponent 
+      :marcasArray="marcasArray" 
+      @actualizarMarcasArray="actualizarMarcasArray" 
+    />
+
+  </v-container>
+</template>
+
+<script>
+import DatosLoginUsuarioComponent from "@/components/DatosLoginUsuarioComponent.vue"
+import DatosMarcasUsuarioComponent from "@/components/DatosMarcasUsuarioComponent.vue";
+import { useUsuariosStore } from "@/store/usuariosStore.js";
+import { mapState } from "pinia";
+
+export default {
+  components: {
+    DatosLoginUsuarioComponent,
+    DatosMarcasUsuarioComponent,
+  },
+  computed: {
+    ...mapState(useUsuariosStore, ["marcas"]),
+  },
+  methods: {
+    actualizarMarcasArray() {
+      this.marcasArray = Object.entries(this.marcas).map(([key, value]) => ({
+        nombre: key,
+        cantidad: value,
+      }));
+>>>>>>> main
     },
   },
   data() {
     return {
+<<<<<<< HEAD
       windowWidth: window.innerWidth,
       gruposUsuario: [
         { nombre: "Grupo 1", color: { nombre: "rojo", valor: "#FF0000" } },
@@ -166,11 +201,18 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.handleResize);
+=======
+      marcasArray: [],
+    };
+  },
+  created() {
+    this.actualizarMarcasArray();
+>>>>>>> main
   },
 };
 </script>
-
 <style scoped>
+<<<<<<< HEAD
 .texto {
   padding-top: 10px;
   padding-left: 10px;
@@ -200,5 +242,14 @@ export default {
 .carta::before {
   width: 5px;
   background-color: var(--bg-color);
+=======
+.columna{
+  flex-flow: column;
+}
+@media (min-width: 1000px) {
+  .columna {
+    flex-flow: row;
+  }
+>>>>>>> main
 }
 </style>
