@@ -2,6 +2,7 @@ package es.mde.kiron.security.entities;
 
 import es.mde.kiron.security.models.Rol;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +16,9 @@ public class UsuarioExterno implements UserDetails {
 
   @Id
   private String id;
+  @Indexed(unique = true)
   private String username;
+  @Indexed(unique = true)
   private String email;
   private String password;
   Rol rol;

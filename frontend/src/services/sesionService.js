@@ -32,6 +32,7 @@ export default class SesionesService {
     }
 
     async editarSesion(sesion){
+      sesion.grupo = sesion.grupo.nombre;
       return await axios.patch(sesion.href, sesion, config);
     }
 

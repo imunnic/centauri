@@ -77,6 +77,12 @@ export const useUsuariosStore = defineStore("usuarios", {
       await this.usuarioService.actualizarMarcas(marcasUsuario);
     },
 
+    async eliminarMarca(usuario){
+      this.marcas = usuario.marcas;
+      usuario.href = this.href;
+      await this.usuarioService.borrarMarca(usuario);
+    },
+
     encontrarMarca(nombreEjercicio){
       return this.marcas[nombreEjercicio] !== undefined ? this.marcas[nombreEjercicio] : 0;
     },

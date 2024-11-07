@@ -46,7 +46,7 @@
             flat
             @click.stop="emitirEvento(sesion)"
             :style="{
-              backgroundColor: sesion.grupo.color.valor + ' !important',
+              backgroundColor: sesion.grupo.color + ' !important',
             }"
           >
             {{ sesion.nombre }} - {{ sesion.grupo.nombre }}

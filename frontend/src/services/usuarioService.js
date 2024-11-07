@@ -54,6 +54,10 @@ export default class UsuariosService {
     return await axios.patch(href,marcasUsuario,config);
   }
 
+  async borrarMarca(usuario){
+    return await axios.put(usuario.href,usuario,config)
+  }
+
   async existeUsuario(nombreUsuario){
     let href = configuracion.urlBase + "usuarios/search/existsByNombre?nombre=" + nombreUsuario;
     return await axios.get(href,config);

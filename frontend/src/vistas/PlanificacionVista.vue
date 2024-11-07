@@ -227,7 +227,6 @@ export default {
     },
 
     async sesionCreada(nuevaSesion) {
-      console.log(nuevaSesion.grupo);
       await this.crearSesion(nuevaSesion);
       this.mostrarFormulario = false;
       await this.mostrarSesiones();
@@ -254,6 +253,7 @@ export default {
 
     async sesionEditada(sesion) {
       await this.modificarSesion(sesion);
+      this.cerrarDetalleCalendario();
       this.edicion = false;
       await this.mostrarSesiones();
       await this.renovarToken();

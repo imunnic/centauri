@@ -18,8 +18,10 @@
               v-model="logeo.password"
               label="Contraseña"
               :rules="[rules.required]"
-              type="password"
+              :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+              :type="visible ? 'text' : 'password'"
               required
+              @click:append-inner="visible = !visible"
             ></v-text-field>
               <a @click="activarRecuperacion">No recuerdo la contraseña</a>
           </div>
@@ -69,6 +71,7 @@
         rules: {
           required: value => !!value || 'Requerido.',
         },
+        visible:false,
       };
     },
     methods: {
