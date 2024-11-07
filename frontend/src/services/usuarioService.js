@@ -50,7 +50,6 @@ export default class UsuariosService {
   }
 
   async actualizarMarcas(marcasUsuario){
-    console.log(marcasUsuario);
     let href = marcasUsuario.href;
     return await axios.patch(href,marcasUsuario,config);
   }

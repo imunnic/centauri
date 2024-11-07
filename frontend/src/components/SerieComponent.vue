@@ -223,6 +223,7 @@
               :etiqueta="'Marca'"
             ></InformacionComponent>
             <InputTiempoComponent
+              ref="tiempo"
               :valor-inicial="ritmoObjetivo"
               @nuevo-valor="actualizarMarca"
             ></InputTiempoComponent>
@@ -443,6 +444,8 @@ export default {
       if(this.encontrarMarca(this.serie.ejercicio.nombre)){
         this.marcaObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
         this.ritmoObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
+        this.$refs.tiempo.minutos = Math.floor(this.ritmoObjetivo / 60);
+        this.$refs.tiempo.segundos = this.ritmoObjetivo % 60
       }
     }
   }
