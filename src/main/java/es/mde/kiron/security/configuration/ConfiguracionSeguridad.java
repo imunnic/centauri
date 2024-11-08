@@ -41,6 +41,8 @@ public class ConfiguracionSeguridad {
             .requestMatchers(HttpMethod.GET, "/api/ejercicios").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/ejercicios/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/equipamientos").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/usuarios/existe-email").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/usuarios/search/existsByNombre").permitAll()
             .anyRequest().authenticated())
         .sessionManagement(sessionManager ->
             sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

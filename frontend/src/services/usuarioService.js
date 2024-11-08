@@ -63,6 +63,11 @@ export default class UsuariosService {
     return await axios.get(href,config);
   }
 
+  async existeCorreo(correo){
+    let href = configuracion.urlBase + "usuarios/existe-email?email=" + correo;
+    return await axios.get(href);
+  }
+
   async renovarToken(){
     return await axios.post(url + renovacion, null, config);
   }
@@ -72,13 +77,18 @@ export default class UsuariosService {
       username: usuario.nombre,
       password: usuario.password,
       email: usuario.correo
-    }
+    };
     return await axios.post(url + registro + "/" + usuario.invitacion, user, config);
   }
 
   async cambiarNombreUsuario(usuario){
     let href = url + "cambiar-nombre-usuario?nombre=" + usuario;
     return await axios.post(href,null, config);
+  }
+
+  async cambiarCorreo(correo,id){
+    let href = configuracion.urlBase + "usuarios/" + id + "/cambiar-email?email=" + correo;
+    return await axios.patch(href,null,config);
   }
 
   async cambiarPassword(passwords){

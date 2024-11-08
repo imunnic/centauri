@@ -11,7 +11,7 @@
           <v-text-field
             v-model="nombreUsuario"
             label="Nombre de Usuario"
-            :rules="reglasNombreUsuario"
+            :rules="reglasNombre"
             required
           ></v-text-field>
           <v-btn
@@ -20,6 +20,26 @@
             @click="confirmarAccion('nombreUsuario')"
           >
             Cambiar Nombre de Usuario
+          </v-btn>
+        </v-form>
+
+        <v-form
+          ref="formularioCorreo"
+          v-model="formularioCorreoValido"
+          lazy-validation
+        >
+          <v-text-field
+            v-model="correo"
+            label="Correo de usuario"
+            :rules="reglasCorreo"
+            required
+          ></v-text-field>
+          <v-btn
+            :disabled="!formularioCorreoValido"
+            class="claro"
+            @click="confirmarAccion('correoUsuario')"
+          >
+            Cambiar Correo
           </v-btn>
         </v-form>
 
@@ -68,6 +88,8 @@
           {{
             accionAConfirmar === "nombreUsuario"
               ? "nombre de usuario"
+              : accionAConfirmar === "correoUsuario"
+              ? "correo electrónico"
               : "contraseña"
           }}?
         </v-card-text>
@@ -94,13 +116,27 @@ export default {
       nuevaPassword: "",
       confirmarNuevaPassword: "",
       formularioNombreUsuarioValido: false,
+      correo: "",
+      formularioCorreoValido: false,
       formularioPasswordValido: false,
       dialogoConfirmacion: false,
       accionAConfirmar: null,
-      reglasNombreUsuario: [
-        (v) => !!v || "El nombre de usuario es obligatorio",
-        (v) => v.length >= 3 || "Debe tener al menos 3 caracteres",
-        (v) => this.validarNombreUsuario(v),
+      reglasNombre: [
+        (v) => !!v || "El nombre de usuario es requerido",
+        async (v) => {
+          if (!v) return true;
+          const esValido = await this.validarNombreUsuario(v);
+          return esValido || "El nombre de usuario ya existe";
+        },
+      ],
+      reglasCorreo: [
+        (v) => !!v || "El correo electrónico es requerido",
+        (v) => /.+@.+\..+/.test(v) || "Debe ser un correo electrónico válido",
+        async (v) => {
+          if (!v) return true;
+          const esValido = await this.validarCorreo(v);
+          return esValido || "El correo ya existe";
+        },
       ],
       reglasPassword: [
         (v) => !!v || "El password es obligatorio",
@@ -120,22 +156,28 @@ export default {
       "existeUsuario",
       "cambiarNombre",
       "cambiarPassword",
+      "comprobarCorreo",
+      "modificarCorreo",
     ]),
     ...mapActions(useAlertasStore, ["mostrarAlerta"]),
     async validarNombreUsuario(nombreUsuario) {
-      if (!nombreUsuario) return true;
-      if (nombreUsuario == this.username) return true;
-      try {
-        const existe = await this.existeUsuario(nombreUsuario);
-        this.nombreUsuarioError = existe
-          ? "El nombre de usuario ya está en uso"
-          : "";
-        return !existe || this.nombreUsuarioError;
-      } catch (error) {
-        console.error("Error al verificar nombre de usuario:", error);
-        this.nombreUsuarioError = "Error al verificar nombre de usuario";
-        return false;
+      let existe = false;
+      if (nombreUsuario == this.username) {
+        existe = true;
       }
+      try {
+        existe = await this.existeUsuario(nombreUsuario);
+        existe = !existe;
+      } catch (error) {}
+      return existe;
+    },
+    async validarCorreo(correo) {
+      let existe = false;
+      try {
+        let response = await this.comprobarCorreo(correo);
+        existe = response.data;
+      } catch {}
+      return !existe;
     },
     confirmarAccion(accion) {
       this.accionAConfirmar = accion;
@@ -151,6 +193,8 @@ export default {
         await this.actualizarNombreUsuario();
       } else if (this.accionAConfirmar === "password") {
         await this.actualizarPassword();
+      } else if (this.accionAConfirmar === "correoUsuario"){
+        await this.actualizarCorreo();
       }
       this.accionAConfirmar = null;
     },
@@ -164,6 +208,19 @@ export default {
         );
       } catch (error) {
         this.mostrarAlerta("No se ha podido cambiar el nombre", "error");
+      }
+    },
+    async actualizarCorreo() {
+      try {
+        let response = await this.modificarCorreo(this.correo);
+        if(response){
+          this.mostrarAlerta("Correo cambiado con éxito", "success");
+        } else {
+          this.mostrarAlerta("No se ha podido cambiar el correo", "error");
+        }
+      } catch(error) {
+        console.log(error);
+        this.mostrarAlerta("No se ha podido cambiar el correo", "error");
       }
     },
     async actualizarPassword() {

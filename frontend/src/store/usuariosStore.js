@@ -95,6 +95,15 @@ export const useUsuariosStore = defineStore("usuarios", {
       await this.usuarioService.recuperarPassword(correo);
     },
 
+    async comprobarCorreo(correo){
+      return await this.usuarioService.existeCorreo(correo);
+    },
+
+    async modificarCorreo(correo){
+      let response = await this.usuarioService.cambiarCorreo(correo,this.id);
+      return response.data;
+    },
+
     arrancarServicios(){
       const fichasStore = useFichasStore();
       const ejerciciosStore = useEjerciciosStore();
