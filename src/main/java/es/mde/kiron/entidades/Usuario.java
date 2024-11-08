@@ -2,6 +2,7 @@ package es.mde.kiron.entidades;
 
 import es.mde.kiron.security.models.Rol;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashMap;
@@ -12,6 +13,7 @@ public class Usuario {
 
   @Id
   private String id;
+  @Indexed(unique = true)
   private String nombre;
   private Map<String, Integer> marcas;
   Rol rol;
