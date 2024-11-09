@@ -90,6 +90,8 @@ export default {
           return "1 RM";
         case "VAM":
           return "VAM";
+        case "TIEMPO":
+          return "Tiempo"
         default:
           return "Tipo de carga no especificado.";
       }

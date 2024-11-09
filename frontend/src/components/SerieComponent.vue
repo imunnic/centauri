@@ -200,7 +200,8 @@
         </div>
       </div>
       <div
-        v-if="serie.ajustable && serie.ejercicio.tipoCarga == 'VAM'"
+        v-if="serie.ajustable && 
+        (serie.ejercicio.tipoCarga == 'VAM'||serie.ejercicio.tipoCarga == 'TIEMPO')"
         class="flex-fila"
       >
         <div class="info-serie">
@@ -370,7 +371,8 @@ export default {
     },
 
     marcaEjercicio() {
-      if (this.serie.ejercicio.tipoCarga === "VAM") {
+      if (this.serie.ejercicio.tipoCarga === "VAM" || 
+      this.serie.ejercicio.tipoCarga === "TIEMPO") {
         const ritmoEnSegundos =
           this.ritmoObjetivo +
           this.ritmoObjetivo * ((100 - this.serie.carga) / 100);

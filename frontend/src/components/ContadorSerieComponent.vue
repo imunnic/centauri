@@ -13,7 +13,8 @@
       </v-progress-circular>
       
       <a class="texto nombre-ejercicio" @click="mostrarEjercicio">{{ ejercicio.nombre }}</a>
-      <p v-if="ejercicio.tipoCarga == 'VAM'" class="texto">
+      <p v-if="ejercicio.tipoCarga == 'VAM' || ejercicio.tipoCarga == 'TIEMPO'" 
+      class="texto">
         Ritmo: {{ formatoVam }}
       </p>
       <p v-if="ejercicio.tipoCarga == 'RM'"class="texto">
@@ -64,7 +65,8 @@
         </div>
         <div
           class="cantidad-serie"
-          v-if="tipo == 'DIST' && ejercicio.tipoCarga == 'VAM'"
+          v-if="tipo == 'DIST' && 
+          (ejercicio.tipoCarga == 'VAM' || ejercicio.tipoCarga == 'TIEMPO')"
         >
           <p class="texto">{{ serie.cantidad }} m</p>
           <p class="texto">
@@ -131,24 +133,30 @@ export default {
     },
 
     marcaAjustada() {
-      if(!this.marcasUsuario){
-        if(this.ejercicio.tipoCarga == 'VAM'){
+      if(this.marcasUsuario != {}){
+        if(this.ejercicio.tipoCarga == 'VAM' || this.ejercicio.tipoCarga == 'TIEMPO'){
           return 280;
         } else {
           return 10;
         }
       }
       let marcaUsuario = this.marcasUsuario[this.ejercicio.nombre];
-      if (this.serie.ajustable && this.ejercicio.tipoCarga !== 'VAM') {
+      if (this.serie.ajustable && 
+        (this.ejercicio.tipoCarga !== 'VAM' || this.ejercicio.tipoCarga !== 'TIEMPO')) {
         if (marcaUsuario) {
           const porcentaje = (this.serie.carga / 100) * marcaUsuario;
           return Math.round(porcentaje);
-        } else {return 'Sin marca guardada'}
-      } else if(this.serie.ajustable && this.ejercicio.tipoCarga == 'VAM') {
+        } else {
+          return 'Sin marca guardada';
+        }
+      } else if(this.serie.ajustable && 
+        (this.ejercicio.tipoCarga == 'VAM'||this.ejercicio.tipoCarga == 'TIEMPO')) {
         if (marcaUsuario) {
           const porcentaje = (((100 - this.serie.carga) + 100) / 100) * marcaUsuario;
           return Math.round(porcentaje);
-        } else {return 'Sin marca guardada'}
+        } else {
+          return 'Sin marca guardada';
+        }
       } else {
         return this.serie.cantidad;
       }
@@ -215,8 +223,8 @@ export default {
     this.empezarTemporizador();
     this.leerEnVozAlta(this.ejercicio.nombre);
     if(this.tipo == 'TIEMPO'){
-      let minutos = Math.floor(this.marcaAjustada / 60);
-      let segundos = this.marcaAjustada % 60;
+      let minutos = Math.floor(this.serie.cantidad / 60);
+      let segundos = this.serie.cantidad % 60;
       this.leerEnVozAlta(minutos + ' minutos, ' + segundos + ' segundos');
     } else if(this.tipo == 'REPS'){
       this.leerEnVozAlta(this.marcaAjustada + ' repeticiones')

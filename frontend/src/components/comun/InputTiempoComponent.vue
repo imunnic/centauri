@@ -1,5 +1,5 @@
 <!--
-  Este componente `CronometroComponent` permite al usuario ingresar y actualizar un tiempo en minutos y segundos, proporcionando un control de entrada de tiempo interactivo. 
+  Este componente `InputTiempoComponent` permite al usuario introducir y actualizar un tiempo en minutos y segundos. 
   Está construido con Vuetify (https://vuetifyjs.com/), usando el componente `v-text-field` para entradas de número y generando una interfaz intuitiva.
 
   Props:
@@ -20,6 +20,7 @@
   {{ titulo }}
   <div class="input-tiempo">
     <v-text-field
+      class="input-corto"
       v-model="minutos"
       label="Minutos"
       type="number"
@@ -29,6 +30,7 @@
     ></v-text-field>
     <span class="separador-tiempo">:</span>
     <v-text-field
+      class="input-corto"
       v-model="segundos"
       label="Segundos"
       type="number"
@@ -91,7 +93,7 @@ export default {
 .input-tiempo {
   display: flex;
   align-items: center;
-  width: 200px;
+  width: auto;
 }
 
 .separador-tiempo {
@@ -101,6 +103,6 @@ export default {
 }
 
 .input-corto {
-  width: 80px;
+  width: 100px;
 }
 </style>

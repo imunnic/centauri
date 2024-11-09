@@ -175,6 +175,7 @@ export default {
         { texto: "Repeticiones", valor: "REPS" },
         { texto: "1 RM", valor: "RM" },
         { texto: "VAM", valor: "VAM" },
+        { texto: "Tiempo", valor: "TIEMPO" },
       ],
       cualidadesItems: [
         "Fuerza",

@@ -10,7 +10,9 @@
         titulo="Marcas Personales"
       >
         <template v-slot:titulo="{ item }">
-          <div v-if="this.tipoCargaEjercicio(item.nombre) == 'VAM'">
+          <div v-if="(this.tipoCargaEjercicio(item.nombre) == 'VAM' 
+          || this.tipoCargaEjercicio(item.nombre) == 'TIEMPO') 
+          || item.nombre == 'VAM'">
             {{ item.nombre }} : {{ formatoTiempo(item.cantidad) }} min/km
           </div>
           <div v-else>
@@ -47,12 +49,12 @@
           <b v-if="ejercicio">Cantidad</b>
           <v-text-field
             v-model="cantidad"
-            v-if="tipo != 'VAM'"
+            v-if="tipo == 'RM' || tipo == 'Repeticiones'"
             type="number"
             min="0"
           ></v-text-field>
           <InputTiempoComponent
-            v-else
+            v-if="tipo == 'VAM' || tipo == 'Tiempo'"
             @nuevo-valor="actualizarCantidad"
             :valor-inicial="cantidad"
           ></InputTiempoComponent>
@@ -65,12 +67,12 @@
           <b v-if="ejercicio">Cantidad</b>
           <v-text-field
             v-model="cantidad"
-            v-if="tipo != 'VAM'"
+            v-if="tipo == 'RM' || tipo == 'Repeticiones'"
             type="number"
             min="0"
           ></v-text-field>
           <InputTiempoComponent
-            v-else
+            v-if="tipo == 'VAM' || tipo == 'Tiempo'"
             @nuevo-valor="actualizarCantidad"
             :valor-inicial="cantidad"
           ></InputTiempoComponent>
@@ -129,8 +131,10 @@ export default {
           tipo = "Repeticiones";
         } else if (this.tipoCargaEjercicio(this.ejercicio) == "RM") {
           tipo = "1 RM";
-        } else if (this.tipoCargaEjercicio(this.ejercicio) == "VAM") {
+        } else if (this.tipoCargaEjercicio(this.ejercicio) == "VAM" || this.ejercicio == 'VAM') {
           tipo = "VAM";
+        } else if (this.tipoCargaEjercicio(this.ejercicio) == "TIEMPO") {
+          tipo = "Tiempo";
         }
       }
       return tipo;
@@ -176,6 +180,15 @@ export default {
           return !this.marcas.hasOwnProperty(ejercicio.nombre);
         }
       );
+      this.ejerciciosFiltrados = this.ejerciciosFiltrados.filter(
+        (ejercicio) => {
+          return ejercicio.tipoCarga != 'VAM'
+        } 
+      );
+      if (!this.marcas.hasOwnProperty('VAM')) {
+        this.ejerciciosFiltrados.push({nombre:'VAM'})
+      }
+
     },
     async editarMarca(marca){
       this.editar = true;

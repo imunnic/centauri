@@ -1,24 +1,25 @@
 <template>
-  <v-container class="contenedor-flex">
-    <ListaCrudComponent
-      :busqueda="false"
-      titulo="Solicitudes de acceso"
-      :accionesPersonalizadas="accionesSolicitudes"
-      :items="solicitudesAcceso"
-      :cargando="cargando"
-      :permisoEdicion="true"
-      :permisoCreacion="false"
-      @aceptar="validarSolicitud"
-      @rechazar="negarSolicitud"
-      class="solicitudes"
-    >
-      <template v-slot:titulo="{ item }">
-        Solicitud de
-        <v-chip class="claro">{{ item.nombreUsuario }}</v-chip> para
-        <v-chip class="claro">{{ item.nombreGrupo }}</v-chip>
-      </template>
-    </ListaCrudComponent>
-    <div class="miembros-grupo">
+  <v-container class="contenedor-flex columna">
+    <v-card class="elevacion solicitudes">
+      <ListaCrudComponent
+        :busqueda="false"
+        titulo="Solicitudes de acceso"
+        :accionesPersonalizadas="accionesSolicitudes"
+        :items="solicitudesAcceso"
+        :cargando="cargando"
+        :permisoEdicion="true"
+        :permisoCreacion="false"
+        @aceptar="validarSolicitud"
+        @rechazar="negarSolicitud"
+      >
+        <template v-slot:titulo="{ item }">
+          Solicitud de
+          <v-chip class="claro">{{ item.nombreUsuario }}</v-chip> para
+          <v-chip class="claro">{{ item.nombreGrupo }}</v-chip>
+        </template>
+      </ListaCrudComponent>
+    </v-card>
+    <v-card class="elevacion">
       <h2>Miembros:</h2>
       <div class="contenedor-flex selector">
         <v-combobox
@@ -29,17 +30,12 @@
           :return-object="true"
           :filter="filtroGrupos"
           :rules="[isSeleccionValida]"
+          append-icon="mdi-trash-can"
+          @click:append-inner="borradoDeGrupo"
           @update:modelValue="cambioGrupoSeleccionado"
           class="selector-grupo"
           solo
         ></v-combobox>
-        <v-btn
-          v-if="grupoSeleccionado"
-          aria-label="eliminar-grupo"
-          class="rechazo"
-          @click="borradoDeGrupo"
-          >Eliminar grupo</v-btn
-        >
       </div>
       <ListaCrudComponent
         :busqueda="false"
@@ -52,6 +48,8 @@
         @cambiar-encargado="confirmarCambioEncargado"
       >
       </ListaCrudComponent>
+    </v-card>
+    <v-card class="elevacion">
       <ListaCrudComponent
         :titulo="'Resumen de Sesiones'"
         :busqueda="false"
@@ -71,73 +69,74 @@
           </v-icon>
         </template>
       </ListaCrudComponent>
-      <DetalleUsuarioSesionesComponent
-        v-if="mostrarDetalleUsuario"
-        :sesionesRealizadas="sesionesRealizadasDeUsuario"
-        @cerrar="cerrarMiembro"
-      ></DetalleUsuarioSesionesComponent>
-      <v-dialog v-model="mostrarConfirmacionCambioEncargado" max-width="600px">
-        <v-card>
-          <v-card-title class="flex-fila justify-space-between">
-            <span>Confirmar cambio de encargado</span>
-            <v-btn
-              aria-label="cancelar-cambio-encargado"
-              icon
-              @click="cancelarCambioEncargado"
-              flat
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </v-card-title>
-          <v-card-text>
-            ¿Está seguro de que desea cambiar el encargado? Perderá los
-            privilegios sobre este grupo.
-          </v-card-text>
-          <div class="contenedor-flex botones">
-            <v-btn
-              aria-label="confirmar"
-              class="claro boton"
-              @click="aceptarCambioEncargado"
-              >Confirmar</v-btn
-            >
-            <v-btn
-              aria-label="cancelar-cambio-encargado"
-              class="rechazo boton"
-              @click="cancelarCambioEncargado"
-              >Cancelar</v-btn
-            >
-          </div>
-        </v-card>
-      </v-dialog>
-    </div>
+    </v-card>
+    <DetalleUsuarioSesionesComponent
+      v-if="mostrarDetalleUsuario"
+      :sesionesRealizadas="sesionesRealizadasDeUsuario"
+      @cerrar="cerrarMiembro"
+    ></DetalleUsuarioSesionesComponent>
+    <v-dialog v-model="mostrarConfirmacionCambioEncargado" max-width="600px">
+      <v-card>
+        <v-card-title class="flex-fila justify-space-between">
+          <span>Confirmar cambio de encargado</span>
+          <v-btn
+            aria-label="cancelar-cambio-encargado"
+            icon
+            @click="cancelarCambioEncargado"
+            flat
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          ¿Está seguro de que desea cambiar el encargado? Perderá los
+          privilegios sobre este grupo.
+        </v-card-text>
+        <div class="contenedor-flex botones">
+          <v-btn
+            aria-label="confirmar"
+            class="claro boton"
+            @click="aceptarCambioEncargado"
+            >Confirmar</v-btn
+          >
+          <v-btn
+            aria-label="cancelar-cambio-encargado"
+            class="rechazo boton"
+            @click="cancelarCambioEncargado"
+            >Cancelar</v-btn
+          >
+        </div>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="confirmarBorrado" max-width="600px">
       <v-card>
-          <v-card-title class="flex-fila justify-space-between align-center">
-            <span>Confirmar eliminar grupo</span>
-            <v-btn
-              aria-label="cancelar-cambio-encargado"
-              icon
-              @click="cancelarBorrarGrupo"
-              flat
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </v-card-title>
-          <v-card-text>
-            ¿Está seguro de que desea eliminar el grupo? Se eliminarán todas las solicitudes y las sesiones futuras del grupo.
-          </v-card-text>
+        <v-card-title class="flex-fila justify-space-between align-center">
+          <span>Confirmar eliminar grupo</span>
           <v-btn
-              aria-label="confirmar-eliminar-grupo"
-              class="claro boton"
-              @click="borrarGrupo"
-              >Confirmar</v-btn
-            >
-            <v-btn
-              aria-label="cancelar-eliminar-grupo"
-              class="rechazo boton"
-              @click="cancelarBorrarGrupo"
-              >Cancelar</v-btn
-            >
+            aria-label="cancelar-cambio-encargado"
+            icon
+            @click="cancelarBorrarGrupo"
+            flat
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          ¿Está seguro de que desea eliminar el grupo? Se eliminarán todas las
+          solicitudes y las sesiones futuras del grupo.
+        </v-card-text>
+        <v-btn
+          aria-label="confirmar-eliminar-grupo"
+          class="claro boton"
+          @click="borrarGrupo"
+          >Confirmar</v-btn
+        >
+        <v-btn
+          aria-label="cancelar-eliminar-grupo"
+          class="rechazo boton"
+          @click="cancelarBorrarGrupo"
+          >Cancelar</v-btn
+        >
       </v-card>
     </v-dialog>
   </v-container>
@@ -186,7 +185,7 @@ export default {
       mostrarDetalleUsuario: false,
       mostrarConfirmacionCambioEncargado: false,
       miembroSeleccionado: null,
-      confirmarBorrado: false
+      confirmarBorrado: false,
     };
   },
   computed: {
@@ -198,7 +197,7 @@ export default {
     ...mapState(useUsuariosStore, ["href"]),
   },
   methods: {
-    ...mapActions(useUsuariosStore,['renovarToken']),
+    ...mapActions(useUsuariosStore, ["renovarToken"]),
     ...mapActions(useGruposStore, [
       "getGruposEncargado",
       "getSolicitudes",
@@ -206,13 +205,13 @@ export default {
       "rechazarSolicitud",
       "getMiembrosGrupo",
       "cambiarEncargado",
-      "eliminarGrupo"
+      "eliminarGrupo",
     ]),
     ...mapActions(useSesionesRealizadasStore, [
       "getSesionesRealizadasDeUsuarioyGrupo",
       "getResumenSesionesRealizadasDeGrupo",
     ]),
-    ...mapActions(useAlertasStore,['mostrarAlerta']),
+    ...mapActions(useAlertasStore, ["mostrarAlerta"]),
 
     getIcono(rpe) {
       if (rpe >= 1 && rpe <= 2) {
@@ -307,10 +306,7 @@ export default {
         this.mostrarAlerta("Encargado cambiado con éxito", "success");
         await this.renovarToken();
       } catch {
-        this.mostrarAlerta(
-          "No se ha podido cambiar el encargado",
-          "error"
-        );
+        this.mostrarAlerta("No se ha podido cambiar el encargado", "error");
       }
       this.miembroSeleccionado = null;
       this.mostrarConfirmacionCambioEncargado = false;
@@ -350,15 +346,15 @@ export default {
     borradoDeGrupo() {
       this.confirmarBorrado = true;
     },
-    cancelarBorrarGrupo(){
+    cancelarBorrarGrupo() {
       this.confirmarBorrado = false;
     },
-    async borrarGrupo(){
+    async borrarGrupo() {
       await this.eliminarGrupo(this.grupoSeleccionado._links.self.href);
       await this.cargarDatos();
       await this.renovarToken();
-      this.confirmarBorrado= false;
-    }
+      this.confirmarBorrado = false;
+    },
   },
 
   async mounted() {
@@ -367,6 +363,10 @@ export default {
 };
 </script>
 <style scoped>
+.columna{
+  flex-flow: column;
+  gap:10px;
+}
 .contenedor-flex {
   align-items: start;
 }
@@ -374,10 +374,12 @@ export default {
 .selector {
   align-items: center !important;
   justify-content: space-between;
+  gap:10px;
 }
 
 .miembros-grupo {
   width: 50%;
+  margin: 10px;
 }
 
 .solicitudes {
@@ -410,16 +412,9 @@ export default {
   color: white;
 }
 
-@media (max-width: 600px) {
-  .contenedor-flex {
-    flex-flow: column;
-  }
-
-  .solicitudes,
-  .miembros-grupo {
-    width: 100%;
-    margin: 20px;
-    padding: 0px;
-  }
+.elevacion{
+  padding: 10px;
+  width: 100%
 }
+
 </style>

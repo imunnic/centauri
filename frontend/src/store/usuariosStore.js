@@ -12,7 +12,7 @@ import { useGruposStore } from "@/store/gruposStore.js";
 export const useUsuariosStore = defineStore("usuarios", {
   state: () => ({
     username: "",
-    marcas:"",
+    marcas:{},
     token: "",
     perfil: "",
     id: "",
