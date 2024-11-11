@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div class="contenedor-flex justify-start flex-columna">
+    <div class="contenedor-flex justify-start flex-fila">
       <v-switch
         aria-label="fichas-propias"
         v-if="perfil == 'ECEF' || perfil == 'DIPLOMADO'"
@@ -172,5 +172,11 @@ export default {
   margin: 5px;
   padding: 5px;
   max-height: 40px;
+}
+@media(max-width:500px){
+  .flex-fila{
+    align-items: start;
+    flex-flow: column !important;
+  }
 }
 </style>

@@ -10,25 +10,34 @@
         titulo="Marcas Personales"
       >
         <template v-slot:titulo="{ item }">
-          <div v-if="(this.tipoCargaEjercicio(item.nombre) == 'VAM' 
-          || this.tipoCargaEjercicio(item.nombre) == 'TIEMPO') 
-          || item.nombre == 'VAM'">
+          <div
+            v-if="
+              this.tipoCargaEjercicio(item.nombre) == 'VAM' ||
+              this.tipoCargaEjercicio(item.nombre) == 'TIEMPO' ||
+              item.nombre == 'VAM'
+            "
+          >
             {{ item.nombre }} : {{ formatoTiempo(item.cantidad) }} min/km
           </div>
-          <div v-else>
-            {{ item.nombre }} : {{ item.cantidad }}
-          </div>
+          <div v-else>{{ item.nombre }} : {{ item.cantidad }}</div>
         </template>
       </ListaCrudComponent>
       <FabBotonComponent
         class="boton claro"
         @click="agregarMarcaPersonal"
       ></FabBotonComponent>
+      <FabBotonComponent
+        icon="mdi-calculator"
+        class="calculadora"
+        @click="calculadora = true"
+      ></FabBotonComponent>
     </v-card>
 
     <v-dialog v-model="agregarMarca" max-width="400">
       <v-card>
-        <v-card-title>{{ editar ? 'Editar Marca' : 'Agregar Marca' }}</v-card-title>
+        <v-card-title>{{
+          editar ? "Editar Marca" : "Agregar Marca"
+        }}</v-card-title>
         <v-card-text v-if="!editar">
           <b>Ejercicio</b>
           <v-autocomplete
@@ -88,6 +97,13 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="calculadora">
+      <CalculadoraMarcasComponent
+        @guardar-VAM="guardarVAM"
+        @cerrar="calculadora = false"
+      >
+      </CalculadoraMarcasComponent>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -95,6 +111,7 @@
 import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
 import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
 import InputTiempoComponent from "@/components/comun/InputTiempoComponent.vue";
+import CalculadoraMarcasComponent from "@/components/CalculadoraMarcasComponent.vue";
 import { useAlertasStore } from "@/store/alertasStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useEjerciciosStore } from "@/store/ejerciciosStore";
@@ -105,6 +122,7 @@ export default {
     ListaCrudComponent,
     FabBotonComponent,
     InputTiempoComponent,
+    CalculadoraMarcasComponent,
   },
   props: {
     marcasArray: {
@@ -119,10 +137,11 @@ export default {
       agregarMarca: false,
       ejerciciosFiltrados: [],
       editar: false,
+      calculadora: false,
     };
   },
   computed: {
-    ...mapState(useUsuariosStore, ["marcas", "username","rol"]),
+    ...mapState(useUsuariosStore, ["marcas", "username", "perfil"]),
     ...mapState(useEjerciciosStore, ["ejerciciosRegistrados"]),
     tipo() {
       let tipo = "";
@@ -131,7 +150,10 @@ export default {
           tipo = "Repeticiones";
         } else if (this.tipoCargaEjercicio(this.ejercicio) == "RM") {
           tipo = "1 RM";
-        } else if (this.tipoCargaEjercicio(this.ejercicio) == "VAM" || this.ejercicio == 'VAM') {
+        } else if (
+          this.tipoCargaEjercicio(this.ejercicio) == "VAM" ||
+          this.ejercicio == "VAM"
+        ) {
           tipo = "VAM";
         } else if (this.tipoCargaEjercicio(this.ejercicio) == "TIEMPO") {
           tipo = "Tiempo";
@@ -141,21 +163,30 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useUsuariosStore, ["actualizarMarcas","eliminarMarca"]),
+    ...mapActions(useUsuariosStore, ["actualizarMarcas", "eliminarMarca"]),
     ...mapActions(useEjerciciosStore, [
       "cargarEjercicios",
       "tipoCargaEjercicio",
     ]),
     ...mapActions(useAlertasStore, ["mostrarAlerta"]),
     formatoTiempo(cantidad) {
-      let minutos = Math.floor(cantidad / 60);
-      let segundos = cantidad % 60;
+      let minutos = Math.floor(cantidad / 60)
+        .toString()
+        .padStart(2, "0");
+      let segundos = (cantidad % 60).toString().padStart(2, "0");
       return `${minutos}:${segundos}`;
     },
     async agregarMarcaPersonal() {
-      await this.cargarEjercicios();
-      this.filtrarEjercicios();
-      this.agregarMarca = true;
+      try {
+        await this.cargarEjercicios();
+        this.filtrarEjercicios();
+        this.agregarMarca = true;
+      } catch (error) {
+        this.mostrarAlerta(
+          "No se ha podido agregar la marca personal",
+          "error"
+        );
+      }
     },
     cerrarAgregarMarca() {
       this.agregarMarca = false;
@@ -182,36 +213,41 @@ export default {
       );
       this.ejerciciosFiltrados = this.ejerciciosFiltrados.filter(
         (ejercicio) => {
-          return ejercicio.tipoCarga != 'VAM'
-        } 
+          return ejercicio.tipoCarga != "VAM";
+        }
       );
-      if (!this.marcas.hasOwnProperty('VAM')) {
-        this.ejerciciosFiltrados.push({nombre:'VAM'})
+      if (!this.marcas.hasOwnProperty("VAM")) {
+        this.ejerciciosFiltrados.push({ nombre: "VAM" });
       }
-
     },
-    async editarMarca(marca){
+    async editarMarca(marca) {
       this.editar = true;
       this.agregarMarca = true;
       this.ejercicio = marca.nombre;
       this.cantidad = marca.cantidad;
     },
-    async borrarMarca(marca){
+    async borrarMarca(marca) {
       this.ejercicio = marca.nombre;
       let marcasUsuario = this.marcas;
       delete marcasUsuario[this.ejercicio];
       let usuario = {
         nombre: this.username,
-        rol: this.rol,
-        marcas:marcasUsuario
-      }
+        rol: this.perfil,
+        marcas: marcasUsuario,
+      };
       await this.eliminarMarca(usuario);
       this.$emit("actualizarMarcasArray");
-    }
+    },
+    async guardarVAM(cantidad) {
+      this.ejercicio = "VAM";
+      this.cantidad = cantidad;
+      await this.confirmarAgregarMarca();
+      this.calculadora = false;
+    },
   },
-  created(){
+  created() {
     this.cargarEjercicios();
-  }
+  },
 };
 </script>
 
@@ -227,6 +263,17 @@ export default {
 .boton {
   margin: 15px;
   position: relative !important;
+  align-self: flex-end;
+  width: fit-content;
+  border-radius: 50%;
+  padding: 5px 5px;
+  height: fit-content;
+}
+.calculadora {
+  margin: 15px;
+  top: 5px;
+  right: 10px;
+  position: absolute !important;
   align-self: flex-end;
   width: fit-content;
   border-radius: 50%;

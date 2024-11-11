@@ -121,7 +121,6 @@ export default {
         this.equipamiento = { nombre: "No especificado." };
       }
     } catch (error) {
-      console.error("Error fetching equipamiento:", error);
       this.equipamiento = { nombre: "No especificado." };
     }
   },

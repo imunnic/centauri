@@ -446,8 +446,11 @@ export default {
       if(this.encontrarMarca(this.serie.ejercicio.nombre)){
         this.marcaObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
         this.ritmoObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
-        this.$refs.tiempo.minutos = Math.floor(this.ritmoObjetivo / 60);
-        this.$refs.tiempo.segundos = this.ritmoObjetivo % 60
+        if (this.serie.ajustable && 
+        (this.serie.ejercicio.tipoCarga == 'VAM'||this.serie.ejercicio.tipoCarga == 'TIEMPO')){
+          this.$refs.tiempo.minutos = Math.floor(this.ritmoObjetivo / 60);
+          this.$refs.tiempo.segundos = this.ritmoObjetivo % 60;
+        }
       }
     }
   }

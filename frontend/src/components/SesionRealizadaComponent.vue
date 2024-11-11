@@ -50,6 +50,8 @@
 <script>
 import InformacionComponent from "@/components/comun/InformacionComponent.vue";
 import ValoracionComponent from "@/components/comun/ValoracionComponent.vue";
+import {useAlertasStore} from "@/store/alertasStore.js";
+import {mapActions} from "pinia";
 import tooltips from "@/tooltips.json";
 
 export default {
@@ -70,18 +72,23 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useAlertasStore,['mostrarError']),
     ajustarRpe(valor) {
       this.rpe = valor * 2;
     },
     async sesionRealizada() {
-      let valido = await this.$refs.form.validate();
-      if (valido.valid) {
-        let sesionRealizada = {
-          rpe: this.rpe,
-          tiempo: this.tiempo,
-          comentarios: this.comentarios,
-        };
-        this.$emit("sesion-realizada", sesionRealizada);
+      try {
+        let valido = await this.$refs.form.validate();
+        if (valido.valid) {
+          let sesionRealizada = {
+            rpe: this.rpe,
+            tiempo: this.tiempo,
+            comentarios: this.comentarios,
+          };
+          this.$emit("sesion-realizada", sesionRealizada);
+        }
+      } catch (error) {
+        this.mostrarError("No se puede cargar las sesión relizada");
       }
     },
     salir() {

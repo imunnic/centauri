@@ -20,7 +20,7 @@
     </v-btn>
   </div>
   <v-dialog v-model="formFinalizarSesion" persistent max-width="600px">
-    <v-card>
+    <v-card v-if="!sesionRealizada">
       <v-card-title class="d-flex justify-space-between align-center">
         <span>Valorar Sesión</span>
         <v-btn
@@ -33,6 +33,7 @@
         </v-btn>
       </v-card-title>
       <SesionRealizadaComponent
+
         :tiempoFinal="minutosTotales"
         @sesion-realizada="realizarSesion"
         @salir="finalizarContador"
@@ -110,10 +111,11 @@ export default {
       formFinalizarSesion: false,
       detalleEjercicio: false,
       ejercicio: null,
+      sesionRealizada:false
     };
   },
   computed: {
-    ...mapState(useUsuariosStore,['id','marcas']),
+    ...mapState(useUsuariosStore,['id','marcas','href']),
     tiempoFormateado() {
       const minutos = Math.floor(this.tiempoSesion / 60)
         .toString()
@@ -132,7 +134,7 @@ export default {
     ]),
     ...mapActions(useFichasStore, ["cargarFichaDetalle"]),
     ...mapActions(useSesionesRealizadasStore, [
-      "crearSesionRealizada",
+      "crearSesionRealizada", "comprobarSesionRealizada"
     ]),
     iniciarContador() {
       this.inicio = true;
@@ -143,8 +145,8 @@ export default {
     },
 
     finSesion(){
-      if (this.$route.query.sesion == "true"){
-        this.formFinalizarSesion = true;
+      if (this.$route.query.sesion == "true" && !this.sesionRealizada){
+          this.formFinalizarSesion = true;
       } else {
         this.finalizarContador();
       }
@@ -166,7 +168,7 @@ export default {
 
     finalizar() {
       if (this.$route.query.sesion == "true") {
-        this.$router.push("/usuario");
+        this.$router.push("/planificacion");
       } else {
         this.$router.push("/fichas");
       }
@@ -190,6 +192,8 @@ export default {
       } catch (error) {
         this.finalizar();
       }
+
+      this.sesionRealizada = await this.comprobarSesionRealizada(this.href, this.sesion._links.self.href);
       let fichas = await this.getFichasDeSesionConId(this.$route.params.id);
       this.sesion.fichas = fichas;
       this.cargando = false;

@@ -154,6 +154,7 @@
 <script>
 import musculos from "../assets/musculos.json";
 import { useEquipamientosStore } from "@/store/equipamientosStore";
+import { useAlertasStore } from "@/store/alertasStore";
 import { mapState, mapActions } from "pinia";
 
 export default {
@@ -217,6 +218,7 @@ export default {
   },
   methods: {
     ...mapActions(useEquipamientosStore, ["cargarEquipamientos"]),
+    ...mapActions(useAlertasStore,["mostrarError"]),
     cerrarDialogo() {
       this.$emit("cerrar");
       this.resetForm();
@@ -226,10 +228,14 @@ export default {
       this.ejercicioNuevo.equipamiento = "";
     },
     async guardarEjercicio() {
-      let isValid = await this.$refs.form.validate();
-      if (isValid.valid) {
-        this.$emit("guardar", this.ejercicioNuevo);
-        this.cerrarDialogo();
+      try {
+        let isValid = await this.$refs.form.validate();
+        if (isValid.valid) {
+          this.$emit("guardar", this.ejercicioNuevo);
+          this.cerrarDialogo();
+        }
+      } catch (error) {
+        this.mostrarError("No se ha podido validar el formulario");
       }
     },
   },

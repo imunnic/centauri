@@ -119,14 +119,24 @@ export default {
     async crearInvitacion(){
       let servicioInvitaciones = new InvitacionesService();
       servicioInvitaciones.actualizarCabecera(this.token);
-      let respuesta = await servicioInvitaciones.crearInvitacion();
-      respuesta = respuesta.data._links.self.href.split('/').pop();
-      respuesta = config.urlInvitaciones + respuesta;
-      this.enlace = respuesta;
+      try {
+        let respuesta = await servicioInvitaciones.crearInvitacion();
+        respuesta = respuesta.data._links.self.href.split('/').pop();
+        respuesta = config.urlInvitaciones + respuesta;
+        this.enlace = respuesta;
+        
+      } catch (error) {
+        this.enlace = "No se ha podido crear el enlace"
+        this.mostrarAlerta("No se ha podido crear un enlace", "error");
+      }
     },
     async copiarPortapapeles(){
-      await navigator.clipboard.writeText(this.enlace);
-      this.mostrarAlerta('Texto copiado en el portapapeles','success');
+      try {
+        await navigator.clipboard.writeText(this.enlace);
+        this.mostrarAlerta('Texto copiado en el portapapeles','success');
+      } catch (error) {
+        this.mostrarAlerta('No se ha podido copiar el texto', 'error');
+      }
     },
     cerrarSesion(){
       location.reload();

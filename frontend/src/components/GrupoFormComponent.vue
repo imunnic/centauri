@@ -52,6 +52,7 @@
 <script>
 import configuracion from "@/configuracion.json";
 import { useGruposStore } from "@/store/gruposStore.js";
+import {useAlertasStore} from "@/store/alertasStore.js";
 import { mapActions } from "pinia";
 export default {
   props: {
@@ -80,25 +81,34 @@ export default {
   },
   methods: {
     ...mapActions(useGruposStore, ["existeGrupo"]),
+    ...mapActions(useAlertasStore, ['mostrarError']),
     cerrar() {
       this.dialog = false;
       this.$emit("cerrar");
     },
     async submitForm() {
-      let isValido = await this.$refs.formulario.validate();
-      if (isValido.valid){
-        const nuevoGrupo = {
-          nombre: this.nombre,
-          color: this.color,
-        };
-        this.$emit("crear-grupo", nuevoGrupo);
-        this.resetForm();
-        this.cerrar();
+      try {
+        let isValido = await this.$refs.formulario.validate();
+        if (isValido.valid){
+          const nuevoGrupo = {
+            nombre: this.nombre,
+            color: this.color,
+          };
+          this.$emit("crear-grupo", nuevoGrupo);
+          this.resetForm();
+          this.cerrar();
+        }
+      } catch (error) {
+        this.mostrarError("No se ha podido validar el formulario, revise los datos")
       }
     },
     async verificarExiste() {
-      let response = await this.existeGrupo(this.nombre);
-      this.existe = response;
+      try {
+        let response = await this.existeGrupo(this.nombre);
+        this.existe = response;
+      } catch (error) {
+        this.mostrarError("Ese grupo no existe");
+      }
     },
     resetForm() {
       this.nombre = "";

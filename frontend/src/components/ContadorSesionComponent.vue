@@ -38,7 +38,6 @@ export default {
       this.fichaActual++;
       this.ficha = this.sesion.fichas[this.fichaActual];
       if (this.fichaActual >= this.sesion.fichas.length){
-        console.log('sesion finalizada')
         this.$emit('sesion-finalizada');
       }
     },

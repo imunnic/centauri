@@ -115,10 +115,14 @@ export default {
     }
   },
   async created() {
-    this.realizada = await this.comprobarSesionRealizada(
-      this.href,
-      this.sesion.href
-    );
+    try {
+      this.realizada = await this.comprobarSesionRealizada(
+        this.href,
+        this.sesion.href
+      );
+    } catch (error) {
+      this.realizada = true;
+    }
   },
 };
 </script>

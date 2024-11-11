@@ -1,6 +1,6 @@
 <template>
   <v-container class="contenedor-flex columna">
-    <v-card class="elevacion solicitudes">
+    <v-card class="elevacion solicitudes" elevation="3">
       <ListaCrudComponent
         :busqueda="false"
         titulo="Solicitudes de acceso"
@@ -19,7 +19,7 @@
         </template>
       </ListaCrudComponent>
     </v-card>
-    <v-card class="elevacion">
+    <v-card class="elevacion" elevation="3">
       <h2>Miembros:</h2>
       <div class="contenedor-flex selector">
         <v-combobox
@@ -49,7 +49,7 @@
       >
       </ListaCrudComponent>
     </v-card>
-    <v-card class="elevacion">
+    <v-card class="elevacion" elevation="3">
       <ListaCrudComponent
         :titulo="'Resumen de Sesiones'"
         :busqueda="false"

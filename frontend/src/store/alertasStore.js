@@ -16,6 +16,12 @@ export const useAlertasStore = defineStore('alertas', {
         this.mostrar = false;
       }, 3000);
     },
+    mostrarError(mensaje){
+      this.mostrarAlerta(mensaje,'error');
+    },
+    mostrarExito(mensaje){
+      this.mostrarAlerta(mensaje,'success')
+    },
     cerrarAlerta() {
       this.mostrar = false;
     },

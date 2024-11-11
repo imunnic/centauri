@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     ...mapActions(useFichasStore, ["grabarFicha", "editarFicha"]),
-    ...mapActions(useAlertasStore,['mostrarAlerta']),
+    ...mapActions(useAlertasStore,['mostrarAlerta', 'mostrarError']),
     actualizarRutina(rondas) {
       this.fichaLocal.rutina = rondas;
     },
@@ -162,17 +162,21 @@ export default {
       if (this.url){
         this.fichaLocal.url = this.url
       }
-      let isValido = await this.$refs.formulario.validate();
-      if (this.$route.query.edicion == "true") {
-        await this.editarFicha(this.fichaLocal, this.$route.params.id);
-        this.mostrarAlerta("Ficha creada con éxito", "success")
-        this.$router.push({ path: "/fichas" });
-      } else {
-        if (isValido.valid) {
-          await this.grabarFicha(this.fichaLocal);
+      try {
+        let isValido = await this.$refs.formulario.validate();
+        if (this.$route.query.edicion == "true") {
+          await this.editarFicha(this.fichaLocal, this.$route.params.id);
           this.mostrarAlerta("Ficha creada con éxito", "success")
           this.$router.push({ path: "/fichas" });
+        } else {
+          if (isValido.valid) {
+            await this.grabarFicha(this.fichaLocal);
+            this.mostrarAlerta("Ficha creada con éxito", "success")
+            this.$router.push({ path: "/fichas" });
+          }
         }
+      } catch (error) {
+        this.mostrarError("No se ha podido crear la ficha")
       }
     },
   },

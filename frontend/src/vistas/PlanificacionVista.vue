@@ -386,9 +386,6 @@ export default {
       await this.mostrarSesiones();
       await this.renovarToken();
     },
-    eliminarGrupo(grupo) {
-      console.log(grupo);
-    },
   },
   async created() {
     await this.mostrarGrupos();

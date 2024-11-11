@@ -125,7 +125,12 @@ export default {
         (v) => !!v || "El nombre de usuario es requerido",
         async (v) => {
           if (!v) return true;
-          const esValido = await this.validarNombreUsuario(v);
+          let esValido;
+          try {
+            esValido = await this.validarNombreUsuario(v);
+          } catch (error) {
+            
+          }
           return esValido || "El nombre de usuario ya existe";
         },
       ],
@@ -134,7 +139,12 @@ export default {
         (v) => /.+@.+\..+/.test(v) || "Debe ser un correo electrónico válido",
         async (v) => {
           if (!v) return true;
-          const esValido = await this.validarCorreo(v);
+          let esValido;
+          try {
+            esValido = await this.validarCorreo(v);
+          } catch (error) {
+            
+          }
           return esValido || "El correo ya existe";
         },
       ],
@@ -168,7 +178,9 @@ export default {
       try {
         existe = await this.existeUsuario(nombreUsuario);
         existe = !existe;
-      } catch (error) {}
+      } catch {
+        this.mostrarAlerta("Error al comprobar los usuarios existentes","error");
+      }
       return existe;
     },
     async validarCorreo(correo) {
@@ -176,7 +188,9 @@ export default {
       try {
         let response = await this.comprobarCorreo(correo);
         existe = response.data;
-      } catch {}
+      } catch {
+        this.mostrarAlerta("Error al comprobar los usuarios existentes","error");
+      }
       return !existe;
     },
     confirmarAccion(accion) {

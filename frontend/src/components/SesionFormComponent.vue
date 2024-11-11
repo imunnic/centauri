@@ -280,7 +280,11 @@ export default {
         fichas: [...this.fundamental],
       };
       nuevaSesion.fichas = nuevaSesion.fichas.map((ficha) => ({ id: ficha }));
-      this.tipoAlerta = await this.validarFichasSesion(nuevaSesion);
+      try {
+        this.tipoAlerta = await this.validarFichasSesion(nuevaSesion);
+      } catch (error) {
+        this.tipoAlerta == 0;
+      }
       if (this.tipoAlerta == 0) {
         this.fichasSeleccionadasAdecuadas = true;
       } else {
