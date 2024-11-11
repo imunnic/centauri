@@ -16,6 +16,10 @@ export const useEjerciciosStore = defineStore("ejercicios", {
         this.ejerciciosRegistrados = [];
       }
     },
+    async getEjerciciosPorCarga(carga){
+      await this.cargarEjercicios();
+      return this.ejerciciosRegistrados.filter(e => e.tipoCarga == carga);
+    },
     arrancarServicioEjercicios(token) {
       this.ejerciciosService = new EjercicioService();
       this.ejerciciosService.actualizarCabecera(token);

@@ -27,21 +27,37 @@
             <div class="resultado">
               <b v-if="mostrarVAM">Resultado: {{ resultadoVAM }} min/km</b>
               <v-btn @click="calcularVAM" class="claro">Calcular</v-btn>
-              <v-btn :disabled="!mostrarVAM" @click="guardarVAM" class="rechazo">Guardar</v-btn>
+              <v-btn :disabled="!mostrarVAM" @click="guardarVAM" class="rechazo"
+                >Guardar</v-btn
+              >
             </div>
           </v-tabs-window-item>
 
           <v-tabs-window-item value="rm">
             <h3>Calculadora RM</h3>
             <p label="Entrada RM" v-html="testRM"></p>
+            <v-autocomplete v-model="ejercicio" :items="ejercicios"> </v-autocomplete>
             <v-text-field
+              v-model="peso"
               type="number"
               class="input-medio"
-              label="Resultado"
-              placeholder="1700"
+              label="Peso"
+              placeholder="60"
             ></v-text-field>
-
-            <v-btn @click="calcularRM">Calcular</v-btn>
+            <v-text-field
+              v-model="repeticiones"
+              type="number"
+              class="input-medio"
+              label="Repeticiones"
+              placeholder="4"
+            ></v-text-field>
+            <div class="resultado">
+              <b v-if="mostrarRM">Resultado: {{ resultadoRM }} kg</b>
+              <v-btn :disabled="!ejercicio" @click="calcularRM" class="claro">Calcular</v-btn>
+              <v-btn :disabled="!mostrarRM" @click="guardarRM" class="rechazo"
+                >Guardar</v-btn
+              >
+            </div>
           </v-tabs-window-item>
         </v-tabs-window>
       </v-card-text>
@@ -50,6 +66,8 @@
 </template>
 
 <script>
+import { useEjerciciosStore } from "@/store/ejerciciosStore";
+import { mapActions } from "pinia";
 import configuracion from "@/configuracion.json";
 export default {
   data() {
@@ -57,16 +75,21 @@ export default {
       dialog: true,
       tab: "vam",
       resultadoVAM: "",
-      resultadoRM: "",
+      resultadoRM: 0,
       testCooper: configuracion.instruccionesCooper,
       testRM: configuracion.instruccionesRM,
       distancia: 1000,
+      peso: 20,
+      repeticiones: 4,
       mostrarVAM: false,
+      mostrarRM: false,
+      ejercicios: [],
+      ejercicio:null
     };
   },
   methods: {
+    ...mapActions(useEjerciciosStore, ["getEjerciciosPorCarga"]),
     calcularVAM() {
-
       let resultadoDecimal = 1 / (this.distancia / (100 * 60));
       let minutos = Math.floor(resultadoDecimal);
       let segundos = Math.round((resultadoDecimal - minutos) * 60);
@@ -76,19 +99,32 @@ export default {
       this.resultadoVAM = `${minutos}:${segundos}`;
       this.mostrarVAM = true;
     },
-    guardarVAM(){
-      let [minutos, segundos] = this.resultadoVAM.split(':').map(Number);
-      let cantidad = (minutos * 60) + segundos;
-      this.$emit('guardar-VAM',cantidad);
+    guardarVAM() {
+      let [minutos, segundos] = this.resultadoVAM.split(":").map(Number);
+      let cantidad = minutos * 60 + segundos;
+      this.$emit("guardar-VAM", cantidad);
     },
     calcularRM() {
-      // Lógica de cálculo para RM
-      this.resultadoRM = `Resultado de RM basado en: ${this.rmInput}`;
+      this.resultadoRM = Math.floor(
+        this.peso / (1.0278 - 0.0278 * this.repeticiones)
+      );
+      this.mostrarRM = true;
+    },
+    guardarRM(){
+      let marca = {
+        nombre:this.ejercicio,
+        cantidad:this.resultadoRM
+      };
+      this.$emit("guardar-RM", marca);
     },
     cerrar() {
       this.dialog = false;
       this.$emit("cerrar");
     },
+  },
+  async created() {
+    let ejerciciosRM = await this.getEjerciciosPorCarga("RM");
+    this.ejercicios = ejerciciosRM.map((ejercicio) => ejercicio.nombre);
   },
 };
 </script>
@@ -97,12 +133,12 @@ export default {
 .v-tabs-window-item {
   margin: 10px;
 }
-.resultado{
+.resultado {
   display: flex;
   flex-flow: column;
   gap: 10px;
 }
-.resultado > .v-btn{
+.resultado > .v-btn {
   width: fit-content;
 }
 </style>

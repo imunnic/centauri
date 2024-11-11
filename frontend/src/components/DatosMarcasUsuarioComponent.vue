@@ -100,6 +100,7 @@
     <v-dialog v-model="calculadora">
       <CalculadoraMarcasComponent
         @guardar-VAM="guardarVAM"
+        @guardar-RM="guardarRM"
         @cerrar="calculadora = false"
       >
       </CalculadoraMarcasComponent>
@@ -241,6 +242,12 @@ export default {
     async guardarVAM(cantidad) {
       this.ejercicio = "VAM";
       this.cantidad = cantidad;
+      await this.confirmarAgregarMarca();
+      this.calculadora = false;
+    },
+    async guardarRM(marca) {
+      this.ejercicio = marca.nombre;
+      this.cantidad = marca.cantidad;
       await this.confirmarAgregarMarca();
       this.calculadora = false;
     },

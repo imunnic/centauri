@@ -140,10 +140,10 @@
           </div>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn aria-label="cerrar" color="primary" text @click="cerrarDialogo"
+            <v-btn aria-label="cerrar" class="claro" text @click="cerrarDialogo"
               >Cancelar</v-btn
             >
-            <v-btn aria-label="guardar" color="primary" type="submit">Guardar</v-btn>
+            <v-btn aria-label="guardar" class="claro" type="submit">Guardar</v-btn>
           </v-card-actions>
         </v-form>
       </v-card-text>
