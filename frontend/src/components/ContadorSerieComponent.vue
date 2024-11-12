@@ -226,10 +226,12 @@ export default {
       let minutos = Math.floor(this.serie.cantidad / 60);
       let segundos = this.serie.cantidad % 60;
       this.leerEnVozAlta(minutos + ' minutos, ' + segundos + ' segundos');
-    } else if(this.tipo == 'REPS'){
-      this.leerEnVozAlta(this.marcaAjustada + ' repeticiones')
-    } else {
-      this.leerEnVozAlta(this.marcaAjustada + ' metros')
+    } else if(this.tipo == 'REPS' && this.serie.ajustable){
+      this.leerEnVozAlta(this.marcaAjustada + ' repeticiones');
+    } else if (this.tipo == 'REPS' && this.serie.ajustable){
+      this.leerEnVozAlta(this.serie.cantidad + ' repeticiones');
+    } else if (this.tipo == 'DIST'){
+      this.leerEnVozAlta(this.serie.cantidad + ' metros');
     }
   },
 

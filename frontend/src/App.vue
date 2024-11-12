@@ -79,24 +79,31 @@ export default {
     };
   },
   computed: {
-    ...mapState(useUsuariosStore, ["token", "isLogged", "username"]),
+    ...mapState(useUsuariosStore, ["token", "isLogged", "username","perfil"]),
     menuItems() {
       if (this.isLogged) {
         this.menu.push({
           title: "Grupos",
           prependIcon: "mdi-account-group",
           ruta: "/grupos",
-        })
+        });
         this.menu.push({
           title: "Planificación", 
           prependIcon: "mdi-calendar-outline", 
           ruta: "/planificacion"
-        })
+        });
         this.menu.push({
           title: "Usuario", 
           prependIcon: "mdi-account", 
           ruta: "/usuario"
-        })
+        });
+        if(this.perfil=='ECEF'){
+          this.menu.push({
+          title: "Gestión Usuarios", 
+          prependIcon: "mdi-cogs", 
+          ruta: "/gestion"
+        });
+        }
       }
       return this.menu;
     },

@@ -45,6 +45,16 @@ export default class UsuariosService {
     return response.data.usuario.rol;
   }
 
+  async getUsuarios(){
+    let url = configuracion.urlBase + "usuarios";
+    return await axios.get(url,config);
+  }
+
+  async cambiarRol(usuario){
+    let href = usuario.href;
+    return await axios.patch(href,usuario,config);
+  }
+
   async getUsuario(href){
     return await axios.get(href,config);
   }

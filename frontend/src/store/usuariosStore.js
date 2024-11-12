@@ -43,6 +43,26 @@ export const useUsuariosStore = defineStore("usuarios", {
       return response.data.nombre;
     },
 
+    async getUsuarios(){
+      let usuarios = [];
+      try {
+        let response = await this.usuarioService.getUsuarios();
+        usuarios = response.data._embedded.usuarios;
+        usuarios = usuarios.map(usuario => ({
+          nombre: usuario.nombre,
+          rol: usuario.rol,
+          href: usuario._links.self.href
+        }));
+      } catch (error) {
+        console.log(error)
+      }
+      return usuarios;
+    },
+
+    async cambiarRol(usuario){
+      await this.usuarioService.cambiarRol(usuario);
+    },
+
     async existeUsuario(nombreUsuario){
       let respone = await this.usuarioService.existeUsuario(nombreUsuario);
       return respone.data;

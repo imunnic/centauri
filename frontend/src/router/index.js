@@ -45,6 +45,12 @@ const routes = [
     meta: { requiresAuth: true, requiresRole: ['DIPLOMADO', 'ECEF'] },
   },
   {
+    path: "/gestion",
+    name: "gestionUsuarios",
+    component: () => import("../vistas/GestionUsuariosVista.vue"),
+    meta: { requiresAuth: true, requiresRole: ['ECEF'] },
+  },
+  {
     path: "/ejercicios",
     name: "ejercicios",
     component: () => import("../vistas/EjerciciosVista.vue"),

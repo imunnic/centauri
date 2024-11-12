@@ -26,7 +26,7 @@
 -->
 
 <template>
-  <v-card class="carta" :style="{ '--color-background': item.color || 'var(--claro)' }" flat>
+  <v-card class="carta" :style="{ '--color-background': item.color || 'var(--claro)' }" elevacion="2">
     <div class="contenedor-flex">
       <div v-if="mostrarImagen" class="imagen-contenedor">
         <v-img 
