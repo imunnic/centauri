@@ -46,8 +46,28 @@ export default class UsuariosService {
   }
 
   async getUsuarios(){
-    let url = configuracion.urlBase + "usuarios";
-    return await axios.get(url,config);
+    let usuarios = []; 
+    let paginaActual = 0;
+    let totalPaginas = 1;
+    let urlPagina = configuracion.urlBase + "usuarios?page=" + paginaActual;
+
+    while (paginaActual < totalPaginas) {
+      try {
+        const response = await axios.get(urlPagina, config);
+        usuarios = usuarios.concat(response.data._embedded.usuarios);
+        totalPaginas = response.data.page.totalPages;
+
+        if (paginaActual <= totalPaginas) {
+          paginaActual++;
+          urlPagina = url + "?page=" + paginaActual;
+        }
+      } catch (error) {
+        console.error("Error al obtener los datos:", error);
+        break;
+      }
+    }
+
+    return usuarios;
   }
 
   async cambiarRol(usuario){

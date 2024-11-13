@@ -24,7 +24,7 @@
     </v-card-title>
 
     <v-card-text class="contenido">
-      <b>Grupo: </b>{{ sesion.grupo.nombre }}
+      <b v-if="!plan">Grupo: </b><p v-if="!plan">{{ sesion.grupo.nombre }}</p>
       <v-list dense>
         <v-list-item v-for="(ficha, index) in sesion.fichas || []" :key="index">
           <v-card class="mb-2 claro" outlined>
@@ -60,9 +60,14 @@ export default {
     },
     gruposConPermiso: {
       type: Array,
-      required: true,
+      required: false,
       default: [],
     },
+    plan: {
+      type: Boolean,
+      required:false,
+      default:false
+    }
   },
   computed: {
     ...mapState(useUsuariosStore, ["href"]),
@@ -72,14 +77,18 @@ export default {
       );
     },
     puedeRealizar() {
-      const partesFecha = this.sesion.fecha.split("/");
-      const dia = parseInt(partesFecha[0], 10);
-      const mes = parseInt(partesFecha[1], 10) - 1;
-      const año = parseInt(partesFecha[2], 10);
-      const fechaSesionDate = new Date(año, mes, dia);
-      const hoy = new Date();
-      hoy.setHours(0, 0, 0, 0);
-      return fechaSesionDate <= hoy;
+      if(this.plan){
+        return false;
+      } else {
+        const partesFecha = this.sesion.fecha.split("/");
+        const dia = parseInt(partesFecha[0], 10);
+        const mes = parseInt(partesFecha[1], 10) - 1;
+        const año = parseInt(partesFecha[2], 10);
+        const fechaSesionDate = new Date(año, mes, dia);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        return fechaSesionDate <= hoy;
+      }
     },
   },
   data() {
@@ -115,13 +124,15 @@ export default {
     }
   },
   async created() {
-    try {
-      this.realizada = await this.comprobarSesionRealizada(
-        this.href,
-        this.sesion.href
-      );
-    } catch (error) {
-      this.realizada = true;
+    if(!this.plan){
+      try {
+        this.realizada = await this.comprobarSesionRealizada(
+          this.href,
+          this.sesion.href
+        );
+      } catch (error) {
+        this.realizada = true;
+      }
     }
   },
 };

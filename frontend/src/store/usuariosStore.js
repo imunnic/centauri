@@ -8,6 +8,8 @@ import { useEquipamientosStore } from "@/store/equipamientosStore.js";
 import { useSesionesStore } from "@/store/sesionesStore.js";
 import { useSesionesRealizadasStore } from "@/store/sesionesRealizadasStore.js";
 import { useGruposStore } from "@/store/gruposStore.js";
+import { usePlanesStore } from "@/store/planesStore.js";
+
 
 export const useUsuariosStore = defineStore("usuarios", {
   state: () => ({
@@ -47,7 +49,7 @@ export const useUsuariosStore = defineStore("usuarios", {
       let usuarios = [];
       try {
         let response = await this.usuarioService.getUsuarios();
-        usuarios = response.data._embedded.usuarios;
+        usuarios = response;
         usuarios = usuarios.map(usuario => ({
           nombre: usuario.nombre,
           rol: usuario.rol,
@@ -131,6 +133,7 @@ export const useUsuariosStore = defineStore("usuarios", {
       const sesionesStore = useSesionesStore();
       const sesionesRealizadasStore = useSesionesRealizadasStore();
       const gruposStore = useGruposStore();
+      const planesStore = usePlanesStore();
 
       fichasStore.arrancarServicioFicha(this.token);
       ejerciciosStore.arrancarServicioEjercicios(this.token);
@@ -138,6 +141,7 @@ export const useUsuariosStore = defineStore("usuarios", {
       sesionesStore.arrancarServicioSesion(this.token);
       sesionesRealizadasStore.arrancarServicioSesionRealizada(this.token);
       gruposStore.arrancarServicioGrupos(this.token);
+      planesStore.arrancarServicioPlanes(this.token);
       this.usuarioService.actualizarCabecera(this.token);
     }
   },

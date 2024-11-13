@@ -17,7 +17,8 @@
     <div class="contenedor-flex">
       <v-btn
         aria-label="anterior-fecha"
-        @click="$emit('cambiar-fecha', -1)"
+        @click="navegar(-1)"
+        :disabled="sinFecha && dia <= 1"
         icon
         flat
       >
@@ -25,14 +26,12 @@
       </v-btn>
 
       <div class="contenedor-texto">
-        <v-toolbar-title
-          ><b>{{ fechaMostrada }}</b></v-toolbar-title
-        >
+        <v-toolbar-title><b>{{ fechaMostrada }}</b></v-toolbar-title>
       </div>
 
       <v-btn
         aria-label="siguiente-fecha"
-        @click="$emit('cambiar-fecha', 1)"
+        @click="navegar(1)"
         icon
         flat
       >
@@ -59,10 +58,33 @@ export default {
       type: Date,
       required: true,
     },
+    sinFecha: {
+      type: Boolean,
+      default: false,
+    },
+    dia:{
+      type: Number,
+    }
+  },
+  data() {
+    return {
+      anchoPantalla: window.innerWidth,
+      modo: "mes",
+      modos: [
+        { valor: "dia", texto: "Día" },
+        { valor: "mes", texto: "Mes" },
+      ],
+    };
   },
   computed: {
     fechaMostrada() {
-      if (this.modo === "dia") {
+      if (this.sinFecha) {
+        if (this.modo === "dia") {
+          return `Día ${this.dia}`;
+        } else {
+          return `Mes ${this.mes}`;
+        };
+      } else if (this.modo === "dia") {
         const opciones = {
           weekday: "long",
           year: "numeric",
@@ -79,32 +101,36 @@ export default {
         );
       }
     },
+    mes(){
+      return Math.floor(this.dia / 28) + 1
+    },
     isPantallaGrande() {
       return this.anchoPantalla > 600;
     },
-  },
-  data() {
-    return {
-      anchoPantalla: window.innerWidth,
-      modo: "mes",
-      modos: [
-        { valor: "dia", texto: "Día" },
-        { valor: "mes", texto: "Mes" },
-      ],
-    };
   },
   methods: {
     mayusculaPrimero(texto) {
       return texto.charAt(0).toUpperCase() + texto.slice(1);
     },
-    manejarCambioTamano(){
+    manejarCambioTamano() {
       this.anchoPantalla = window.innerWidth;
       if (this.anchoPantalla < 1000) {
         this.modo = "dia";
       } else {
         this.modo = "mes";
       }
-    }
+    },
+    navegar(direccion) {
+      if (this.sinFecha) {
+        if (direccion === -1 && this.dia > 1) {
+          this.$emit("cambiar-fecha", direccion);
+        } else if (direccion === 1) {
+          this.$emit("cambiar-fecha", direccion);
+        }
+      } else {
+        this.$emit("cambiar-fecha", direccion);
+      }
+    },
   },
   watch: {
     modo(nuevoModo) {

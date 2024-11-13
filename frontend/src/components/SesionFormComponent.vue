@@ -20,6 +20,7 @@
             class="item-flex placeholder"
           ></v-text-field>
           <v-select
+            v-if="!plan"
             label="Grupo"
             v-model="grupo"
             :items="grupos"
@@ -31,6 +32,7 @@
             class="item-flex placeholder"
           ></v-select>
           <v-autocomplete
+            v-if="!plan"
             label="Unidad"
             v-model="unidad"
             :items="unidadesRegistradas"
@@ -38,6 +40,7 @@
             class="item-flex placeholder"
           ></v-autocomplete>
           <v-text-field
+            v-if="!plan"
             label="Fecha"
             v-model="fechaSesion"
             type="date"
@@ -119,21 +122,32 @@ import { mapState, mapActions } from "pinia";
 
 export default {
   props: {
+    plan:{
+      type:Boolean,
+      required:false,
+      default:false
+    },
     grupos: {
       type: Array,
-      required: true,
+      required: false,
     },
     fecha: {
       type: Date,
       required: false,
+      default: new Date()
     },
     sesion: {
       type: Object,
       required: false,
+      default:{
+        nombre:"",
+        grupo:"",
+        unidad:""
+      }
     },
     edicion: {
       type: Boolean,
-      required: true,
+      required: false,
     },
   },
   computed: {
@@ -274,21 +288,23 @@ export default {
       );
     },
     async validar() {
-      let nuevaSesion = {
-        grupo: this.grupo.nombre,
-        fecha: this.fechaSesion,
-        fichas: [...this.fundamental],
-      };
-      nuevaSesion.fichas = nuevaSesion.fichas.map((ficha) => ({ id: ficha }));
-      try {
-        this.tipoAlerta = await this.validarFichasSesion(nuevaSesion);
-      } catch (error) {
-        this.tipoAlerta == 0;
-      }
-      if (this.tipoAlerta == 0) {
-        this.fichasSeleccionadasAdecuadas = true;
-      } else {
-        this.fichasSeleccionadasAdecuadas = false;
+      if(!this.plan){
+        let nuevaSesion = {
+          grupo: this.grupo.nombre,
+          fecha: this.fechaSesion,
+          fichas: [...this.fundamental],
+        };
+        nuevaSesion.fichas = nuevaSesion.fichas.map((ficha) => ({ id: ficha }));
+        try {
+          this.tipoAlerta = await this.validarFichasSesion(nuevaSesion);
+        } catch (error) {
+          this.tipoAlerta == 0;
+        }
+        if (this.tipoAlerta == 0) {
+          this.fichasSeleccionadasAdecuadas = true;
+        } else {
+          this.fichasSeleccionadasAdecuadas = false;
+        }
       }
     },
   },
