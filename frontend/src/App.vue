@@ -68,6 +68,11 @@ export default {
           title: "Equipamiento",
           prependIcon: "mdi-dumbbell",
           ruta: "/equipamientos",
+        },
+        {
+          title: "Planes", 
+          prependIcon: "mdi-map-marker-path", 
+          ruta: "/planes"
         }
       ],
       aplicacion: {

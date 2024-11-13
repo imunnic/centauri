@@ -18,16 +18,17 @@
           >
             mdi-trash-can
           </v-icon>
-          <v-icon @click="detalle" class="icono-editar"> mdi-eye </v-icon>
+          <v-icon v-if="!plan" @click="detalle" class="icono-editar"> mdi-eye </v-icon>
         </div>
       </div>
     </v-card-title>
 
     <v-card-text class="contenido">
-      <b v-if="!plan">Grupo: </b><p v-if="!plan">{{ sesion.grupo.nombre }}</p>
+      <b v-if="!plan">Grupo: </b>
+      <p v-if="!plan">{{ sesion.grupo.nombre }}</p>
       <v-list dense>
         <v-list-item v-for="(ficha, index) in sesion.fichas || []" :key="index">
-          <v-card class="mb-2 claro" outlined>
+          <v-card class="mb-2 claro" outlined @click="detalleFicha(ficha)">
             <v-card-title>{{ ficha.nombre }}</v-card-title>
           </v-card>
         </v-list-item>
@@ -35,11 +36,12 @@
     </v-card-text>
 
     <v-divider v-if="puedeRealizar && !realizada" />
-    <SesionRealizadaComponent 
-    v-if="puedeRealizar && !realizada" 
-    @sesion-realizada="hecha"
-    @salir="cerrarTarjeta">
-  </SesionRealizadaComponent>
+    <SesionRealizadaComponent
+      v-if="puedeRealizar && !realizada"
+      @sesion-realizada="hecha"
+      @salir="cerrarTarjeta"
+    >
+    </SesionRealizadaComponent>
   </v-card>
 </template>
 
@@ -52,7 +54,11 @@ import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { mapState, mapActions } from "pinia";
 import tooltips from "@/tooltips.json";
 export default {
-  components:{InformacionComponent, ValoracionComponent, SesionRealizadaComponent},
+  components: {
+    InformacionComponent,
+    ValoracionComponent,
+    SesionRealizadaComponent,
+  },
   props: {
     sesion: {
       type: Object,
@@ -65,9 +71,9 @@ export default {
     },
     plan: {
       type: Boolean,
-      required:false,
-      default:false
-    }
+      required: false,
+      default: false,
+    },
   },
   computed: {
     ...mapState(useUsuariosStore, ["href"]),
@@ -77,7 +83,7 @@ export default {
       );
     },
     puedeRealizar() {
-      if(this.plan){
+      if (this.plan) {
         return false;
       } else {
         const partesFecha = this.sesion.fecha.split("/");
@@ -119,12 +125,15 @@ export default {
       sesionRealizada.sesion = this.sesion.href;
       this.$emit("hecha", sesionRealizada);
     },
-    ajustarRpe(valor){
-      this.rpe = valor*2;
-    }
+    ajustarRpe(valor) {
+      this.rpe = valor * 2;
+    },
+    detalleFicha(ficha) {
+      this.$emit("detalle-ficha", ficha);
+    },
   },
   async created() {
-    if(!this.plan){
+    if (!this.plan) {
       try {
         this.realizada = await this.comprobarSesionRealizada(
           this.href,

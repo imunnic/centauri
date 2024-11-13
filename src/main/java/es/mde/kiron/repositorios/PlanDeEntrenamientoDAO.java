@@ -11,5 +11,4 @@ import java.util.List;
 public interface PlanDeEntrenamientoDAO extends MongoRepository<PlanDeEntrenamiento, String> {
   List<PlanDeEntrenamiento> findByNombre(String nombre);
   List<PlanDeEntrenamiento> findByObjetivo(String objetivo);
-
 }

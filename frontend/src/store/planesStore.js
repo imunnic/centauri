@@ -11,6 +11,14 @@ export const usePlanesStore = defineStore('planes', {
     },
    async crearPlan(plan){
     await this.planesService.crearPlan(plan);
+   },
+   async getPlanes(){
+    let response = await this.planesService.getPlanes();
+    return response.data;
+   },
+   async getPlan(id){
+    let response = await this.planesService.getPlan(id);
+    return response.data;
    }
   },
 });

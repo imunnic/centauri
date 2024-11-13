@@ -444,8 +444,14 @@ export default {
   mounted(){
     if(this.serie.ejercicio){
       if(this.encontrarMarca(this.serie.ejercicio.nombre)){
-        this.marcaObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
-        this.ritmoObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
+        if(this.serie.ejercicio.tipoCarga == 'VAM'){
+          this.ritmoObjetivo=this.encontrarMarca('VAM');
+          this.marcaObjetivo=this.encontrarMarca('VAM');
+        } else {
+          this.marcaObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
+          this.ritmoObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
+        }
+
         if (this.serie.ajustable && 
         (this.serie.ejercicio.tipoCarga == 'VAM'||this.serie.ejercicio.tipoCarga == 'TIEMPO')){
           this.$refs.tiempo.minutos = Math.floor(this.ritmoObjetivo / 60);

@@ -14,4 +14,13 @@ export default class PlanesService {
   async crearPlan(plan){
     return await axios.post(url,plan, config)
   }
+
+  async getPlanes(){
+    return await axios.get(url,config);
+  }
+
+  async getPlan(id){
+    let href = url + "/" + id;
+    return await axios.get(href, config);
+  }
 }
