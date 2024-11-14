@@ -23,4 +23,9 @@ export default class PlanesService {
     let href = url + "/" + id;
     return await axios.get(href, config);
   }
+
+  async agregarSesiones(agregarSesionesRequest){
+    let href = url + "/" + agregarSesionesRequest.planId + "/agregarSesiones";
+    return await axios.post(href, agregarSesionesRequest, config);
+  }
 }

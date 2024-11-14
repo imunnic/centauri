@@ -19,6 +19,9 @@ export const usePlanesStore = defineStore('planes', {
    async getPlan(id){
     let response = await this.planesService.getPlan(id);
     return response.data;
+   },
+   async agregarSesiones(agregarSesionesRequest){
+    await this.planesService.agregarSesiones(agregarSesionesRequest);
    }
   },
 });
