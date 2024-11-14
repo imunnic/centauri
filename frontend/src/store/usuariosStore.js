@@ -45,20 +45,20 @@ export const useUsuariosStore = defineStore("usuarios", {
       return response.data.nombre;
     },
 
-    async getUsuarios(){
-      let usuarios = [];
-      try {
-        let response = await this.usuarioService.getUsuarios();
-        usuarios = response;
-        usuarios = usuarios.map(usuario => ({
-          nombre: usuario.nombre,
-          rol: usuario.rol,
-          href: usuario._links.self.href
-        }));
-      } catch (error) {
-        console.log(error)
+    async getUsuarios(paginacion){
+      let respuesta = {
+        usuarios:[],
+        paginasTotales:1,
       }
-      return usuarios;
+      let response = await this.usuarioService.getUsuarios(paginacion);
+      respuesta.usuarios = response.data._embedded.usuarios;
+      respuesta.paginasTotales = response.data.page.totalPages;
+      return respuesta;
+    },
+
+    async getUsuariosBusqueda(busqueda){
+      let response = await this.usuarioService.buscarUsuarios(busqueda);
+      return response.data._embedded.usuarios;
     },
 
     async cambiarRol(usuario){

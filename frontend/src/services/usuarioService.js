@@ -2,17 +2,17 @@ import axios from "axios";
 import configuracion from "@/configuracion.json";
 
 let url = configuracion.urlBase + "autenticacion/";
+let urlUsuarios = configuracion.urlBase + "usuarios";
 let login = "login";
 let registro = "registro";
 let renovacion = "renovacion";
 let config = {
   headers: {
     Authorization: configuracion.headersDefecto.Authorization,
-  }
+  },
 };
 
 export default class UsuariosService {
-
   actualizarCabecera(token) {
     config.headers.Authorization = "Bearer " + token;
   }
@@ -45,92 +45,87 @@ export default class UsuariosService {
     return response.data.usuario.rol;
   }
 
-  async getUsuarios(){
-    let usuarios = []; 
-    let paginaActual = 0;
-    let totalPaginas = 1;
-    let urlPagina = configuracion.urlBase + "usuarios?page=" + paginaActual;
-
-    while (paginaActual < totalPaginas) {
-      try {
-        const response = await axios.get(urlPagina, config);
-        usuarios = usuarios.concat(response.data._embedded.usuarios);
-        totalPaginas = response.data.page.totalPages;
-
-        if (paginaActual <= totalPaginas) {
-          paginaActual++;
-          urlPagina = url + "?page=" + paginaActual;
-        }
-      } catch (error) {
-        console.error("Error al obtener los datos:", error);
-        break;
-      }
-    }
-
-    return usuarios;
+  async getUsuarios(paginacion) {
+    let href =
+      urlUsuarios + "?page=" + paginacion.pagina + "&size=" + paginacion.tamano;
+    return await axios.get(href, config);
   }
 
-  async cambiarRol(usuario){
+  async buscarUsuarios(busqueda) {
+    let href =
+      urlUsuarios +
+      "/search/findByNombreOrRolContaining?nombre=" +
+      busqueda +
+      "&rol=" +
+      busqueda;
+      return await axios.get(href, config)
+  }
+
+  async cambiarRol(usuario) {
     let href = usuario.href;
-    return await axios.patch(href,usuario,config);
+    return await axios.patch(href, usuario, config);
   }
 
-  async getUsuario(href){
-    return await axios.get(href,config);
+  async getUsuario(href) {
+    return await axios.get(href, config);
   }
 
-  async actualizarMarcas(marcasUsuario){
+  async actualizarMarcas(marcasUsuario) {
     let href = marcasUsuario.href;
-    return await axios.patch(href,marcasUsuario,config);
+    return await axios.patch(href, marcasUsuario, config);
   }
 
-  async borrarMarca(usuario){
-    return await axios.put(usuario.href,usuario,config)
+  async borrarMarca(usuario) {
+    return await axios.put(usuario.href, usuario, config);
   }
 
-  async existeUsuario(nombreUsuario){
-    let href = configuracion.urlBase + "usuarios/search/existsByNombre?nombre=" + nombreUsuario;
-    return await axios.get(href,config);
+  async existeUsuario(nombreUsuario) {
+    let href = urlUsuarios + "/search/existsByNombre?nombre=" + nombreUsuario;
+    return await axios.get(href, config);
   }
 
-  async existeCorreo(correo){
-    let href = configuracion.urlBase + "usuarios/existe-email?email=" + correo;
+  async existeCorreo(correo) {
+    let href = urlUsuarios + "/existe-email?email=" + correo;
     return await axios.get(href);
   }
 
-  async renovarToken(){
+  async renovarToken() {
     return await axios.post(url + renovacion, null, config);
   }
 
-  async registroUsuario(usuario){
+  async registroUsuario(usuario) {
     let user = {
       username: usuario.nombre,
       password: usuario.password,
-      email: usuario.correo
+      email: usuario.correo,
     };
-    return await axios.post(url + registro + "/" + usuario.invitacion, user, config);
+    return await axios.post(
+      url + registro + "/" + usuario.invitacion,
+      user,
+      config
+    );
   }
 
-  async cambiarNombreUsuario(usuario){
+  async cambiarNombreUsuario(usuario) {
     let href = url + "cambiar-nombre-usuario?nombre=" + usuario;
-    return await axios.post(href,null, config);
+    return await axios.post(href, null, config);
   }
 
-  async cambiarCorreo(correo,id){
-    let href = configuracion.urlBase + "usuarios/" + id + "/cambiar-email?email=" + correo;
-    return await axios.patch(href,null,config);
+  async cambiarCorreo(correo, id) {
+    let href = urlUsuarios + id + "/cambiar-email?email=" + correo;
+    return await axios.patch(href, null, config);
   }
 
-  async cambiarPassword(passwords){
+  async cambiarPassword(passwords) {
     let href = url + "cambiar-password";
     return await axios.post(href, passwords, config);
   }
 
-  async recuperarPassword(correo){
+  async recuperarPassword(correo) {
     let usuario = {
-      email:correo
-    }
+      email: correo,
+    };
     let href = url + "reset-password";
-    return await axios.post(href,usuario,config);
+    return await axios.post(href, usuario, config);
   }
 }

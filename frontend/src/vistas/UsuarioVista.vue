@@ -6,7 +6,6 @@
       :marcasArray="marcasArray" 
       @actualizarMarcasArray="actualizarMarcasArray" 
     />
-
   </v-container>
 </template>
 
