@@ -3,20 +3,28 @@
     <ListaCrudComponent
       :items="planes"
       :cargando="cargando"
-      :permisoCreacion="false"
+      :permisoCreacion="permisoCreacion"
       :permisoEdicion="false"
       @detalle="verPlan"
+      @crear="crearPlan"
     >
     </ListaCrudComponent>
     </div>
 </template>
 <script>
 import ListaCrudComponent from '@/components/comun/ListaCrudComponent.vue';
+import { useUsuariosStore } from '@/store/usuariosStore';
 import { usePlanesStore } from '@/store/planesStore.js';
-import { mapActions } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 export default {
   components:{
     ListaCrudComponent
+  },
+  computed:{
+    ...mapState(useUsuariosStore,['perfil', 'isLogged']),
+    permisoCreacion(){
+      return ((this.perfil == 'ECEF' || this.perfil == 'DIPLOMADO') && this.isLogged)
+    }
   },
   data() {
     return {
@@ -28,6 +36,10 @@ export default {
     ...mapActions(usePlanesStore, ['getPlanes']),
     verPlan(plan){
       this.$router.push("/planes/" + plan.id);
+    },
+    crearPlan(){
+      this.$router.push("/planes/crear");
+
     }
   },
   async created(){
