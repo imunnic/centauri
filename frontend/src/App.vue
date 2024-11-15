@@ -123,7 +123,7 @@ export default {
       logeo.username = logeo.usuario;
       try {
         await this.peticionLogin(logeo);
-        this.$router.push("/planificacion")
+        // this.$router.push("/planificacion")
       } catch (error) {
         this.mostrarError("No ha podido realizarse el acceso");
       }
