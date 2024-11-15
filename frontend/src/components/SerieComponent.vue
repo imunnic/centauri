@@ -443,21 +443,23 @@ export default {
   },
   mounted(){
     if(this.serie.ejercicio){
-      if(this.encontrarMarca(this.serie.ejercicio.nombre)){
-        if(this.serie.ejercicio.tipoCarga == 'VAM'){
-          this.ritmoObjetivo=this.encontrarMarca('VAM');
-          this.marcaObjetivo=this.encontrarMarca('VAM');
-        } else {
-          this.marcaObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
-          this.ritmoObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
-        }
-
-        if (this.serie.ajustable && 
+      console.log(this.serie.ejercicio);
+      if(this.serie.ejercicio.tipoCarga == 'VAM'){
+        this.ritmoObjetivo=this.encontrarMarca('VAM');
+        this.marcaObjetivo=this.encontrarMarca('VAM');
+      } else {
+        this.marcaObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
+        this.ritmoObjetivo=this.encontrarMarca(this.serie.ejercicio.nombre);
+      }
+      if (this.marcaObjetivo == 0 && this.ritmoObjetivo == 0){
+        this.marcaObjetivo = 20;
+        this.ritmoObjetivo = 270;
+      }
+      if (this.serie.ajustable && 
         (this.serie.ejercicio.tipoCarga == 'VAM'||this.serie.ejercicio.tipoCarga == 'TIEMPO')){
           this.$refs.tiempo.minutos = Math.floor(this.ritmoObjetivo / 60);
           this.$refs.tiempo.segundos = this.ritmoObjetivo % 60;
         }
-      }
     }
   }
 };
