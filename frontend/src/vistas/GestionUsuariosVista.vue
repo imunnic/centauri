@@ -75,6 +75,7 @@ export default {
         await this.cargarUsuarios();
         this.mostrarExito("Perfil cambiado con éxito");
       } catch (error) {
+        console.log(error)
         this.mostrarError("No se ha podido cambiar el perfil");
       }
     },

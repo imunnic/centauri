@@ -62,7 +62,7 @@ export default class UsuariosService {
   }
 
   async cambiarRol(usuario) {
-    let href = usuario.href;
+    let href = usuario._links.self.href;
     return await axios.patch(href, usuario, config);
   }
 
