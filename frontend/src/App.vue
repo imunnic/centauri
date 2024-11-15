@@ -115,7 +115,7 @@ export default {
   },
   methods: {
     ...mapActions(useUsuariosStore, ["peticionLogin", "resetPassword"]),
-    ...mapActions(useAlertasStore, ["mostrarAlerta"]),
+    ...mapActions(useAlertasStore, ["mostrarAlerta","mostrarError"]),
     mostrarNavegador() {
       this.$refs.navegadorComponent.mostrarNavegador();
     },
@@ -125,6 +125,7 @@ export default {
         await this.peticionLogin(logeo);
         this.$router.push("/planificacion")
       } catch (error) {
+        this.mostrarError("No ha podido realizarse el acceso");
       }
       this.intentosLogin++;
     },
