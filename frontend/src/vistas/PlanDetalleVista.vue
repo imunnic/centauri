@@ -4,20 +4,20 @@
       <b>Plan de entrenamiento</b>
       <v-text-field
         label="Nombre"
-        readonly="true"
+        :readonly="true"
         placeholder="Plan TGCF - 2 meses"
         v-model="plan.nombre"
       ></v-text-field>
       <v-text-field
         label="Objetivo"
-        readonly="true"
+        :readonly="true"
         placeholder="TGCF"
         v-model="plan.objetivo"
       ></v-text-field>
       <v-textarea
         label="Descripción"
         placeholder="Preparar el TGCF en un margen de 2 meses"
-        readonly="true"
+        :readonly="true"
         v-model="plan.descripcion"
       ></v-textarea>
     </div>
@@ -27,26 +27,15 @@
         :sesiones="plan.sesiones"
         @fecha-seleccionada=""
         @sesion-seleccionada="onSesionSeleccionada"
-        :key="calendario"
       >
         <template v-slot:detalle-sesion>
           <DetalleSesionComponent
             :plan="true"
             :sesion="sesionSeleccionada"
-            @editarSesion=""
-            @borrarSesion=""
-            @detalle=""
             @detalle-ficha="verFicha"
-            @hecha=""
           />
         </template>
       </CalendarioSinFecha>
-      <SesionFormComponent
-        v-if="formularioSesion"
-        :plan="true"
-        @cerrar="formularioSesion = false"
-        @sesion-creada="crearSesion"
-      ></SesionFormComponent>
     </div>
     <FabBotonComponent
       v-if="puedePlanificar"
@@ -90,7 +79,7 @@ export default {
   data() {
     return {
       id: "",
-      plan: {},
+      plan: {sesiones:[]},
       sesionSeleccionada: {},
       agregarSesionesForm: false,
     };
@@ -126,7 +115,6 @@ export default {
   async created() {
     this.id = this.$route.params.id;
     this.plan = await this.getPlan(this.id);
-    console.log(this.plan);
   },
 };
 </script>

@@ -15,8 +15,7 @@ public class PlanDeEntrenamiento {
   private String objetivo;
   private String descripcion;
   private List<SesionDePlan> sesiones;
-  @DBRef
-  private Usuario autor;
+  private String autor;
 
   public PlanDeEntrenamiento() {
     setSesiones(new ArrayList<>());
@@ -54,11 +53,11 @@ public class PlanDeEntrenamiento {
     this.sesiones = sesiones;
   }
 
-  public Usuario getAutor() {
+  public String getAutor() {
     return autor;
   }
 
-  public void setAutor(Usuario autor) {
+  public void setAutor(String autor) {
     this.autor = autor;
   }
 

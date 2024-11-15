@@ -5,7 +5,7 @@
         {{ sesion.nombre || "Sin nombre" }}
         <div class="contenedor-flex iconos">
           <v-icon
-            v-if="permisoEdicion"
+            v-if="permisoEdicion && !crearPlan"
             @click="editarSesion"
             class="icono-editar"
           >
@@ -74,13 +74,22 @@ export default {
       required: false,
       default: false,
     },
+    crearPlan: {
+      type:Boolean,
+      required:false,
+      default:false
+    }
   },
   computed: {
     ...mapState(useUsuariosStore, ["href"]),
     permisoEdicion() {
-      return this.gruposConPermiso.some(
-        (grupo) => grupo.nombre === this.sesion.grupo.nombre
-      );
+      if(this.crearPlan){
+        return true;
+      } else {
+        return this.gruposConPermiso.some(
+          (grupo) => grupo.nombre === this.sesion.grupo.nombre
+        );
+      }
     },
     puedeRealizar() {
       if (this.plan) {

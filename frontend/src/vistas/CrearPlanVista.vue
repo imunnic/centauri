@@ -17,7 +17,7 @@
         placeholder="Preparar el TGCF en un margen de 2 meses"
         v-model="descripcion"
       ></v-textarea>
-      <v-btn class="claro" @click="nuevoPlan">Crear Plan</v-btn>
+      <v-btn class="claro" @click="nuevoPlan">{{textoGuardado}}</v-btn>
     </div>
     <div class="derecha">
       <CalendarioSinFecha
@@ -31,9 +31,10 @@
           <DetalleSesionComponent
             :plan="true"
             :sesion="sesionSeleccionada"
+            :crearPlan="true"
             @cerrarTarjeta="cerrarDetalleCalendario"
-            @editarSesion=""
-            @borrarSesion=""
+            @borrarSesion="borrarSesion"
+            @detalle-ficha="verFicha"
             @detalle=""
             @hecha=""
           />
@@ -54,6 +55,8 @@ import SesionFormComponent from "@/components/SesionFormComponent.vue";
 import DetalleSesionComponent from "@/components/DetalleSesionComponent.vue";
 import { usePlanesStore } from "@/store/planesStore.js";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
+import { useFichasStore } from "@/store/fichasStore.js";
+import { useAlertasStore } from "@/store/alertasStore.js";
 import { mapState, mapActions } from "pinia";
 
 export default {
@@ -63,7 +66,19 @@ export default {
     DetalleSesionComponent,
   },
   computed: {
-    ...mapState(useUsuariosStore, ["href"]),
+    ...mapState(useUsuariosStore, ["href","username"]),
+    textoGuardado() {
+      let texto = "";
+      if (this.id) {
+        texto = "Editar plan";
+      } else {
+        texto = "Crear plan";
+      }
+      return texto;
+    },
+    id() {
+      return this.$route.query.id;
+    },
   },
   data() {
     return {
@@ -78,7 +93,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions(usePlanesStore, ["crearPlan"]),
+    ...mapActions(usePlanesStore, ["crearPlan", "getPlan", "modificarPlan"]),
+    ...mapActions(useFichasStore, ["getFichaPorHref"]),
+    ...mapActions(useAlertasStore, ["mostrarExito", "mostrarError"]),
     fechaSeleccionada(fecha) {
       this.formularioSesion = true;
       this.dia = fecha;
@@ -88,8 +105,19 @@ export default {
       this.sesiones.push(nuevaSesion);
       this.calendario++;
     },
-    onSesionSeleccionada(sesion) {
+    borrarSesion(sesionBorrada) {
+      this.sesiones = this.sesiones.filter(
+        (sesion) => sesion.nombre != sesionBorrada.nombre
+      );
+      this.cerrarDetalleCalendario();
+    },
+    async onSesionSeleccionada(sesion) {
       this.sesionSeleccionada = sesion;
+      this.sesionSeleccionada.fichas = await Promise.all(
+        this.sesionSeleccionada.fichas.map(
+          async (href) => await this.getFichaPorHref(href)
+        )
+      );
     },
     cerrarDetalleCalendario() {
       this.$refs.calendar.mostrarTarjeta = false;
@@ -100,11 +128,37 @@ export default {
         objetivo: this.objetivo,
         descripcion: this.descripcion,
         sesiones: this.sesiones,
-        autor: this.autor,
+        autor: this.username,
       };
-      await this.crearPlan(plan);
-      this.$router.push("/planificacion");
+      try {
+        if (this.id) {
+          plan.id = this.id;
+          await this.modificarPlan(plan);
+          this.$router.push("/planes");
+        } else {
+          await this.crearPlan(plan);
+          this.$router.push("/planes");
+        }
+        this.mostrarExito("Plan guardado");
+      } catch (error) {
+        this.mostrarError("El plan no se ha podido guardar");
+      }
     },
+    verFicha(ficha) {
+      let ruta = this.$router.resolve({ name: "fichas" });
+      ruta = ruta.href + "/" + ficha.id;
+      window.open(ruta, "_blank");
+    },
+  },
+  async created() {
+    const queryId = this.id;
+    if (queryId) {
+      let plan = await this.getPlan(this.id);
+      this.sesiones = plan.sesiones;
+      this.nombre = plan.nombre;
+      this.objetivo = plan.objetivo;
+      this.descripcion = plan.descripcion;
+    }
   },
 };
 </script>

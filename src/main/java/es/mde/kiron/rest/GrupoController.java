@@ -1,12 +1,9 @@
 package es.mde.kiron.rest;
 
 import es.mde.kiron.entidades.Grupo;
-import es.mde.kiron.entidades.Sesion;
 import es.mde.kiron.modelos.AbandonarGrupoRequest;
 import es.mde.kiron.repositorios.GrupoDAO;
-import es.mde.kiron.repositorios.SesionDAO;
 import es.mde.kiron.servicios.GrupoService;
-import es.mde.kiron.servicios.SesionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

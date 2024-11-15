@@ -1,13 +1,12 @@
 package es.mde.kiron.rest;
 
-import es.mde.kiron.entidades.Grupo;
 import es.mde.kiron.entidades.PlanDeEntrenamiento;
 import es.mde.kiron.entidades.Sesion;
-import es.mde.kiron.entidades.Usuario;
 import es.mde.kiron.modelos.AgregarSesionesRequest;
 import es.mde.kiron.repositorios.PlanDeEntrenamientoDAO;
 import es.mde.kiron.repositorios.SesionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +23,7 @@ public class PlanDeEntrenamientoController {
   @Autowired
   SesionDAO sesionDAO;
 
-  @GetMapping
+  @GetMapping("/respuesta")
   public ResponseEntity<List<PlanDeEntrenamientoResponse>> getPlanes() {
     List<PlanDeEntrenamiento> planes = planDeEntrenamientoDAO.findAll();
     List<PlanDeEntrenamientoResponse> planesResponse = new ArrayList<>();
@@ -34,16 +33,12 @@ public class PlanDeEntrenamientoController {
       planResponse.setNombre(plan.getNombre());
       planResponse.setObjetivo(plan.getObjetivo());
       planResponse.setDescripcion(plan.getDescripcion());
-      planResponse.setAutor(plan.getAutor() != null ? plan.getAutor().getNombre() : null);
+      planResponse.setAutor(plan.getAutor() != null ? plan.getAutor() : null);
       return  planResponse;
     }).collect(Collectors.toList());
     return ResponseEntity.ok(planesResponse);
   }
-  @GetMapping("/{id}")
-  public ResponseEntity<PlanDeEntrenamiento> getPlanes(@PathVariable String id) {
-    PlanDeEntrenamiento planDeEntrenamiento = planDeEntrenamientoDAO.findById(id).orElseThrow();
-    return ResponseEntity.ok(planDeEntrenamiento);
-  }
+
   @PostMapping("/{id}/agregarSesiones")
   public ResponseEntity<Boolean> getPlanes(@PathVariable String id, @RequestBody
   AgregarSesionesRequest request) {
@@ -60,4 +55,6 @@ public class PlanDeEntrenamientoController {
     });
     return ResponseEntity.ok(true);
   }
+
+
 }

@@ -82,6 +82,7 @@
             @borrarSesion="borrarSesion"
             @detalle="navegarADetalleSesion"
             @hecha="sesionRealizada"
+            @detalle-ficha="verFicha"
           />
         </template>
       </CalendarioComponent>
@@ -385,6 +386,11 @@ export default {
       await this.mostrarGrupos();
       await this.mostrarSesiones();
       await this.renovarToken();
+    },
+    verFicha(ficha) {
+      let ruta = this.$router.resolve({ name: "fichas" });
+      ruta = ruta.href + "/" + ficha.id;
+      window.open(ruta, "_blank");
     },
   },
   async created() {

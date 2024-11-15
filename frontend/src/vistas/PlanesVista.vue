@@ -2,14 +2,14 @@
   <div>
     <v-container>
       <v-switch
-          aria-label="planes-propios"
-          v-if="perfil == 'ECEF' || perfil == 'DIPLOMADO'"
-          v-model="planesPropios"
-          label="Mostrar planes propios"
-          color="var(--claro)"
-          active-color="var(--claro)"
-          class="interruptor"
-        ></v-switch>
+        aria-label="planes-propios"
+        v-if="perfil == 'ECEF' || perfil == 'DIPLOMADO'"
+        v-model="planesPropios"
+        label="Mostrar planes propios"
+        color="var(--claro)"
+        active-color="var(--claro)"
+        class="interruptor"
+      ></v-switch>
     </v-container>
     <ListaCrudComponent
       :items="planes"
@@ -17,63 +17,68 @@
       :permisoCreacion="permisoCreacion"
       :permisoEdicion="planesPropios"
       @eliminar="eliminarPlan"
+      @editar="editarPlan"
       @detalle="verPlan"
       @crear="crearPlan"
     >
     </ListaCrudComponent>
-    </div>
+  </div>
 </template>
 <script>
-import ListaCrudComponent from '@/components/comun/ListaCrudComponent.vue';
-import { useUsuariosStore } from '@/store/usuariosStore';
-import { usePlanesStore } from '@/store/planesStore.js';
-import { mapState, mapActions } from 'pinia';
+import ListaCrudComponent from "@/components/comun/ListaCrudComponent.vue";
+import { useUsuariosStore } from "@/store/usuariosStore";
+import { usePlanesStore } from "@/store/planesStore.js";
+import { mapState, mapActions } from "pinia";
 export default {
-  components:{
-    ListaCrudComponent
+  components: {
+    ListaCrudComponent,
   },
-  computed:{
-    ...mapState(useUsuariosStore,['perfil', 'isLogged','username']),
-    permisoCreacion(){
-      return ((this.perfil == 'ECEF' || this.perfil == 'DIPLOMADO') && this.isLogged)
-    }
+  computed: {
+    ...mapState(useUsuariosStore, ["perfil", "isLogged", "username"]),
+    permisoCreacion() {
+      return (
+        (this.perfil == "ECEF" || this.perfil == "DIPLOMADO") && this.isLogged
+      );
+    },
   },
   data() {
     return {
-      planes:[],
-      cargando:false,
-      planesPropios:false
-    }
+      planes: [],
+      cargando: false,
+      planesPropios: false,
+    };
   },
   watch: {
     async planesPropios(newValue) {
       if (newValue) {
-        this.planes = this.planes.filter(plan => plan.autor == this.username);
+        this.planes = this.planes.filter((plan) => plan.autor == this.username);
       } else {
         await this.cargarPlanes();
       }
     },
   },
-  methods:{
-    ...mapActions(usePlanesStore, ['getPlanes','borrarPlan']),
-    verPlan(plan){
+  methods: {
+    ...mapActions(usePlanesStore, ["getPlanes", "borrarPlan"]),
+    verPlan(plan) {
       this.$router.push("/planes/" + plan.id);
     },
-    crearPlan(){
+    crearPlan() {
       this.$router.push("/planes/crear");
-
     },
-    async cargarPlanes(){
+    async cargarPlanes() {
       this.cargando = true;
       this.planes = await this.getPlanes();
       this.cargando = false;
     },
-    async eliminarPlan(planBorrado){
-      await this.borrarPlan(planBorrado.id)
-      this.planes = this.planes.filter(plan => plan.id != planBorrado.id);
-    }
+    async eliminarPlan(planBorrado) {
+      await this.borrarPlan(planBorrado.id);
+      this.planes = this.planes.filter((plan) => plan.id != planBorrado.id);
+    },
+    editarPlan(plan) {
+      this.$router.push("/planes/crear?id=" + plan.id);
+    },
   },
-  async created(){
+  async created() {
     this.cargarPlanes();
   },
 };

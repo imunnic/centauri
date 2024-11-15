@@ -25,6 +25,9 @@ export const usePlanesStore = defineStore('planes', {
    },
    async borrarPlan(planId){
     await this.planesService.eliminarPlan(planId);
+   },
+   async modificarPlan(plan){
+    await this.planesService.modificarPlan(plan);
    }
   },
 });

@@ -16,7 +16,8 @@ export default class PlanesService {
   }
 
   async getPlanes(){
-    return await axios.get(url,config);
+    let href = url + "/respuesta"
+    return await axios.get(href,config);
   }
 
   async getPlan(id){
@@ -32,5 +33,11 @@ export default class PlanesService {
   async eliminarPlan(planId){
     let href = url + "/" + planId;
     return await axios.delete(href, config);
+  }
+
+  async modificarPlan(plan){
+    let href = url + "/" + plan.id
+    return await axios.put(href,plan, config);
+
   }
 }

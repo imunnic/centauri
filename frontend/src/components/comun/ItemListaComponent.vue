@@ -143,6 +143,7 @@ export default {
 
 .descripcion{
   padding-left: 15px;
+  margin-bottom: 10px;
 }
 
 .acciones {

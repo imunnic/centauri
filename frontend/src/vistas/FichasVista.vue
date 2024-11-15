@@ -150,7 +150,8 @@ export default {
       });
     },
     async eliminarFicha(ficha) {
-      await this.borrarFicha(ficha.id);
+      let id = ficha._links.self.href.split("/").pop();
+      await this.borrarFicha(id);
       await this.cargarPropias();
     },
   },
