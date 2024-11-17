@@ -23,9 +23,9 @@
       <CalendarioSinFecha
         ref="calendar"
         :sesiones="sesiones"
+        :modoInicial="modoInicial"
         @fecha-seleccionada="fechaSeleccionada"
         @sesion-seleccionada="onSesionSeleccionada"
-        :key="calendario"
       >
         <template v-slot:detalle-sesion>
           <DetalleSesionComponent
@@ -80,14 +80,17 @@ export default {
     id() {
       return this.$route.query.id;
     },
+    modoInicial() {
+      return this.anchoPantalla > 1000 ? "mes" : "dia";
+    },
   },
   data() {
     return {
       sesiones: [],
       formularioSesion: false,
       dia: 1,
-      calendario: 1,
       sesionSeleccionada: {},
+      anchoPantalla: window.innerWidth,
       nombre: "",
       objetivo: "",
       descripcion: "",
@@ -98,13 +101,14 @@ export default {
     ...mapActions(useFichasStore, ["getFichaPorHref"]),
     ...mapActions(useAlertasStore, ["mostrarExito", "mostrarError"]),
     fechaSeleccionada(fecha) {
+      console.log(fecha);
       this.formularioSesion = true;
       this.dia = fecha;
     },
     crearSesion(nuevaSesion) {
       nuevaSesion.dia = this.dia;
+      console.log(nuevaSesion);
       this.sesiones.push(nuevaSesion);
-      this.calendario++;
     },
     borrarSesion(sesionBorrada) {
       this.sesiones = this.sesiones.filter(
@@ -165,6 +169,12 @@ export default {
       this.descripcion = plan.descripcion;
     }
   },
+  async mounted() {
+    window.addEventListener("resize", this.manejarCambioTamano);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.manejarCambioTamano);
+  },
 };
 </script>
 <style scoped>
@@ -198,6 +208,10 @@ export default {
   .agenda {
     flex-flow: column-reverse;
     align-items: center;
+  }
+
+  .formulario{
+    max-width: 95vw;
   }
 
   .grupos {

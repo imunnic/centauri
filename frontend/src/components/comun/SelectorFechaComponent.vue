@@ -64,12 +64,17 @@ export default {
     },
     dia:{
       type: Number,
+    },
+    modoInicial:{
+      type: String,
+      default: 'mes',
+      required:false
     }
   },
   data() {
     return {
       anchoPantalla: window.innerWidth,
-      modo: "mes",
+      modo: this.modoInicial,
       modos: [
         { valor: "dia", texto: "Día" },
         { valor: "mes", texto: "Mes" },

@@ -49,20 +49,8 @@
       <v-card class="carta-dia" elevation="2" @click="emitirFecha(dia)">
         <v-card-title
           class="titulo-dia"
-          :class="{
-            claro:
-              dia.fecha &&
-              dia.fecha === fechaActual.dia &&
-              fecha.getMonth() === fechaActual.mes &&
-              fecha.getFullYear() === fechaActual.año,
-            redondeado:
-              dia.fecha &&
-              dia.fecha === fechaActual.dia &&
-              fecha.getMonth() === fechaActual.mes &&
-              fecha.getFullYear() === fechaActual.año,
-          }"
         >
-          <span v-if="dia.fecha">{{ dia.fecha }}</span>
+          <span v-if="dia">Sesiones</span>
         </v-card-title>
 
         <v-container class="lista-eventos">
@@ -70,14 +58,11 @@
             <v-card
               v-for="(sesion, sesionIndex) in sesionesPorDia(dia)"
               :key="sesionIndex"
-              class="carta-eventos claro"
+              class="carta-eventos claro espacio"
               flat
               @click.stop="emitirEvento(sesion)"
-              :style="{
-                backgroundColor: sesion.grupo.color + ' !important',
-              }"
             >
-              {{ sesion.nombre }} - {{ sesion.grupo.nombre }}
+              {{ sesion.nombre }}
             </v-card>
           </template>
           <template v-else>
@@ -166,7 +151,11 @@ export default {
     },
 
     sesionesPorDia(dia) {
-      return this.sesiones.filter((sesion) => sesion.dia === dia.fecha);
+      if(this.modo == 'dia'){
+        return this.sesiones.filter((sesion) => sesion.dia === dia);
+      } else {
+        return this.sesiones.filter((sesion) => sesion.dia === dia.fecha)
+      }
     },
 
     emitirEvento(sesion) {
@@ -174,7 +163,11 @@ export default {
     },
 
     emitirFecha(dia) {
-      this.$emit("fecha-seleccionada", dia.fecha);
+      if(this.modo == 'dia'){
+        this.$emit("fecha-seleccionada", dia);
+      } else {
+        this.$emit("fecha-seleccionada", dia.fecha);
+      }
     },
   },
   mounted() {
@@ -197,6 +190,10 @@ export default {
   align-items: center;
   justify-content: center;
   font-weight: bold;
+}
+
+.espacio{
+  padding: 10px !important;
 }
 
 .carta-dia {
@@ -229,7 +226,7 @@ export default {
   height: auto;
   min-height: 40px;
   margin-bottom: 2px;
-  padding: 2px 5px;
+  padding: 10px;
   font-size: 16px;
   font-weight: 400;
   border-radius: 4px;

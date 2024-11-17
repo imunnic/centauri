@@ -3,6 +3,7 @@
     <SelectorFechaComponent
       :sin-fecha="true"
       :dia="dia"
+      :modo-inicial="modoInicial"
       @cambiar-fecha="cambiarFecha"
       @cambiar-modo="cambiarModo"
       :fecha="fecha"
@@ -33,6 +34,11 @@ export default {
     sesiones: {
       type: Array,
       required: true,
+    },
+    modoInicial:{
+      type: String,
+      default: 'mes',
+      required:false
     },
   },
   data() {
@@ -70,10 +76,14 @@ export default {
       this.mostrarTarjeta = false;
     },
   },
+  created(){
+    this.modo = this.modoInicial;
+  }
 };
 </script>
 <style scoped>
 .calendario {
   width: 100%;
 }
+
 </style>

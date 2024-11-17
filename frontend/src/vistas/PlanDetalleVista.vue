@@ -25,7 +25,7 @@
       <CalendarioSinFecha
         ref="calendar"
         :sesiones="plan.sesiones"
-        @fecha-seleccionada=""
+        :modoInicial="modoInicial"
         @sesion-seleccionada="onSesionSeleccionada"
       >
         <template v-slot:detalle-sesion>
@@ -76,6 +76,9 @@ export default {
     puedePlanificar() {
       return this.isLogged && this.gruposEncargado.length > 0;
     },
+    modoInicial() {
+      return this.anchoPantalla > 1000 ? "mes" : "dia";
+    },
   },
   data() {
     return {
@@ -83,6 +86,7 @@ export default {
       plan: {sesiones:[]},
       sesionSeleccionada: {},
       agregarSesionesForm: false,
+      anchoPantalla: window.innerWidth,
     };
   },
   methods: {
@@ -91,11 +95,7 @@ export default {
     ...mapActions(useAlertasStore, ["mostrarExito", "mostrarError"]),
     async onSesionSeleccionada(sesion) {
       this.sesionSeleccionada = sesion;
-      // this.sesionSeleccionada.fichas = await Promise.all(
-      //   this.sesionSeleccionada.fichas.map(
-      //     async (href) => await this.getFichaPorHref(href)
-      //   )
-      // );
+
     },
     verFicha(ficha) {
       let ruta = this.$router.resolve({ name: "fichas" });
@@ -103,7 +103,6 @@ export default {
       window.open(ruta, "_blank");
     },
     confirmarAgregarSesiones() {
-      console.log(this.gruposEncargado)
       this.agregarSesionesForm = true;
     },
     async agregarSesionesPlan(agregarPlanRequest){
@@ -116,13 +115,24 @@ export default {
         console.log(error);
         this.mostrarError("No se han podido agregar las sesiones");
       }
-    }
+    },
+    manejarCambioTamano() {
+      this.anchoPantalla = window.innerWidth;
+    },
 
   },
+  async mounted() {
+    window.addEventListener("resize", this.manejarCambioTamano);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.manejarCambioTamano);
+  },
   async created() {
+  },
+  async mounted(){
     this.id = this.$route.params.id;
     this.plan = await this.getPlan(this.id);
-  },
+  }
 };
 </script>
 <style scoped>
@@ -158,6 +168,9 @@ export default {
     align-items: center;
   }
 
+  .formulario{
+    max-width: 95vw;
+  }
   .grupos {
     max-width: 1200px;
     padding: 16px;
