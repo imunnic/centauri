@@ -58,6 +58,7 @@ import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useFichasStore } from "@/store/fichasStore.js";
 import { useAlertasStore } from "@/store/alertasStore.js";
 import { mapState, mapActions } from "pinia";
+import configuracion from "@/configuracion.json";
 
 export default {
   components: {
@@ -118,6 +119,7 @@ export default {
           async (href) => await this.getFichaPorHref(href)
         )
       );
+      console.log(this.sesionSeleccionada);
     },
     cerrarDetalleCalendario() {
       this.$refs.calendar.mostrarTarjeta = false;
@@ -155,6 +157,9 @@ export default {
     if (queryId) {
       let plan = await this.getPlan(this.id);
       this.sesiones = plan.sesiones;
+      this.sesiones.forEach(sesion => {
+        sesion.fichas = sesion.fichas.map(ficha => `${configuracion.urlBase}fichas/${ficha.id}`);
+      });
       this.nombre = plan.nombre;
       this.objetivo = plan.objetivo;
       this.descripcion = plan.descripcion;

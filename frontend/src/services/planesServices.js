@@ -21,7 +21,7 @@ export default class PlanesService {
   }
 
   async getPlan(id){
-    let href = url + "/" + id;
+    let href = url + "/" + id + "/completo";
     return await axios.get(href, config);
   }
 

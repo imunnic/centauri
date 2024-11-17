@@ -58,6 +58,7 @@ import SesionFormComponent from "@/components/SesionFormComponent.vue";
 import DetalleSesionComponent from "@/components/DetalleSesionComponent.vue";
 import { useUsuariosStore } from "@/store/usuariosStore.js";
 import { useGruposStore } from "@/store/gruposStore";
+import { useFichasStore } from "@/store/fichasStore.js";
 import { usePlanesStore } from "@/store/planesStore.js";
 import { useAlertasStore } from "@/store/alertasStore.js";
 import { mapActions, mapState } from "pinia";
@@ -86,9 +87,15 @@ export default {
   },
   methods: {
     ...mapActions(usePlanesStore, ["getPlan","agregarSesiones"]),
+    ...mapActions(useFichasStore, ["getFichaPorHref"]),
     ...mapActions(useAlertasStore, ["mostrarExito", "mostrarError"]),
-    onSesionSeleccionada(sesion) {
+    async onSesionSeleccionada(sesion) {
       this.sesionSeleccionada = sesion;
+      // this.sesionSeleccionada.fichas = await Promise.all(
+      //   this.sesionSeleccionada.fichas.map(
+      //     async (href) => await this.getFichaPorHref(href)
+      //   )
+      // );
     },
     verFicha(ficha) {
       let ruta = this.$router.resolve({ name: "fichas" });

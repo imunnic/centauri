@@ -443,7 +443,6 @@ export default {
   },
   mounted(){
     if(this.serie.ejercicio){
-      console.log(this.serie.ejercicio);
       if(this.serie.ejercicio.tipoCarga == 'VAM'){
         this.ritmoObjetivo=this.encontrarMarca('VAM');
         this.marcaObjetivo=this.encontrarMarca('VAM');

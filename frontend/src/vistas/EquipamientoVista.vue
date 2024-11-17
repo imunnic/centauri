@@ -59,9 +59,6 @@ export default {
       modoEdicion: false,
       detalle: false,
       equipamientosKey: 0,
-      mostrarAlerta: false,
-      mensajeAlerta: "",
-      tipoAlerta: "success",
       cargando: false,
       imagenNoEncontrada: configuracion.urlImagenNoEncontrada,
     };
@@ -82,7 +79,7 @@ export default {
       "modificarEquipamiento",
       "eliminarEquipamiento",
     ]),
-    ...mapActions(useAlertasStore,['mostrarAlerta']),
+    ...mapActions(useAlertasStore,['mostrarExito','mostrarError']),
     resetFormulario() {
       this.equipamientoSeleccionado = {};
       this.modoEdicion = false;
@@ -90,11 +87,11 @@ export default {
     async guardarEquipamiento(equipamiento) {
       if (this.modoEdicion) {
         await this.modificarEquipamiento(equipamiento);
-        this.mostrarAlerta("Equipamiento modificado con éxito", "success");
+        this.mostrarExito("Equipamiento modificado con éxito");
         await this.renovarCredenciales();
       } else {
         await this.agregarEquipamiento(equipamiento);
-        this.mostrarAlerta("Equipamiento creado con éxito", "success");
+        this.mostrarExito("Equipamiento creado con éxito");
         await this.renovarCredenciales();
       }
       await this.cargarEquipamientos();
@@ -122,7 +119,7 @@ export default {
       await this.eliminarEquipamiento(equipamiento);
       this.cargarEquipamientos();
       this.equipamientosKey += 1;
-      this.mostrarAlerta("Equipamiento eliminado con éxito", "success");
+      this.mostrarExito("Equipamiento eliminado con éxito");
       await this.renovarCredenciales();
     },
     cerrarFormulario() {

@@ -39,6 +39,12 @@ public class PlanDeEntrenamientoController {
     return ResponseEntity.ok(planesResponse);
   }
 
+  @GetMapping("/{id}/completo")
+  public ResponseEntity<PlanDeEntrenamiento> getPlanes(@PathVariable String id) {
+    PlanDeEntrenamiento planDeEntrenamiento = planDeEntrenamientoDAO.findById(id).orElseThrow();
+    return ResponseEntity.ok(planDeEntrenamiento);
+  }
+
   @PostMapping("/{id}/agregarSesiones")
   public ResponseEntity<Boolean> getPlanes(@PathVariable String id, @RequestBody
   AgregarSesionesRequest request) {

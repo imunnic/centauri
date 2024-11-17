@@ -15,8 +15,8 @@ export const useFichasStore = defineStore("fichas", {
       await this.fichaService.cambiarEstado(ficha, estado);
     },
     async getFichaPorHref(href){
-      href = href.split("/").pop();
-      return this.fichasRegistradas.find(ficha => ficha.id==href);
+      let id = href.split("/").pop();
+      return this.fichasRegistradas.find(ficha => ficha.id==id);
     },
     async cargarFichas() {
       try {
