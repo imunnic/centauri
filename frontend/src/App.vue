@@ -1,8 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <MensajeAlertaComponent
-    ></MensajeAlertaComponent>
+      <MensajeAlertaComponent></MensajeAlertaComponent>
       <HeaderComponent
         @navegacion="mostrarNavegador"
         @intento-login="intentarLogin"
@@ -13,29 +12,30 @@
         :aplicacion="aplicacion"
         :key="intentosLogin"
       >
-      <template v-slot:default>
-        <v-menu offset-y :close-on-content-click="false">
-        <template v-slot:activator="{ props }">
-          <v-btn class="mr-2 claro" v-bind="props" @click="crearInvitacion">
-            Crear Invitacion
-          </v-btn>
-        </template>
+        <template v-slot:default>
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ props }">
+              <v-btn class="mr-2 claro" v-bind="props" @click="crearInvitacion">
+                Crear Invitacion
+              </v-btn>
+            </template>
 
-        <v-card>
-          <v-card-text>
-            <v-text-field 
-            class="enlace"
-            label="Enlace"
-            append-icon="mdi-content-copy"
-            @click:append="copiarPortapapeles"
-            v-model="enlace"
-            enabled="false">
-          </v-text-field>
-          </v-card-text>
-        </v-card>
-      </v-menu>
-  </template>
-    </HeaderComponent>
+            <v-card>
+              <v-card-text>
+                <v-text-field
+                  class="enlace"
+                  label="Enlace"
+                  append-icon="mdi-content-copy"
+                  @click:append="copiarPortapapeles"
+                  v-model="enlace"
+                  enabled="false"
+                >
+                </v-text-field>
+              </v-card-text>
+            </v-card>
+          </v-menu>
+        </template>
+      </HeaderComponent>
       <NavegadorComponent
         ref="navegadorComponent"
         :menu-items-prop="menuItems"
@@ -49,7 +49,7 @@ import HeaderComponent from "./components/comun/HeaderComponent.vue";
 import NavegadorComponent from "./components/comun/NavegadorComponent.vue";
 import MensajeAlertaComponent from "@/components/comun/MensajeAlertaComponent.vue";
 import { useUsuariosStore } from "./store/usuariosStore.js";
-import { useAlertasStore } from "@/store/alertasStore.js"
+import { useAlertasStore } from "@/store/alertasStore.js";
 import { mapActions, mapState } from "pinia";
 import InvitacionesService from "@/services/invitacionService.js";
 import config from "@/configuracion.json";
@@ -70,21 +70,21 @@ export default {
           ruta: "/equipamientos",
         },
         {
-          title: "Planes", 
-          prependIcon: "mdi-map-marker-path", 
-          ruta: "/planes"
-        }
+          title: "Planes",
+          prependIcon: "mdi-map-marker-path",
+          ruta: "/planes",
+        },
       ],
       aplicacion: {
         nombre: "Centauri",
         icono: "/centauri_verde.png",
       },
-      intentosLogin:0,
-      enlace:"",
+      intentosLogin: 0,
+      enlace: "",
     };
   },
   computed: {
-    ...mapState(useUsuariosStore, ["token", "isLogged", "username","perfil"]),
+    ...mapState(useUsuariosStore, ["token", "isLogged", "username", "perfil"]),
     menuItems() {
       if (this.isLogged) {
         this.menu.push({
@@ -93,21 +93,21 @@ export default {
           ruta: "/grupos",
         });
         this.menu.push({
-          title: "Planificación", 
-          prependIcon: "mdi-calendar-outline", 
-          ruta: "/planificacion"
+          title: "Planificación",
+          prependIcon: "mdi-calendar-outline",
+          ruta: "/planificacion",
         });
         this.menu.push({
-          title: "Usuario", 
-          prependIcon: "mdi-account", 
-          ruta: "/usuario"
+          title: "Usuario",
+          prependIcon: "mdi-account",
+          ruta: "/usuario",
         });
-        if(this.perfil=='ECEF'){
+        if (this.perfil == "ECEF") {
           this.menu.push({
-          title: "Gestión Usuarios", 
-          prependIcon: "mdi-cogs", 
-          ruta: "/gestion"
-        });
+            title: "Gestión Usuarios",
+            prependIcon: "mdi-cogs",
+            ruta: "/gestion",
+          });
         }
       }
       return this.menu;
@@ -115,7 +115,11 @@ export default {
   },
   methods: {
     ...mapActions(useUsuariosStore, ["peticionLogin", "resetPassword"]),
-    ...mapActions(useAlertasStore, ["mostrarAlerta","mostrarError"]),
+    ...mapActions(useAlertasStore, [
+      "mostrarAlerta",
+      "mostrarError",
+      "mostrarExito",
+    ]),
     mostrarNavegador() {
       this.$refs.navegadorComponent.mostrarNavegador();
     },
@@ -123,52 +127,52 @@ export default {
       logeo.username = logeo.usuario;
       try {
         await this.peticionLogin(logeo);
-        // this.$router.push("/planificacion")
+        this.$router.push("/planificacion");
+        this.mostrarExito("Acceso correcto")
       } catch (error) {
         this.mostrarError("No ha podido realizarse el acceso");
       }
       this.intentosLogin++;
     },
-    async crearInvitacion(){
+    async crearInvitacion() {
       let servicioInvitaciones = new InvitacionesService();
       servicioInvitaciones.actualizarCabecera(this.token);
       try {
         let respuesta = await servicioInvitaciones.crearInvitacion();
-        respuesta = respuesta.data._links.self.href.split('/').pop();
+        respuesta = respuesta.data._links.self.href.split("/").pop();
         respuesta = config.urlInvitaciones + respuesta;
         this.enlace = respuesta;
-        
       } catch (error) {
-        this.enlace = "No se ha podido crear el enlace"
+        this.enlace = "No se ha podido crear el enlace";
         this.mostrarAlerta("No se ha podido crear un enlace", "error");
       }
     },
-    async copiarPortapapeles(){
+    async copiarPortapapeles() {
       try {
         await navigator.clipboard.writeText(this.enlace);
-        this.mostrarAlerta('Texto copiado en el portapapeles','success');
+        this.mostrarAlerta("Texto copiado en el portapapeles", "success");
       } catch (error) {
-        this.mostrarAlerta('No se ha podido copiar el texto', 'error');
+        this.mostrarAlerta("No se ha podido copiar el texto", "error");
       }
     },
-    cerrarSesion(){
+    cerrarSesion() {
       location.reload();
     },
-    async recuperarPassword(correo){
+    async recuperarPassword(correo) {
       try {
         await this.resetPassword(correo);
-        this.mostrarAlerta("Contraseña actualizada","success")
+        this.mostrarAlerta("Contraseña actualizada", "success");
       } catch (error) {
-        this.mostrarAlerta("No se ha podido actualizar la contraseña","error")
+        this.mostrarAlerta("No se ha podido actualizar la contraseña", "error");
       }
-    }
+    },
   },
   async created() {},
 };
 </script>
 
 <style scoped>
-.enlace{
+.enlace {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
