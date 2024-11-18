@@ -1,0 +1,8 @@
+services:
+  vue-app:
+    build:
+      context: . # El contexto es la carpeta actual donde está el docker-compose.yml y el Dockerfile
+      dockerfile: Dockerfile # Usa el Dockerfile en el contexto actual
+    ports:
+      - "87:80"  # Mapea el puerto 80 del contenedor al 87 de la máquina
+    restart: always
