@@ -1,3 +1,21 @@
+<!--
+  Este componente de tarjeta permite gestionar la autenticación de usuarios, mostrando diferentes vistas dependiendo del estado de autenticación y de la necesidad de recuperación de contraseña. Se utiliza Vuetify para la estructura de la tarjeta y sus elementos.
+
+  Props:
+  - `loggeado`: Booleano que indica si el usuario ya ha iniciado sesión.
+  - `usuarioNombre`: String que muestra el nombre del usuario logueado.
+
+  Slots:
+  - Default: Permite contenido personalizado en la vista de usuario logueado.
+
+  Events:
+  - `intentoLogin`: Emitido con los datos de inicio de sesión al intentar acceder.
+  - `cerrarSesion`: Emitido al cerrar la sesión.
+  - `recuperar-password`: Emitido con el correo electrónico al iniciar la recuperación de contraseña.
+
+-->
+
+
 <template>
     <v-card>
       <v-card-title>{{ loggeado ? 'Usuario' : recuperar ? 'Recuperación de contraseña' : 'Registro' }}</v-card-title>
@@ -113,7 +131,7 @@
   a:hover{
     cursor: pointer;
     text-decoration: underline;
-    color: var(--estiramiento);
+    color: #0202aa;
   }
   .icono {
     margin-right: 10px;

@@ -1,6 +1,5 @@
 <!--
-  Este componente `InputTiempoComponent` permite al usuario introducir y actualizar un tiempo en minutos y segundos. 
-  Está construido con Vuetify (https://vuetifyjs.com/), usando el componente `v-text-field` para entradas de número y generando una interfaz intuitiva.
+  Este componente `InputTiempoComponent` permite al usuario introducir y actualizar un tiempo en minutos y segundos. Está construido con Vuetify (https://vuetifyjs.com/), usando el componente `v-text-field` para entradas de número.
 
   Props:
   - `valorInicial`: Un valor numérico que representa el tiempo inicial en segundos. 

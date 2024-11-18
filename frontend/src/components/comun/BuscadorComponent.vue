@@ -15,7 +15,7 @@
   <div>
     <v-text-field
       class="placeholder"
-      v-model="queryBusqueda"
+      v-model="busqueda"
       placeholder="Buscar"
       label="Buscar"
       @input="listaFiltrada"
@@ -38,41 +38,41 @@ export default {
   },
   data() {
     return {
-      queryBusqueda: "",
+      busqueda: "",
     };
   },
   methods: {
     listaFiltrada() {
-      const query = this.queryBusqueda.toLowerCase();
-      const normalizeString = (str) => {
+      const query = this.busqueda.toLowerCase();
+      const cadenaPlana = (str) => {
         return str
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
           .toLowerCase();
       };
-      const normalizedQuery = normalizeString(query);
+      const consultaPlana = cadenaPlana(query);
       let filtrado = this.filtros.filter((key) => key !== "id");
       const itemsfiltrados = this.items.filter((item) => {
         return filtrado.some((key) => {
           if (Array.isArray(item[key])) {
             return item[key].some((subItem) => {
               if (typeof subItem === "object" && subItem.nombre) {
-                return normalizeString(subItem.nombre.toString()).includes(
-                  normalizedQuery
+                return cadenaPlana(subItem.nombre.toString()).includes(
+                  consultaPlana
                 );
               }
-              return normalizeString(subItem.toString()).includes(
-                normalizedQuery
+              return cadenaPlana(subItem.toString()).includes(
+                consultaPlana
               );
             });
           } else if (item[key] !== null && item[key] !== undefined) {
             if (typeof item[key] === "object" && item[key].nombre) {
-              return normalizeString(item[key].nombre.toString()).includes(
-                normalizedQuery
+              return cadenaPlana(item[key].nombre.toString()).includes(
+                consultaPlana
               );
             }
-            return normalizeString(item[key].toString()).includes(
-              normalizedQuery
+            return cadenaPlana(item[key].toString()).includes(
+              consultaPlana
             );
           }
           return false;

@@ -27,7 +27,7 @@ public class FichaController {
     Optional<Ficha> fichaOptional = fichaDAO.findById(id);
 
     if (!fichaOptional.isPresent()) {
-      return ResponseEntity.notFound().build(); // Ficha no encontrada
+      return ResponseEntity.notFound().build();
     }
 
     Ficha ficha = fichaOptional.get();

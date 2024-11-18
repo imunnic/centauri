@@ -22,7 +22,7 @@
       ></v-textarea>
     </div>
     <div class="derecha">
-      <CalendarioSinFecha
+      <CalendarioSinFechaComponent
         ref="calendar"
         :sesiones="plan.sesiones"
         :modoInicial="modoInicial"
@@ -35,7 +35,7 @@
             @detalle-ficha="verFicha"
           />
         </template>
-      </CalendarioSinFecha>
+      </CalendarioSinFechaComponent>
     </div>
     <FabBotonComponent
       v-if="puedePlanificar"
@@ -52,7 +52,7 @@
 </template>
 <script>
 import AgregarSesionesPlanForm from "@/components/AgregarSesionesPlanForm.vue";
-import CalendarioSinFecha from "@/components/comun/CalendarioSinFecha.vue";
+import CalendarioSinFechaComponent from "@/components/comun/CalendarioSinFechaComponent.vue";
 import FabBotonComponent from "@/components/comun/FabBotonComponent.vue";
 import SesionFormComponent from "@/components/SesionFormComponent.vue";
 import DetalleSesionComponent from "@/components/DetalleSesionComponent.vue";
@@ -64,7 +64,7 @@ import { useAlertasStore } from "@/store/alertasStore.js";
 import { mapActions, mapState } from "pinia";
 export default {
   components: {
-    CalendarioSinFecha,
+    CalendarioSinFechaComponent,
     SesionFormComponent,
     DetalleSesionComponent,
     FabBotonComponent,

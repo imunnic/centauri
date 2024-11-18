@@ -1,6 +1,5 @@
 <!--
-  Este componente muestra un calendario en formato de mes y permite seleccionar una fecha. Además, 
-  muestra las sesiones del día y emite eventos cuando se selecciona una fecha o una sesión.
+  Este componente muestra un calendario en formato de mes y permite seleccionar una fecha. Además, muestra las sesiones del día y emite eventos cuando se selecciona una fecha o una sesión.
 
   Props:
   - fecha: La fecha actualmente seleccionada que se muestra en el calendario.

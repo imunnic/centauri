@@ -22,7 +22,6 @@ public class ConfiguracionJava {
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.registerModule(new JavaTimeModule());
-    //mapper.addMixIn(Usuario.class, MixIns.Usuarios.class);
     return mapper;
   }
 

@@ -1,7 +1,5 @@
 <!--
-  Este componente muestra información adicional a través de un ícono interactivo con tooltip, 
-  facilitado por la librería Vuetify (https://vuetifyjs.com/). Está compuesto por una etiqueta 
-  descriptiva y un ícono de información que, al ser activado, despliega un mensaje dentro del tooltip.
+  Este componente muestra información adicional a través de un ícono interactivo con tooltip, facilitado por la librería Vuetify (https://vuetifyjs.com/). Está compuesto por una etiqueta descriptiva y un ícono de información que, al ser activado, despliega un mensaje dentro del tooltip.
 
   Props:
   - texto: String que contiene el mensaje que se mostrará dentro del tooltip. Es un campo 

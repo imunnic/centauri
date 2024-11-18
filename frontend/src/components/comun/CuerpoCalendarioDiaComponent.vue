@@ -6,11 +6,6 @@
   - fecha: La fecha del día que se está mostrando en el calendario.
   - sesiones: Array de sesiones programadas, de las cuales se filtran las que corresponden al día mostrado.
 
-  Computed:
-  - fechaActual: Devuelve el día, mes y año actuales, usados para resaltar el día presente.
-  - dia: Devuelve la información del día mostrado, incluyendo su fecha completa.
-  - sesionesDelDia: Filtra y devuelve solo las sesiones que pertenecen al día mostrado.
-
   Eventos:
   - sesion-seleccionada: Se emite cuando se selecciona una sesión, entregando el objeto de la sesión como payload.
   - fecha-seleccionada: Se emite cuando se selecciona una fecha, entregando la fecha completa como payload.

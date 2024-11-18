@@ -20,7 +20,7 @@
       <v-btn class="claro" @click="nuevoPlan">{{textoGuardado}}</v-btn>
     </div>
     <div class="derecha">
-      <CalendarioSinFecha
+      <CalendarioSinFechaComponent
         ref="calendar"
         :sesiones="sesiones"
         :modoInicial="modoInicial"
@@ -39,7 +39,7 @@
             @hecha=""
           />
         </template>
-      </CalendarioSinFecha>
+      </CalendarioSinFechaComponent>
       <SesionFormComponent
         v-if="formularioSesion"
         :plan="true"
@@ -50,7 +50,7 @@
   </div>
 </template>
 <script>
-import CalendarioSinFecha from "@/components/comun/CalendarioSinFecha.vue";
+import CalendarioSinFechaComponent from "@/components/comun/CalendarioSinFechaComponent.vue";
 import SesionFormComponent from "@/components/SesionFormComponent.vue";
 import DetalleSesionComponent from "@/components/DetalleSesionComponent.vue";
 import { usePlanesStore } from "@/store/planesStore.js";
@@ -62,7 +62,7 @@ import configuracion from "@/configuracion.json";
 
 export default {
   components: {
-    CalendarioSinFecha,
+    CalendarioSinFechaComponent,
     SesionFormComponent,
     DetalleSesionComponent,
   },
@@ -101,13 +101,11 @@ export default {
     ...mapActions(useFichasStore, ["getFichaPorHref"]),
     ...mapActions(useAlertasStore, ["mostrarExito", "mostrarError"]),
     fechaSeleccionada(fecha) {
-      console.log(fecha);
       this.formularioSesion = true;
       this.dia = fecha;
     },
     crearSesion(nuevaSesion) {
       nuevaSesion.dia = this.dia;
-      console.log(nuevaSesion);
       this.sesiones.push(nuevaSesion);
     },
     borrarSesion(sesionBorrada) {
@@ -123,7 +121,6 @@ export default {
           async (href) => await this.getFichaPorHref(href)
         )
       );
-      console.log(this.sesionSeleccionada);
     },
     cerrarDetalleCalendario() {
       this.$refs.calendar.mostrarTarjeta = false;

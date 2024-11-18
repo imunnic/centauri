@@ -13,7 +13,7 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
-        .allowedOriginPatterns("*") // Usa allowedOriginPatterns en lugar de allowedOrigins
+        .allowedOriginPatterns("*")
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
         .allowedHeaders("*")
         .allowCredentials(true);
@@ -23,7 +23,7 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
   public CorsFilter corsFilter() {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowCredentials(true);
-    config.addAllowedOriginPattern("*"); // Usa allowedOriginPatterns en lugar de allowedOrigins
+    config.addAllowedOriginPattern("*");
     config.addAllowedHeader("*");
     config.addAllowedMethod("*");
 

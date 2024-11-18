@@ -2,7 +2,7 @@
     <v-dialog max-width="600px" v-model="mostrar" persistent>
       <v-card>
         <v-card-title class="d-flex justify-space-between align-center">
-          <span class="headline">{{ tituloFormulario }}</span>
+          <span class="cabecera">{{ tituloFormulario }}</span>
           <v-btn aria-label="cerrar" icon @click="cerrarDialogo" flat>
               <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -106,7 +106,7 @@
   </script>
   
   <style scoped>
-  .headline {
+  .cabecera {
     margin-top: 2vh;
   }
   

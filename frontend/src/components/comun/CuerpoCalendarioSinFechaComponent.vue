@@ -1,10 +1,11 @@
 <!--
-  Este componente permite la visualización y gestión de un calendario sin especificación de una fecha previa, desde un día 1 hasta el día que se quiera. Integra un selector de fecha y un diálogo para mostrar el detalle de sesiones seleccionadas. Utiliza componentes internos y la biblioteca Vuetify para el diálogo y el icono de cierre.
+  Este componente sirve para la construcción del componente "CalendarioSinFecha".
 
   Props:
   - `sesiones`: Array de sesiones que se muestran en el calendario. Cada sesión debe incluir información 
     como fecha, nombre y otros datos relevantes.
   - `modoInicial`: Define la vista inicial del calendario (“mes” o “día”). Tiene un valor por defecto de “mes”.
+  - `dia`: El dia del calendario que corresponda al que se encuentra mostrándose.
 
   Eventos emitidos:
   - `fecha-seleccionada`: Emitido al seleccionar una fecha en el calendario.

@@ -13,13 +13,13 @@
   - intentoLogin: Se emite con los datos de inicio de sesión cuando el usuario intenta acceder.
   - cerrarSesion: Se emite cuando el usuario cierra sesión.
 
-  Para controlar el navegador desde el componente padre al emitir el evento 'navegacion', puedes usar el siguiente código:
+  Para controlar el navegador desde el componente padre al emitir el evento 'navegacion', se puede usar el siguiente código:
 
   mostrarNavegador() {
       this.$refs.navegadorComponent.mostrarNavegador();
   }
 
-  Asegúrate de referenciar correctamente el componente de navegación al que deseas acceder.
+  Se debe asegurar la referencia correcta del componente de navegación al que se desea acceder.
 -->
 <template>
   <div>
