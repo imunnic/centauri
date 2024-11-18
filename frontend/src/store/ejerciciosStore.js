@@ -63,6 +63,7 @@ export const useEjerciciosStore = defineStore("ejercicios", {
         equipamiento = 
         await this.ejerciciosService.getEquipamientoDeEjercicio(ejercicio._links.equipamiento.href);
       } catch(error) {
+        equipamiento = '';
       }
       return equipamiento;
     }
