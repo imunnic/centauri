@@ -15,7 +15,9 @@
       :permisoCreacion="permisoCreacionEdicion"
       :permiso-edicion="permisoCreacionEdicion"
     >
-
+      <template v-slot:info-extra="{ item }">
+        {{ item.descripcion }}
+      </template>
     </ListaCrudComponent>
 
     <EquipamientoFormComponent
