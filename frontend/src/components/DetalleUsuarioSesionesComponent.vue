@@ -39,9 +39,9 @@ export default {
   computed:{
     titulo(){
       if (this.sesionesRealizadas.length > 0){
-        return 'Sesiones realizadas de ' +  this.sesionesRealizadas[0].usuarioNombre
+        return 'Sesiones de ' +  this.sesionesRealizadas[0].usuarioNombre
       } else {
-        return 'No hay sesiones realizadas de este usuario aún'
+        return 'No hay sesiones aún'
       }
     }
   },

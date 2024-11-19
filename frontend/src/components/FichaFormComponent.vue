@@ -2,7 +2,7 @@
   <v-container>
     <v-form ref="formulario" v-model="valid" @submit.prevent="guardarFicha">
       <h2>Nueva ficha</h2>
-      <div class="flex-container">
+      <div class="flex-container form">
         <v-text-field
           label="Nombre de la ficha"
           v-model="fichaLocal.nombre"
@@ -35,7 +35,7 @@
         ></v-select>
       </div>
 
-      <div class="flex-container">
+      <div class="flex-container form">
         <div class="rpe-estimado">
           <v-text-field
             v-model="fichaLocal.rpeEstimado"
@@ -224,5 +224,11 @@ export default {
   display: block;
   margin-left: auto;
   margin-top: 20px;
+}
+
+@media (max-width: 700px) {
+  .form{
+    flex-flow: column;
+  }
 }
 </style>

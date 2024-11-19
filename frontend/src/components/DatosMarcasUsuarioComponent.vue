@@ -22,15 +22,17 @@
           <div v-else>{{ item.nombre }} : {{ item.cantidad }}</div>
         </template>
       </ListaCrudComponent>
-      <FabBotonComponent
-        class="boton claro"
-        @click="agregarMarcaPersonal"
-      ></FabBotonComponent>
-      <FabBotonComponent
-        icon="mdi-calculator"
-        class="calculadora"
-        @click="calculadora = true"
-      ></FabBotonComponent>
+      <div class="botones">
+        <FabBotonComponent
+          class="boton claro"
+          @click="agregarMarcaPersonal"
+        ></FabBotonComponent>
+        <FabBotonComponent
+          icon="mdi-calculator"
+          class="calculadora"
+          @click="calculadora = true"
+        ></FabBotonComponent>
+      </div>
     </v-card>
 
     <v-dialog v-model="agregarMarca" max-width="400">
@@ -267,24 +269,20 @@ export default {
   max-width: 500px;
   margin: auto;
 }
-.boton {
-  margin: 15px;
-  position: relative !important;
-  align-self: flex-end;
-  width: fit-content;
-  border-radius: 50%;
-  padding: 5px 5px;
-  height: fit-content;
+.botones {
+  position: absolute; 
+  bottom: -10px;
+  right: -10px;
+  display: flex;
+  gap: 10px;
 }
-.calculadora {
-  margin: 15px;
-  top: 5px;
-  right: 10px;
-  position: absolute !important;
-  align-self: flex-end;
+
+.boton, .calculadora {
+  position: relative !important;
+  margin: 0;
   width: fit-content;
   border-radius: 50%;
-  padding: 5px 5px;
+  padding: 10px;
   height: fit-content;
 }
 </style>

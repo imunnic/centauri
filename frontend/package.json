@@ -1,9 +1,10 @@
 {
   "name": "centauri",
   "version": "0.0.0",
+  "type": "commonjs",
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--no-warnings' vite",
-    "build": "vite build",
+    "build": "vite build && cp -r dist/* www/",
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
@@ -21,7 +22,9 @@
     "vuetify": "^3.0.0"
   },
   "devDependencies": {
+    "@red-mobile/cordova-plugin-speech-synthesis": "^0.4.0",
     "@vitejs/plugin-vue": "^4.5.0",
+    "cordova-android": "^13.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.56.0",
     "eslint-config-standard": "^17.1.0",
@@ -37,5 +40,10 @@
     "vite": "^5.0.0",
     "vite-plugin-vuetify": "^2.0.0",
     "vue-router": "^4.2.0"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ]
   }
 }
