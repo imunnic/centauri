@@ -1,5 +1,5 @@
 package es.mde.kiron.modelos;
 
 public enum TipoCarga {
-  REPS, RM, VAM
+  REPS, RM, VAM, TIEMPO
 }

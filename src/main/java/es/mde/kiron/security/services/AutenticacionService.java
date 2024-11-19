@@ -23,7 +23,8 @@ import java.util.NoSuchElementException;
 
 /**
  * @author JOSE LUIS PUENTES ALAMOS
- * Añadido el método renovarToken por IGNACIO OVIDIO MUÑOZ NICOLÁS
+ * Añadido el método renovarToken, cambiarConstrasena, cambiarNombreUsuario, resetPassword y
+ * generarConstrasenaAleatoria por IGNACIO OVIDIO MUÑOZ NICOLÁS
  */
 @Service
 public class AutenticacionService {
@@ -128,8 +129,7 @@ public class AutenticacionService {
       throw new RuntimeException(e.getMessage());
     }
   }
-
-  // Método para generar una contraseña aleatoria
+  
   private String generarContrasenaAleatoria() {
     String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     SecureRandom random = new SecureRandom();
@@ -138,7 +138,7 @@ public class AutenticacionService {
       int indice = random.nextInt(caracteres.length());
       contrasena.append(caracteres.charAt(indice));
     }
-    return contrasena.toString(); // Genera una contraseña aleatoria de 10 caracteres
+    return contrasena.toString();
   }
 
 }

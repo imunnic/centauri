@@ -39,6 +39,8 @@ public class ConfiguracionSeguridad {
             .requestMatchers("/api/fichas/aprobado").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/fichas/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/ejercicios").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/planes").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/planes/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/ejercicios/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/equipamientos").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/usuarios/existe-email").permitAll()

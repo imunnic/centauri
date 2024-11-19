@@ -96,9 +96,9 @@ public class SesionRealizadaResponse {
       SesionRealizada sesionRealizada) {
     SesionRealizadaResponse response = new SesionRealizadaResponse();
     response.setId(sesionRealizada.getId());
-    response.setUsuarioNombre(sesionRealizada.getUsuario().getNombre()); // Asume que Usuario tiene un método getNombre()
+    response.setUsuarioNombre(sesionRealizada.getUsuario().getNombre());
     response.setSesionId(sesionRealizada.getSesionId());
-    response.setGrupo(sesionRealizada.getSesion().getGrupo()); // Asume que Usuario tiene un método getGrupo()
+    response.setGrupo(sesionRealizada.getSesion().getGrupo());
     response.setFecha(sesionRealizada.getFechaSesion());
     response.setRpe(sesionRealizada.getRpe());
     response.setDuracion(sesionRealizada.getTiempo());
